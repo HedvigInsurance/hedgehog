@@ -29,7 +29,7 @@ const InputStyled = styled(Input)(() => ({
 
 const fraudulentStatuses = {
   NOT_FRAUD: 'green',
-  SUSPECTED_FRAUD: 'orange',
+  SUSPECTED_FRAUD: 'yellow',
   CONFIRMED_FRAUD: 'red',
 }
 
