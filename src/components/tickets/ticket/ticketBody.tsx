@@ -298,7 +298,7 @@ export class TicketBody extends React.Component<ITicketBody, ITicketBodyState> {
         return <Redirector route={route} redirectText="Go to claim" />
       }
       case TicketType.MESSAGE: {
-        const route = 'members/' + referenceId
+        const route = 'members/' + memberId
         return <Redirector route={route} redirectText="Go to chat" />
       }
       default:
