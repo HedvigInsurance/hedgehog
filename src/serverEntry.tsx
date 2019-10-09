@@ -66,7 +66,7 @@ reactPageRoutes.forEach((route) => {
 server.app.use(
   proxy({
     target: process.env.API_URL,
-    changeOrigin: false,
+    changeOrigin: true,
     ssl: {
       checkServerIdentity(host, cert) {
         tls.checkServerIdentity(url.parse(process.env.API_URL!).hostname!, cert)
