@@ -79,7 +79,7 @@ const ClaimPage: React.SFC<Props> = ({ match }) => (
               refetchPage={refetch}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6} md={6}>
             {notes && (
               <ClaimNotes
                 notes={(notes.filter(Boolean) as ClaimNote[]) ?? []}
@@ -88,7 +88,7 @@ const ClaimPage: React.SFC<Props> = ({ match }) => (
               />
             )}
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6} md={6}>
             <ClaimInventory claimId={match.params.id} />
           </Grid>
           <Grid item xs={12}>
