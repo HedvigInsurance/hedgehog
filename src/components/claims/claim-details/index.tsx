@@ -11,7 +11,7 @@ import { ClaimNotes } from './components/ClaimNotes'
 import { ClaimPayments } from './components/ClaimPayments'
 import { ClaimTypeForm } from './components/ClaimType'
 import { FileUpload } from './components/FileUpload'
-import { ClaimItemDatabase } from './components/inventory/ClaimItemDatabase'
+import { ClaimInventory } from './components/inventory/ClaimInventory'
 import { MemberInformation } from './components/MemberInformation'
 import { CLAIM_PAGE_QUERY } from './data'
 
@@ -89,7 +89,7 @@ const ClaimPage: React.SFC<Props> = ({ match }) => (
             )}
           </Grid>
           <Grid item xs={6}>
-            <ClaimItemDatabase claimId={match.params.id} />
+            <ClaimInventory claimId={match.params.id} />
           </Grid>
           <Grid item xs={12}>
             {payments && member && (

@@ -1,59 +1,84 @@
-import { AddItemPrompt } from 'components/claims/claim-details/components/inventory/AddItemPrompt'
-import { InventoryList } from 'components/claims/claim-details/components/inventory/InventoryList'
+import Pricing from 'features/pricing'
+import { GET_INVENTORY } from 'features/pricing/queries'
 import * as React from 'react'
-import { Button, Icon } from 'semantic-ui-react'
+import { Query } from 'react-apollo'
 import { Paper } from '../../../../shared/Paper'
+import { InventoryList } from './InventoryList'
+import { TextField } from '@material-ui/core'
 
 export class ClaimInventory extends React.Component {
   state = {
-    addNew: false,
+    itemName: '',
+    itemValue: '',
+    itemCategory: '',
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.state.addNew) {
-      if (nextProps.activeItem) {
-        this.setState({ addNew: true })
-      }
-    }
-  }
-
-  closePrompt = () => {
-    this.setState({ addNew: false })
-    this.props.clearActiveItem()
+  handleChange = (event) => {
+    const { target: { name, value } } = event
+    this.setState(() => ({ [name]: value }))
   }
 
   render() {
     return (
-      <Paper>
-        <div>
-          <h3>{this.state.addNew ? 'Add item' : 'Inventory'}</h3>
-        </div>
+      <Query
+        query={GET_INVENTORY}
+        variables={{
+          claimId: this.props.claimId,
+        }}
+      >
+        {({ data, loading, error }) => {
+          let items = []
 
-        {this.state.addNew ? (
-          <AddItemPrompt
-            closePrompt={this.closePrompt}
-            activeItem={this.props.activeItem}
-            claimId={this.props.claimId}
-          />
-        ) : (
-          <React.Fragment>
-            <InventoryList
-              items={this.props.items}
-              removeItem={this.props.removeItem}
-              claimId={this.props.claimId}
-            />
-            <Button
-              size="tiny"
-              primary
-              style={{ width: '25%', float: 'right' }}
-              onClick={() => this.setState({ addNew: true })}
-            >
-              <Icon name="plus" />
-              Add
-            </Button>
-          </React.Fragment>
-        )}
-      </Paper>
+          if (!loading) {
+            if (!error) {
+              if (typeof data !== 'undefined') {
+                if ('inventory' in data) {
+                  items = data.inventory
+                }
+              }
+            }
+          }
+
+          return (
+            <Paper>
+              <div>
+                <h3>Inventory</h3>
+              </div>
+              <InventoryList items={items} claimId={this.props.claimId} />
+              <div style={{ display: 'inline-flex' }}>
+                <TextField
+                  id="item-name"
+                  style={{ width: '48%' }}
+                  color="secondary"
+                  name="itemName"
+                  placeholder="Item"
+                  value={this.state.itemName}
+                  onChange={this.handleChange}
+                  helperText={"Press Enter to add item"}
+                />
+                <TextField
+                  id="item-value"
+                  style={{ width: '18%', marginLeft: '2%'}}
+                  color="secondary"
+                  placeholder="Value"
+                  name="itemValue"
+                  value={this.state.itemValue}
+                  onChange={this.handleChange}
+                />
+                <TextField
+                  id="item-category"
+                  style={{ width: '25%', marginLeft: '2%'}}
+                  color="secondary"
+                  placeholder="Category"
+                  name="itemCategory"
+                  value={this.state.itemCategory}
+                  onChange={this.handleChange}
+                />
+              </div>
+            </Paper>
+          )
+        }}
+      </Query>
     )
   }
 }
