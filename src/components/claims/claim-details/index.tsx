@@ -79,7 +79,7 @@ const ClaimPage: React.SFC<Props> = ({ match }) => (
               refetchPage={refetch}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             {notes && (
               <ClaimNotes
                 notes={(notes.filter(Boolean) as ClaimNote[]) ?? []}
@@ -88,7 +88,9 @@ const ClaimPage: React.SFC<Props> = ({ match }) => (
               />
             )}
           </Grid>
-          <ClaimItemDatabase type={type} claimId={match.params.id} />
+          <Grid item xs={6}>
+            <ClaimItemDatabase claimId={match.params.id} />
+          </Grid>
           <Grid item xs={12}>
             {payments && member && (
               <ClaimPayments

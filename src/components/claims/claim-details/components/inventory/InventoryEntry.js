@@ -9,9 +9,6 @@ import { Mutation, Query } from 'react-apollo'
 import { Icon, Label, Popup, Table } from 'semantic-ui-react'
 
 export class InventoryEntry extends React.Component {
-  remove = () => {
-    this.props.removeItem(this.props.item)
-  }
 
   truncateItemName(word, n, useWordBoundary) {
     if (word.length <= n) {

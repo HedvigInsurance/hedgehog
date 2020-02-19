@@ -1,47 +1,16 @@
-import Grid from '@material-ui/core/Grid'
-import { ClaimTypes } from 'api/generated/graphql'
 import Pricing from 'features/pricing'
 import { GET_INVENTORY } from 'features/pricing/queries'
 import * as React from 'react'
 import { Query } from 'react-apollo'
 import { Paper } from '../../../../shared/Paper'
-import { ClaimInventory } from './ClaimInventory'
+import {Button, Icon} from "semantic-ui-react";
+import { InventoryList } from "./InventoryList"
 
 export class ClaimItemDatabase extends React.Component {
-  state = {
-    activeItem: null,
-  }
-
-  selectItem = (refId, name, category, priceData) => {
-    this.setState({
-      activeItem: {
-        name,
-        category,
-        refId,
-        range: { lower: priceData.lower, upper: priceData.upper },
-        amount: priceData.mean,
-        source: 'Database',
-      },
-    })
-  }
-
-  clearActiveItem = () => {
-    this.setState({
-      activeItem: null,
-    })
-  }
+  state = {}
 
   render() {
     return (
-      <React.Fragment>
-        <Grid item xs={12} sm={12} md={8}>
-          <Paper>
-            <h3>Item database</h3>
-            <Pricing minimal selectionHandle={this.selectItem} />
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={4}>
           <Query
             query={GET_INVENTORY}
             variables={{
@@ -62,6 +31,17 @@ export class ClaimItemDatabase extends React.Component {
               }
 
               return (
+                <Paper>
+                  <div>
+                    <h3>Inventory</h3>
+                  </div>
+                    <InventoryList
+                      items={items}
+                      claimId={this.props.claimId}
+                    />
+                </Paper>
+
+                /*
                 <ClaimInventory
                   items={items}
                   type={this.props.type}
@@ -70,11 +50,10 @@ export class ClaimItemDatabase extends React.Component {
                   activeItem={this.state.activeItem}
                   clearActiveItem={this.clearActiveItem}
                 />
+                 */
               )
             }}
           </Query>
-        </Grid>
-      </React.Fragment>
     )
   }
 }

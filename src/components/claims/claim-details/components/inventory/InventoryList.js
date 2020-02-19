@@ -21,7 +21,6 @@ export class InventoryList extends React.Component {
             <InventoryEntry
               key={item.inventoryItemId}
               item={item}
-              removeItem={this.props.removeItem}
               claimId={this.props.claimId}
             />
           ))}
