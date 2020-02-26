@@ -32,6 +32,30 @@ export class ClaimInventory extends React.Component {
     )
   }
 
+  getCurrentItem = () => {
+    return {
+      inventoryItemId: null,
+      claimId: this.props.claimId,
+      itemName: this.state.itemName,
+      categoryName: this.state.itemCategory,
+      categoryId: '-1',
+      value: this.state.itemValue,
+      source: 'Custom',
+      upperRange: null,
+      lowerRange: null,
+      itemId: null,
+      filters: [],
+    }
+  }
+
+  clearNewItem = () => {
+    this.setState({
+      itemName: '',
+      itemValue: '',
+      itemCategory: 'Övrigt',
+    })
+  }
+
   render() {
     return (
       <Mutation
@@ -102,7 +126,23 @@ export class ClaimInventory extends React.Component {
                               name="itemName"
                               value={this.state.itemName}
                               onChange={this.handleChange}
-                              helperText={this.formLooksGood() ? 'Press Return to add item ↩' : ' '}
+                              onKeyPress={async (e) => {
+                                if (e.key === 'Enter' && this.formLooksGood()) {
+                                  e.target.blur()
+                                  await addItem({
+                                    variables: {
+                                      item: this.getCurrentItem(),
+                                    },
+                                  })
+
+                                  this.clearNewItem()
+                                }
+                              }}
+                              helperText={
+                                this.formLooksGood()
+                                  ? 'Press Return to add item ↩'
+                                  : ' '
+                              }
                             />
 
                             <TextField
@@ -140,25 +180,15 @@ export class ClaimInventory extends React.Component {
                               value={this.state.itemValue}
                               onChange={this.handleChange}
                               onKeyPress={async (e) => {
-                                if (e.key === 'Enter') {
-                                  console.log('Adding item...')
+                                if (e.key === 'Enter' && this.formLooksGood()) {
+                                  e.target.blur()
                                   await addItem({
                                     variables: {
-                                      item: {
-                                        inventoryItemId: null,
-                                        claimId: this.props.claimId,
-                                        itemName: this.state.itemName,
-                                        categoryName: this.state.itemCategory,
-                                        categoryId: '-1',
-                                        value: this.state.itemValue,
-                                        source: 'Custom',
-                                        upperRange: null,
-                                        lowerRange: null,
-                                        itemId: null,
-                                        filters: [],
-                                      },
+                                      item: this.getCurrentItem(),
                                     },
                                   })
+
+                                  this.clearNewItem()
                                 }
                               }}
                             />
