@@ -152,34 +152,6 @@ export class InventoryEntry extends React.Component {
             }}
           </Query>
 
-          <Mutation
-            mutation={REMOVE_ITEM}
-            refetchQueries={() => {
-              return [
-                {
-                  query: GET_INVENTORY,
-                  variables: { claimId: this.props.claimId },
-                },
-              ]
-            }}
-          >
-            {(removeItem) => {
-              return (
-                <Icon
-                  color="red"
-                  name="remove circle"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    removeItem({
-                      variables: {
-                        inventoryItemId,
-                      },
-                    })
-                  }}
-                />
-              )
-            }}
-          </Mutation>
         </Table.Cell>
       </Table.Row>
     )

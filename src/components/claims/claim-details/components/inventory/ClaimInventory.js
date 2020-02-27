@@ -6,6 +6,7 @@ import { Query, Mutation } from 'react-apollo'
 import { Paper } from '../../../../shared/Paper'
 import { InventoryList } from './InventoryList'
 import { TextField } from '@material-ui/core'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import MenuItem from '@material-ui/core/MenuItem'
 
 
@@ -113,17 +114,22 @@ export class ClaimInventory extends React.Component {
                           <div>
                             <h3>Inventory</h3>
                           </div>
-                          <InventoryList
+
+                          {
+                            this.state.items.length !== 0 ?
+                            <InventoryList
                             items={this.state.items}
                             claimId={this.props.claimId}
-                          />
+                            />
+                            : <></>
+                          }
 
-                          <div style={{ display: 'inline-flex' }}>
+                          <div style={{ display: 'flex'}}>
                             <TextField
                               id="item-name"
-                              style={{ width: '48%' }}
+                              style={{ width: '46%' }}
                               color="secondary"
-                              label="Item"
+                              placeholder="New item"
                               name="itemName"
                               value={this.state.itemName}
                               onChange={this.handleChange}
@@ -150,9 +156,8 @@ export class ClaimInventory extends React.Component {
                               id="item-category"
                               select
                               color="secondary"
-                              label="Category"
                               name="itemCategory"
-                              style={{ width: '25%', marginLeft: '2%' }}
+                              style={{ width: '29%', marginLeft: '2%' }}
                               value={this.state.itemCategory}
                               onChange={this.handleChange}
                             >
@@ -174,10 +179,11 @@ export class ClaimInventory extends React.Component {
 
                             <TextField
                               id="item-value"
-                              style={{ width: '18%', marginLeft: '2%' }}
+                              style={{ width: '21%', marginLeft: '2%' }}
                               color="secondary"
-                              label="Value"
                               name="itemValue"
+                              placeholder="Value"
+                              align="right"
                               value={this.state.itemValue}
                               onChange={this.handleChange}
                               onKeyPress={async (e) => {
