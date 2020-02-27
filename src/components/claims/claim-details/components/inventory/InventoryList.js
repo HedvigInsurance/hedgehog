@@ -1,30 +1,43 @@
-import { InventoryEntry } from 'components/claims/claim-details/components/inventory/InventoryEntry'
 import * as React from 'react'
-import { Table } from 'semantic-ui-react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core'
+import { formatMoney } from 'lib/intl'
 
 export class InventoryList extends React.Component {
   render() {
     return (
-      <Table>
-        {this.props.items.length !== 0 ? (
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Value</Table.HeaderCell>
-              <Table.HeaderCell width={4} />
-            </Table.Row>
-          </Table.Header>
-        ) : null}
-
-        <Table.Body>
-          {this.props.items.map((item) => (
-            <InventoryEntry
-              key={item.inventoryItemId}
-              item={item}
-              claimId={this.props.claimId}
-            />
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="left">Item</TableCell>
+            <TableCell align="right">Category</TableCell>
+            <TableCell align="right">Value</TableCell>
+            <TableCell align="right"></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {this.props.items.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell align="left">{row.itemName}</TableCell>
+              <TableCell align="right">{row.categoryName}</TableCell>
+              <TableCell align="right">
+                {formatMoney(
+                  'sv-SE',
+                  0,
+                )({
+                  amount: row.value,
+                  currency: 'SEK',
+                })}
+              </TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
           ))}
-        </Table.Body>
+        </TableBody>
       </Table>
     )
   }

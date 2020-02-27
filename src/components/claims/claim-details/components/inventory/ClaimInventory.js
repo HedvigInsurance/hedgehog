@@ -8,6 +8,7 @@ import { InventoryList } from './InventoryList'
 import { TextField } from '@material-ui/core'
 import MenuItem from '@material-ui/core/MenuItem'
 
+
 export class ClaimInventory extends React.Component {
   state = {
     itemName: '',
