@@ -35,7 +35,7 @@ export class InventoryList extends React.Component {
         </TableHead>
         <TableBody>
           {this.props.items.map((row) => (
-            <TableRow key={row.name}>
+            <TableRow key={row.inventoryItemId}>
               <TableCell style={{ paddingLeft: '0px' }}>
                 {row.itemName}
               </TableCell>
@@ -68,7 +68,6 @@ export class InventoryList extends React.Component {
                       <IconButton
                         aria-label="Delete item"
                         onClick={(e) => {
-                          e.preventDefault()
                           removeItem({
                             variables: {
                               inventoryItemId: row.inventoryItemId,
