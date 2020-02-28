@@ -1,17 +1,100 @@
 import Pricing from 'features/pricing'
 import { GET_INVENTORY, GET_CATEGORIES } from 'features/pricing/queries'
-import { ADD_ITEM } from 'features/pricing/mutations'
+import { ADD_ITEM, REMOVE_ITEM } from 'features/pricing/mutations'
 import * as React from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { Paper } from '../../../../shared/Paper'
-import { InventoryList } from './InventoryList'
 import {
   TextField,
   Button,
   Grid,
-  Select,
+  Select, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
 } from '@material-ui/core'
 import MenuItem from '@material-ui/core/MenuItem'
+import DeleteForeverIcon from '@material-ui/icons/Delete'
+import { formatMoney } from 'lib/intl'
+
+class InventoryList extends React.Component {
+  render() {
+    return (
+      <Table size="small" style={{marginBottom: "25px"}}>
+        <colgroup>
+          <col style={{ width: '45%' }} />
+          <col style={{ width: '24%' }} />
+          <col style={{ width: '20%' }} />
+          <col style={{ width: '2%' }} />
+        </colgroup>
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ paddingLeft: '0px' }}>Item</TableCell>
+            <TableCell style={{ paddingLeft: '0px' }}>Category</TableCell>
+            <TableCell align="right" style={{ paddingLeft: '0px' }}>
+              Value
+            </TableCell>
+            <TableCell style={{ paddingLeft: '0px' }}></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {this.props.items.map((row) => (
+            <TableRow key={row.inventoryItemId}>
+              <TableCell style={{ paddingLeft: '0px' }}>
+                {row.itemName}
+              </TableCell>
+              <TableCell style={{ paddingLeft: '0px' }}>
+                {row.categoryName}
+              </TableCell>
+              <TableCell style={{ paddingLeft: '0px' }} align="right">
+                {formatMoney(
+                  'sv-SE',
+                  0,
+                )({
+                  amount: row.value,
+                  currency: 'SEK',
+                })}
+              </TableCell>
+              <TableCell style={{ paddingLeft: '0px' }}>
+                <Mutation
+                  mutation={REMOVE_ITEM}
+                  refetchQueries={() => {
+                    return [
+                      {
+                        query: GET_INVENTORY,
+                        variables: { claimId: this.props.claimId },
+                      },
+                    ]
+                  }}
+                >
+                  {(removeItem) => {
+                    return (
+                      <IconButton
+                        aria-label="Delete item"
+                        onClick={(e) => {
+                          removeItem({
+                            variables: {
+                              inventoryItemId: row.inventoryItemId,
+                            },
+                          })
+                        }}
+                      >
+                        <DeleteForeverIcon
+                          style={{
+                            margin: '0px',
+                            padding: '4px',
+                            color: '#666',
+                          }}
+                        />
+                      </IconButton>
+                    )
+                  }}
+                </Mutation>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    )
+  }
+}
 
 export class ClaimInventory extends React.Component {
   state = {
