@@ -7,11 +7,11 @@ import { CreateTicketStandAlone } from '../../../components/tickets/ticket/creat
 import { ClaimEvents } from './components/ClaimEvents'
 import { ClaimFileTable } from './components/ClaimFileTable'
 import { ClaimInformation } from './components/ClaimInformation'
+import { ClaimInventory } from './components/ClaimInventory'
 import { ClaimNotes } from './components/ClaimNotes'
 import { ClaimPayments } from './components/ClaimPayments'
 import { ClaimTypeForm } from './components/ClaimType'
 import { FileUpload } from './components/FileUpload'
-import { ClaimInventory } from './components/ClaimInventory'
 import { MemberInformation } from './components/MemberInformation'
 import { CLAIM_PAGE_QUERY } from './data'
 
