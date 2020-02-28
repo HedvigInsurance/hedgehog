@@ -2,6 +2,7 @@ import { CreateQuote } from 'components/chat/tabs/insurance-tab/create-quote'
 import { LinkRow } from 'components/shared'
 import PaginatorList from 'components/shared/paginator-list/PaginatorList'
 import TableFields from 'components/shared/table-fields/TableFields'
+import { Button } from 'hedvig-ui/button'
 import * as moment from 'moment'
 import * as React from 'react'
 import { Header, Table } from 'semantic-ui-react'
@@ -36,6 +37,8 @@ export interface ExtraBuilding {
   displayName?: string
 }
 
+const ButtonLink = Button.withComponent('a')
+
 export default class InsuranceList extends React.Component<any, any> {
   public insuranceFieldFormatters = {
     extraBuildings: (buildings: ExtraBuilding[]) =>
@@ -48,7 +51,18 @@ export default class InsuranceList extends React.Component<any, any> {
           )
         </p>
       )),
+    certificateUrl: (url: string) => (
+      <ButtonLink
+        className={'ui button'}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View Certificate
+      </ButtonLink>
+    ),
   }
+
   constructor(props) {
     super(props)
     this.state = {

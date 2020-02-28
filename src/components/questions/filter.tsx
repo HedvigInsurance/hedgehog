@@ -1,4 +1,5 @@
 import { Button } from 'hedvig-ui/button'
+import { Spacing } from 'hedvig-ui/spacing'
 import * as React from 'react'
 import styled from 'react-emotion'
 
@@ -18,16 +19,19 @@ export const QuestionsFilter: React.FC<{
 }> = ({ selected, onToggle }) => {
   return (
     <FilterWrapper>
-      <Button
-        onClick={() => {
-          onToggle(FilterState.Even)
-        }}
-        basic={!selected.includes(FilterState.Even)}
-        variation="secondary"
-        type="button"
-      >
-        The empire
-      </Button>
+      <Spacing right>
+        <Button
+          onClick={() => {
+            onToggle(FilterState.Even)
+          }}
+          basic={!selected.includes(FilterState.Even)}
+          variation="secondary"
+          type="button"
+        >
+          The empire
+        </Button>
+      </Spacing>
+
       <Button
         onClick={() => {
           onToggle(FilterState.Odd)

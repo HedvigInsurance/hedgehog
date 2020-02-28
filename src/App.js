@@ -6,7 +6,7 @@ import { Navigation } from 'components/shared/navigation'
 import Breadcrumbs from 'components/shared/navigation/breadcrumbs/Breadcrumbs'
 import Notifications from 'containers/notification-service/NotificationService'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
-import * as React from 'react'
+import React from 'react'
 import styled from 'react-emotion'
 import { hot } from 'react-hot-loader'
 import { Provider } from 'react-redux'
@@ -17,7 +17,6 @@ import { lightUiTheme } from './uiThemes'
 
 const store = Store.configureStore()
 
-declare var window: any
 if (process.env.NODE_ENV !== 'production') {
   if (typeof window !== 'undefined') {
     window.__store = store
@@ -28,20 +27,20 @@ const Layout = styled('div')({
   display: 'flex',
   minHeight: '100vh',
 })
-const Main = styled('div')(({ dark }: { dark: boolean }) => ({
+const Main = styled('div')(({ dark }) => ({
   backgroundColor: dark ? colors.OFF_BLACK_DARK : undefined,
   flex: 1,
   padding: 16,
 }))
 
 class App extends React.Component {
-  public componentDidMount(): void {
+  componentDidMount() {
     history.listen(() => {
       this.forceUpdate()
     })
   }
 
-  public render() {
+  render() {
     return (
       <MuiThemeProvider theme={lightUiTheme}>
         <CssBaseline />
@@ -57,11 +56,6 @@ class App extends React.Component {
                       path="/login"
                       exact
                       component={Routes.LoginPageRoute}
-                    />
-                    <Routes.PrivateRoute
-                      path="/assets"
-                      store={store}
-                      component={Routes.AssetsPageRoute}
                     />
                     <Routes.PrivateRoute
                       path="/dashboard"
@@ -87,16 +81,6 @@ class App extends React.Component {
                           store={store}
                         />
                       )}
-                    />
-                    <Routes.PrivateRoute
-                      path="/charges"
-                      store={store}
-                      component={Routes.ChargePageRoute}
-                    />
-                    <Routes.PrivateRoute
-                      path="/BDX"
-                      store={store}
-                      component={Routes.BourdereauPageRoute}
                     />
                     <Routes.PrivateRoute
                       path="/tools"

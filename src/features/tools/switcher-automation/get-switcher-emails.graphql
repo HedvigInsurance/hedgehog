@@ -1,0 +1,15 @@
+query GetSwitcherEmails {
+  switchableSwitcherEmails {
+    id
+    member {
+      memberId
+      signedOn
+      firstName
+      lastName
+    }
+    switcherCompany
+    queuedAt
+    sentAt
+    remindedAt
+  }
+}

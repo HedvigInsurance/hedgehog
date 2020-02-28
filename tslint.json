@@ -11,5 +11,8 @@
     "variable-name": {
       "options": ["ban-keywords", "allow-pascal-case", "check-format", "allow-leading-underscore", "allow-trailing-underscore"]
     }
+  },
+  "linterOptions": {
+    "exclude": ["./src/api/generated/graphql.tsx"]
   }
 }

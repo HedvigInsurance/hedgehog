@@ -20,5 +20,6 @@
       "*": ["*", "node_modules/*", "src/*", "shared/*"]
     }
   },
+  "include": ["./shared"],
   "exclude": ["node_modules", "src/components/tickets"]
 }

@@ -1,5 +1,7 @@
 import { colors } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
+import { MainHeadline } from 'hedvig-ui/typography'
+import { MonetaryAmount } from 'lib/helpers'
 import { formatMoneySE } from 'lib/intl'
 import * as moment from 'moment'
 import * as React from 'react'
@@ -8,7 +10,6 @@ import styled from 'react-emotion'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Table } from 'semantic-ui-react'
-import { MonetaryAmount } from 'src/lib/helpers'
 import actions from 'store/actions'
 
 const query = gql`
@@ -160,6 +161,7 @@ export class ChargePageComponent extends React.Component<
             }
             return (
               <>
+                <MainHeadline>💰 Approve charges</MainHeadline>
                 <Table celled>
                   <Table.Header>
                     <Table.Row>
@@ -183,14 +185,14 @@ export class ChargePageComponent extends React.Component<
                       },
                     ]}
                   >
-                    {(mutation, { loading }) => {
+                    {(mutation, mutationProps) => {
                       return (
                         <Button
-                          disabled={loading}
+                          disabled={mutationProps.loading}
                           onClick={
                             this.state.confirming
                               ? () => {
-                                  if (loading) {
+                                  if (mutationProps.loading) {
                                     return
                                   }
                                   mutation({
@@ -213,13 +215,13 @@ export class ChargePageComponent extends React.Component<
                                         type: 'olive',
                                       })
                                     })
-                                    .catch((error) => {
+                                    .catch((error_) => {
                                       this.props.showNotification({
-                                        message: error.message,
+                                        message: error_.message,
                                         header: 'Error',
                                         type: 'red',
                                       })
-                                      throw error
+                                      throw error_
                                     })
                                 }
                               : this.confirm
@@ -252,7 +254,4 @@ export class ChargePageComponent extends React.Component<
 
 const mapActions = { ...actions.notificationsActions }
 
-export const ChargePage = connect(
-  null,
-  mapActions,
-)(ChargePageComponent)
+export const ChargePage = connect(null, mapActions)(ChargePageComponent)

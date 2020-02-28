@@ -2,7 +2,7 @@
 /* global Raven, process*/
 import * as history_ from 'history'
 import { routerMiddleware, routerReducer } from 'react-router-redux'
-import { applyMiddleware, combineReducers, createStore } from 'redux'
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import { reducer as reduxFormReducer } from 'redux-form'
 import createSagaMiddleware from 'redux-saga'
 import reducers from './reducers'
@@ -28,8 +28,15 @@ const configureStore = () => {
     },
   })
   const router = routerMiddleware(history)
+  const composeEnhancers =
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+  const store = createStore(
+    rootReducer,
+    composeEnhancers(applyMiddleware(sagaMiddleware, router)),
+  )
+
   return {
-    ...createStore(rootReducer, applyMiddleware(sagaMiddleware, router)),
+    ...store,
     runSaga: sagaMiddleware.run(rootSaga),
   }
 }

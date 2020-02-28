@@ -1,4 +1,3 @@
-import ChargePageRoute from 'routes/ChargePageRoute'
 import ClaimsPageRoute from 'routes/ClaimsPageRoute'
 import DashboardPageRoute from 'routes/DashboardPageRoute'
 import LoginPageRoute from 'routes/LoginPageRoute'
@@ -17,7 +16,6 @@ export default {
   DashboardPageRoute,
   ClaimsPageRoute,
   QuestionsPageRoute,
-  ChargePageRoute,
   ToolsPageRoute,
   PrivateRoute,
   TaskManagerPageRoute,

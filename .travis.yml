@@ -15,6 +15,7 @@ install:
 script:
   - yarn lint
   - yarn tdm
+  - yarn test
   - yarn build
 
 notifications:

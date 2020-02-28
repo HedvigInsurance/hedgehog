@@ -645,6 +645,7 @@ export interface MutationType {
   /** Creates a quote from a product and returns the quote id */
   createQuoteFromProduct: Quote
   updateQuote: Quote
+  markSwitchableSwitcherEmailAsReminded?: Maybe<Scalars['Boolean']>
 }
 
 export interface MutationTypeChargeMemberArgs {
@@ -786,6 +787,10 @@ export interface MutationTypeUpdateQuoteArgs {
   bypassUnderwritingGuidelines?: Maybe<Scalars['Boolean']>
 }
 
+export interface MutationTypeMarkSwitchableSwitcherEmailAsRemindedArgs {
+  id: Scalars['ID']
+}
+
 export interface NotCoveredClaim {
   __typename?: 'NotCoveredClaim'
   date?: Maybe<Scalars['LocalDate']>
@@ -855,6 +860,7 @@ export interface QueryType {
   inventory: Array<Maybe<InventoryItem>>
   filters: FilterSuggestion[]
   inventoryItemFilters?: Maybe<Array<Maybe<FilterOutput>>>
+  switchableSwitcherEmails: SwitchableSwitcherEmail[]
 }
 
 export interface QueryTypeMonthlyPaymentsArgs {
@@ -1003,6 +1009,16 @@ export interface Suggestion {
   allReplies: AllRepliesEntry[]
 }
 
+export interface SwitchableSwitcherEmail {
+  __typename?: 'SwitchableSwitcherEmail'
+  id: Scalars['ID']
+  member: Member
+  switcherCompany: Scalars['String']
+  queuedAt: Scalars['Instant']
+  sentAt?: Maybe<Scalars['Instant']>
+  remindedAt?: Maybe<Scalars['Instant']>
+}
+
 export interface TestClaim {
   __typename?: 'TestClaim'
   date?: Maybe<Scalars['LocalDate']>
@@ -1147,6 +1163,30 @@ export type MemberNameQuery = { __typename?: 'QueryType' } & {
   >
 }
 
+export interface GetSwitcherEmailsQueryVariables {}
+
+export type GetSwitcherEmailsQuery = { __typename?: 'QueryType' } & {
+  switchableSwitcherEmails: Array<
+    { __typename?: 'SwitchableSwitcherEmail' } & Pick<
+      SwitchableSwitcherEmail,
+      'id' | 'switcherCompany' | 'queuedAt' | 'sentAt' | 'remindedAt'
+    > & {
+        member: { __typename?: 'Member' } & Pick<
+          Member,
+          'memberId' | 'signedOn' | 'firstName' | 'lastName'
+        >
+      }
+  >
+}
+
+export interface MarkSwitcherEmailAsRemindedMutationVariables {
+  id: Scalars['ID']
+}
+
+export type MarkSwitcherEmailAsRemindedMutation = {
+  __typename?: 'MutationType'
+} & Pick<MutationType, 'markSwitchableSwitcherEmailAsReminded'>
+
 export const MemberNameDocument = gql`
   query MemberName($memberId: ID!) {
     member(id: $memberId) {
@@ -1201,6 +1241,119 @@ export type MemberNameLazyQueryHookResult = ReturnType<
 export type MemberNameQueryResult = ApolloReactCommon.QueryResult<
   MemberNameQuery,
   MemberNameQueryVariables
+>
+export const GetSwitcherEmailsDocument = gql`
+  query GetSwitcherEmails {
+    switchableSwitcherEmails {
+      id
+      member {
+        memberId
+        signedOn
+        firstName
+        lastName
+      }
+      switcherCompany
+      queuedAt
+      sentAt
+      remindedAt
+    }
+  }
+`
+
+/**
+ * __useGetSwitcherEmailsQuery__
+ *
+ * To run a query within a React component, call `useGetSwitcherEmailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSwitcherEmailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSwitcherEmailsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSwitcherEmailsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetSwitcherEmailsQuery,
+    GetSwitcherEmailsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<
+    GetSwitcherEmailsQuery,
+    GetSwitcherEmailsQueryVariables
+  >(GetSwitcherEmailsDocument, baseOptions)
+}
+export function useGetSwitcherEmailsLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    GetSwitcherEmailsQuery,
+    GetSwitcherEmailsQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    GetSwitcherEmailsQuery,
+    GetSwitcherEmailsQueryVariables
+  >(GetSwitcherEmailsDocument, baseOptions)
+}
+export type GetSwitcherEmailsQueryHookResult = ReturnType<
+  typeof useGetSwitcherEmailsQuery
+>
+export type GetSwitcherEmailsLazyQueryHookResult = ReturnType<
+  typeof useGetSwitcherEmailsLazyQuery
+>
+export type GetSwitcherEmailsQueryResult = ApolloReactCommon.QueryResult<
+  GetSwitcherEmailsQuery,
+  GetSwitcherEmailsQueryVariables
+>
+export const MarkSwitcherEmailAsRemindedDocument = gql`
+  mutation MarkSwitcherEmailAsReminded($id: ID!) {
+    markSwitchableSwitcherEmailAsReminded(id: $id)
+  }
+`
+export type MarkSwitcherEmailAsRemindedMutationFn = ApolloReactCommon.MutationFunction<
+  MarkSwitcherEmailAsRemindedMutation,
+  MarkSwitcherEmailAsRemindedMutationVariables
+>
+
+/**
+ * __useMarkSwitcherEmailAsRemindedMutation__
+ *
+ * To run a mutation, you first call `useMarkSwitcherEmailAsRemindedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkSwitcherEmailAsRemindedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markSwitcherEmailAsRemindedMutation, { data, loading, error }] = useMarkSwitcherEmailAsRemindedMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMarkSwitcherEmailAsRemindedMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    MarkSwitcherEmailAsRemindedMutation,
+    MarkSwitcherEmailAsRemindedMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    MarkSwitcherEmailAsRemindedMutation,
+    MarkSwitcherEmailAsRemindedMutationVariables
+  >(MarkSwitcherEmailAsRemindedDocument, baseOptions)
+}
+export type MarkSwitcherEmailAsRemindedMutationHookResult = ReturnType<
+  typeof useMarkSwitcherEmailAsRemindedMutation
+>
+export type MarkSwitcherEmailAsRemindedMutationResult = ApolloReactCommon.MutationResult<
+  MarkSwitcherEmailAsRemindedMutation
+>
+export type MarkSwitcherEmailAsRemindedMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  MarkSwitcherEmailAsRemindedMutation,
+  MarkSwitcherEmailAsRemindedMutationVariables
 >
 
 export interface IntrospectionResultData {

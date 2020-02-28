@@ -1,0 +1,3 @@
+mutation MarkSwitcherEmailAsReminded($id: ID!) {
+  markSwitchableSwitcherEmailAsReminded(id: $id)
+}
