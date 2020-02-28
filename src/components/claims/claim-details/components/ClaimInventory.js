@@ -1,23 +1,28 @@
-import Pricing from 'features/pricing'
-import { GET_INVENTORY, GET_CATEGORIES } from 'features/pricing/queries'
-import { ADD_ITEM, REMOVE_ITEM } from 'features/pricing/mutations'
-import * as React from 'react'
-import { Query, Mutation } from 'react-apollo'
-import { Paper } from '../../../../shared/Paper'
 import {
   TextField,
   Button,
   Grid,
-  Select, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
+  Select,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  IconButton,
 } from '@material-ui/core'
 import MenuItem from '@material-ui/core/MenuItem'
 import DeleteForeverIcon from '@material-ui/icons/Delete'
 import { formatMoney } from 'lib/intl'
+import { GET_INVENTORY, GET_CATEGORIES } from 'features/pricing/queries'
+import { ADD_ITEM, REMOVE_ITEM } from 'features/pricing/mutations'
+import * as React from 'react'
+import { Query, Mutation } from 'react-apollo'
+import { Paper } from '../../../shared/Paper'
 
 class InventoryList extends React.Component {
   render() {
     return (
-      <Table size="small" style={{marginBottom: "25px"}}>
+      <Table size="small" style={{ marginBottom: '25px' }}>
         <colgroup>
           <col style={{ width: '45%' }} />
           <col style={{ width: '24%' }} />
@@ -169,9 +174,8 @@ export class ClaimInventory extends React.Component {
                       claimId: this.props.claimId,
                     }}
                   >
-                    {({ data = {inventory: undefined} }) => {
-
-                      const {inventory: items = []} = data
+                    {({ data = { inventory: undefined } }) => {
+                      const { inventory: items = [] } = data
 
                       const {
                         itemName: name,

@@ -11,7 +11,7 @@ import { ClaimNotes } from './components/ClaimNotes'
 import { ClaimPayments } from './components/ClaimPayments'
 import { ClaimTypeForm } from './components/ClaimType'
 import { FileUpload } from './components/FileUpload'
-import { ClaimInventory } from './components/inventory/ClaimInventory'
+import { ClaimInventory } from './components/ClaimInventory'
 import { MemberInformation } from './components/MemberInformation'
 import { CLAIM_PAGE_QUERY } from './data'
 
