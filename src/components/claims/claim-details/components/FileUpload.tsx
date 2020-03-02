@@ -58,7 +58,7 @@ class FileUploadComponent extends React.Component<{
           <FileUploadContainer>
             <Dropzone onDrop={this.onDrop}>
               {({ getRootProps, getInputProps, isDragActive }) => (
-                <Button {...getRootProps()}>
+                <Button {...getRootProps()} css={undefined}>
                   <input {...getInputProps()} />
                   {isDragActive
                     ? 'Drop files here to upload them!'
