@@ -9,13 +9,14 @@ import {
   TableCell,
   TableBody,
   IconButton,
+  MenuItem,
   withStyles,
 } from '@material-ui/core'
-import MenuItem from '@material-ui/core/MenuItem'
 import DeleteForeverIcon from '@material-ui/icons/Delete'
 import { formatMoney } from 'lib/intl'
 import * as React from 'react'
 import { Query, Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import { Paper } from '../../../shared/Paper'
 import gql from 'graphql-tag'
 
@@ -35,22 +36,6 @@ const SEARCH_ITEMS = gql`
         id
         name
       }
-      suggestions {
-        name
-        items
-        others
-      }
-    }
-  }
-`
-
-const GET_PRICES = gql`
-  query Prices($date: String!, $ids: [String!]!) {
-    prices(date: $date, ids: $ids) {
-      itemId
-      upper
-      mean
-      lower
     }
   }
 `
@@ -72,25 +57,6 @@ const GET_INVENTORY = gql`
   }
 `
 
-const GET_INVENTORY_ITEM_FILTERS = gql`
-  query InventoryItemFilters($inventoryItemId: String!) {
-    inventoryItemFilters(inventoryItemId: $inventoryItemId) {
-      name
-      value
-    }
-  }
-`
-
-const GET_ALL_FILTERS = gql`
-  query Filters($categoryId: String!) {
-    filters(categoryId: $categoryId) {
-      name
-      items
-      others
-    }
-  }
-`
-
 const ADD_ITEM = gql`
   mutation AddIventoryItem($item: InventoryItemInput!) {
     addInventoryItem(item: $item)
@@ -103,7 +69,6 @@ const REMOVE_ITEM = gql`
   }
 `
 
-
 const InventoryTable = withStyles({
   root: {
     marginBottom: '25px',
@@ -112,95 +77,87 @@ const InventoryTable = withStyles({
 
 const InventoryTableCell = withStyles({
   root: {
-    paddingLeft: '0px'
+    paddingLeft: '0px',
   },
 })(TableCell)
 
 const DeleteIcon = withStyles({
-    root: {
-      margin: '0px',
-      padding: '4px',
-      color: '#666',
-    },
+  root: {
+    margin: '0px',
+    padding: '4px',
+    color: '#666',
+  },
 })(DeleteForeverIcon)
 
+const InventoryList = ({ claimId, items }) => {
+  const [removeItem, { called }] = useMutation(REMOVE_ITEM)
 
-class InventoryList extends React.Component {
-  render() {
-    return (
-      <InventoryTable size="small">
-        <colgroup>
-          <col style={{ width: '45%' }} />
-          <col style={{ width: '24%' }} />
-          <col style={{ width: '20%' }} />
-          <col style={{ width: '2%' }} />
-        </colgroup>
+  return (
+    <InventoryTable size="small">
+      <colgroup>
+        <col style={{ width: '45%' }} />
+        <col style={{ width: '24%' }} />
+        <col style={{ width: '20%' }} />
+        <col style={{ width: '2%' }} />
+      </colgroup>
 
-        <TableHead>
-          <TableRow>
-            <InventoryTableCell>Item</InventoryTableCell>
-            <InventoryTableCell>Category</InventoryTableCell>
-            <InventoryTableCell align="right">
-              Value
-            </InventoryTableCell>
-            <InventoryTableCell/>
-          </TableRow>
-        </TableHead>
+      <TableHead>
+        <TableRow>
+          <InventoryTableCell>Item</InventoryTableCell>
+          <InventoryTableCell>Category</InventoryTableCell>
+          <InventoryTableCell align="right">Value</InventoryTableCell>
+          <InventoryTableCell />
+        </TableRow>
+      </TableHead>
 
-        <TableBody>
-          {this.props.items.map((row) => (
-            <TableRow key={row.inventoryItemId}>
-              <InventoryTableCell>
-                {row.itemName}
-              </InventoryTableCell>
-              <InventoryTableCell>
-                {row.categoryName}
-              </InventoryTableCell>
+      <TableBody>
+        {items.map(
+          ({
+            inventoryItemId,
+            value,
+            itemName: name,
+            categoryName: category,
+          }) => (
+            <TableRow key={inventoryItemId}>
+              <InventoryTableCell>{name}</InventoryTableCell>
+              <InventoryTableCell>{category}</InventoryTableCell>
               <InventoryTableCell align="right">
                 {formatMoney(
                   'sv-SE',
                   0,
                 )({
-                  amount: row.value,
+                  amount: value,
                   currency: 'SEK',
                 })}
               </InventoryTableCell>
               <InventoryTableCell>
-                <Mutation
-                  mutation={REMOVE_ITEM}
-                  refetchQueries={() => {
-                    return [
-                      {
-                        query: GET_INVENTORY,
-                        variables: { claimId: this.props.claimId },
+                <IconButton
+                  disabled={called}
+                  onClick={() => {
+                    removeItem({
+                      variables: {
+                        inventoryItemId,
                       },
-                    ]
+                      refetchQueries: () => {
+                        return [
+                          {
+                            query: GET_INVENTORY,
+                            variables: { claimId },
+                          },
+                        ]
+                      },
+                    })
                   }}
                 >
-                  {(removeItem) => {
-                    return (
-                      <IconButton
-                        aria-label="Delete item"
-                        onClick={() => {
-                          removeItem({
-                            variables: {
-                              inventoryItemId: row.inventoryItemId,
-                            },
-                          })
-                        }}
-                      >
-                        <DeleteIcon/>
-                      </IconButton>
-                    )
-                  }}
-                </Mutation>
+                  <DeleteIcon style={{ color: called && '#BBB' }} />
+                </IconButton>
               </InventoryTableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </InventoryTable>
-    )
-  }
+          ),
+        )}
+      </TableBody>
+    </InventoryTable>
+  )
 }
 
 export class ClaimInventory extends React.Component {
@@ -343,11 +300,13 @@ export class ClaimInventory extends React.Component {
                                   {loadingCategories || errorCategories ? (
                                     <MenuItem value="Övrigt">Övrigt</MenuItem>
                                   ) : (
-                                    dataCategories.categories.map((c) => (
-                                      <MenuItem key={c.id} value={c.name}>
-                                        {c.name}
-                                      </MenuItem>
-                                    ))
+                                    dataCategories.categories.map(
+                                      ({ name, id }) => (
+                                        <MenuItem key={id} value={name}>
+                                          {name}
+                                        </MenuItem>
+                                      ),
+                                    )
                                   )}
                                 </Select>
                               </Grid>
