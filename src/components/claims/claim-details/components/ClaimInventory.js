@@ -14,11 +14,95 @@ import {
 import MenuItem from '@material-ui/core/MenuItem'
 import DeleteForeverIcon from '@material-ui/icons/Delete'
 import { formatMoney } from 'lib/intl'
-import { GET_INVENTORY, GET_CATEGORIES } from 'features/pricing/queries'
-import { ADD_ITEM, REMOVE_ITEM } from 'features/pricing/mutations'
 import * as React from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { Paper } from '../../../shared/Paper'
+import gql from 'graphql-tag'
+
+const GET_CATEGORIES = gql`
+  {
+    categories {
+      id
+      name
+    }
+  }
+`
+
+const SEARCH_ITEMS = gql`
+  query Items($payload: Payload!) {
+    items(payload: $payload) {
+      products {
+        id
+        name
+      }
+      suggestions {
+        name
+        items
+        others
+      }
+    }
+  }
+`
+
+const GET_PRICES = gql`
+  query Prices($date: String!, $ids: [String!]!) {
+    prices(date: $date, ids: $ids) {
+      itemId
+      upper
+      mean
+      lower
+    }
+  }
+`
+
+const GET_INVENTORY = gql`
+  query Inventory($claimId: ID!) {
+    inventory(claimId: $claimId) {
+      inventoryItemId
+      claimId
+      itemName
+      categoryName
+      categoryId
+      value
+      source
+      upperRange
+      lowerRange
+      itemId
+    }
+  }
+`
+
+const GET_INVENTORY_ITEM_FILTERS = gql`
+  query InventoryItemFilters($inventoryItemId: String!) {
+    inventoryItemFilters(inventoryItemId: $inventoryItemId) {
+      name
+      value
+    }
+  }
+`
+
+const GET_ALL_FILTERS = gql`
+  query Filters($categoryId: String!) {
+    filters(categoryId: $categoryId) {
+      name
+      items
+      others
+    }
+  }
+`
+
+const ADD_ITEM = gql`
+  mutation AddIventoryItem($item: InventoryItemInput!) {
+    addInventoryItem(item: $item)
+  }
+`
+
+const REMOVE_ITEM = gql`
+  mutation RemoveIventoryItem($inventoryItemId: ID!) {
+    removeInventoryItem(inventoryItemId: $inventoryItemId)
+  }
+`
+
 
 const InventoryTable = withStyles({
   root: {
