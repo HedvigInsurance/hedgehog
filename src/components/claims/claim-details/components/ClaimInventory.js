@@ -14,9 +14,9 @@ import {
 } from '@material-ui/core'
 import DeleteForeverIcon from '@material-ui/icons/Delete'
 import { formatMoney } from 'lib/intl'
-import * as React from 'react'
-import { Query, Mutation } from 'react-apollo'
-import { useMutation } from '@apollo/react-hooks'
+import React, { useState } from 'react'
+import { Query } from 'react-apollo'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import { Paper } from '../../../shared/Paper'
 import gql from 'graphql-tag'
 
@@ -90,7 +90,8 @@ const DeleteIcon = withStyles({
 })(DeleteForeverIcon)
 
 const InventoryList = ({ claimId, items }) => {
-  const [removeItem, { called }] = useMutation(REMOVE_ITEM)
+  const [removeItem] = useMutation(REMOVE_ITEM)
+  const [itemBeingDeleted, setItemBeingDeleted] = useState(null)
 
   return (
     <InventoryTable size="small">
@@ -132,24 +133,18 @@ const InventoryList = ({ claimId, items }) => {
               </InventoryTableCell>
               <InventoryTableCell>
                 <IconButton
-                  disabled={called}
+                  disabled={itemBeingDeleted === inventoryItemId}
                   onClick={() => {
+                    setItemBeingDeleted(inventoryItemId)
                     removeItem({
                       variables: {
-                        inventoryItemId,
+                        inventoryItemId: inventoryItemId,
                       },
-                      refetchQueries: () => {
-                        return [
-                          {
-                            query: GET_INVENTORY,
-                            variables: { claimId },
-                          },
-                        ]
-                      },
+                      refetchQueries: ['Inventory'],
                     })
                   }}
                 >
-                  <DeleteIcon style={{ color: called && '#BBB' }} />
+                  <DeleteIcon style={{color: itemBeingDeleted === inventoryItemId ? '#bbb' : null}} />
                 </IconButton>
               </InventoryTableCell>
             </TableRow>
@@ -160,205 +155,144 @@ const InventoryList = ({ claimId, items }) => {
   )
 }
 
-export class ClaimInventory extends React.Component {
-  state = {
-    itemName: '',
-    itemValue: '',
-    itemCategory: 'Övrigt',
-    fastSubmit: false,
+export const ClaimInventory = ({ claimId }) => {
+  const [itemName, setItemName] = useState('')
+  const [itemValue, setItemValue] = useState('')
+  const [itemCategory, setItemCategory] = useState('Övrigt')
+  const [fastSubmit, setFastSubmit] = useState(false)
+
+  const [addItem] = useMutation(ADD_ITEM)
+  const {
+    data: dataCategories,
+    loading: loadingCategories,
+    error: errorCategories,
+  } = useQuery(GET_CATEGORIES)
+
+  const { data = { inventory: undefined } } = useQuery(GET_INVENTORY, {
+    variables: { claimId },
+  })
+
+  const { inventory: items = [] } = data
+  const { itemName: name, itemCategory: category, itemValue: value } = {
+    itemName,
+    itemCategory,
+    itemValue,
   }
 
-  handleChange = (event) => {
-    const {
-      target: { name, value },
-    } = event
-    this.setState(() => ({ [name]: value }))
+  const formLooksGood =
+    /^[0-9]+$/.test(itemValue) && itemValue !== '' && itemName !== ''
+
+  const clearNewItem = () => {
+    setItemName('')
+    setItemValue('')
+    setItemCategory('Övrigt')
   }
 
-  formLooksGood = () => {
-    return (
-      /^[0-9]+$/.test(this.state.itemValue) &&
-      this.state.itemValue !== '' &&
-      this.state.itemName !== ''
-    )
+  const currentItem = {
+    inventoryItemId: null,
+    itemName: itemName,
+    categoryName: itemCategory,
+    categoryId: '-1',
+    value: itemValue,
+    source: 'Custom',
+    upperRange: null,
+    lowerRange: null,
+    itemId: null,
+    filters: [],
+    claimId,
   }
 
-  getNewItem = () => {
-    return {
-      inventoryItemId: null,
-      claimId: this.props.claimId,
-      itemName: this.state.itemName,
-      categoryName: this.state.itemCategory,
-      categoryId: '-1',
-      value: this.state.itemValue,
-      source: 'Custom',
-      upperRange: null,
-      lowerRange: null,
-      itemId: null,
-      filters: [],
-    }
-  }
+  return (
+    <Paper>
+      <div>
+        <h3>Inventory</h3>
+      </div>
 
-  clearNewItem = () => {
-    this.setState({
-      itemName: '',
-      itemValue: '',
-      itemCategory: 'Övrigt',
-    })
-  }
+      {items.length !== 0 && <InventoryList items={items} claimId />}
 
-  render() {
-    return (
-      <Mutation
-        mutation={ADD_ITEM}
-        refetchQueries={() => [
-          {
-            query: GET_INVENTORY,
-            variables: { claimId: this.props.claimId },
-          },
-        ]}
-      >
-        {(addItem, addItemMutation) => {
-          return addItemMutation.error ? null : (
-            <Query query={GET_CATEGORIES}>
-              {({
-                data: dataCategories,
-                loading: loadingCategories,
-                error: errorCategories,
-              }) => {
-                return (
-                  <Query
-                    query={GET_INVENTORY}
-                    variables={{
-                      claimId: this.props.claimId,
-                    }}
-                  >
-                    {({ data = { inventory: undefined } }) => {
-                      const { inventory: items = [] } = data
-
-                      const {
-                        itemName: name,
-                        itemCategory: category,
-                        itemValue: value,
-                      } = this.state
-
-                      return (
-                        <Paper>
-                          <div>
-                            <h3>Inventory</h3>
-                          </div>
-
-                          {items.length !== 0 && (
-                            <InventoryList
-                              items={items}
-                              claimId={this.props.claimId}
-                            />
-                          )}
-
-                          <form
-                            onSubmit={async (e) => {
-                              e.preventDefault()
-                              if (this.formLooksGood()) {
-                                await addItem({
-                                  variables: {
-                                    item: this.getNewItem(),
-                                  },
-                                })
-
-                                this.clearNewItem()
-                              }
-                            }}
-                          >
-                            <Grid container spacing={24}>
-                              <Grid item xs={5}>
-                                <TextField
-                                  fullWidth
-                                  id="item-name"
-                                  color="secondary"
-                                  placeholder="New item"
-                                  name="itemName"
-                                  value={name}
-                                  onChange={this.handleChange}
-                                  helperText={
-                                    this.formLooksGood() &&
-                                    this.state.fastSubmit
-                                      ? 'Press Return to add item ↩'
-                                      : ' '
-                                  }
-                                />
-                              </Grid>
-                              <Grid item xs={4}>
-                                <Select
-                                  fullWidth
-                                  id="item-category"
-                                  name="itemCategory"
-                                  value={category}
-                                  onChange={this.handleChange}
-                                >
-                                  <MenuItem value="Övrigt">Övrigt</MenuItem>
-
-                                  {loadingCategories || errorCategories ? (
-                                    <MenuItem value="Övrigt">Övrigt</MenuItem>
-                                  ) : (
-                                    dataCategories.categories.map(
-                                      ({ name, id }) => (
-                                        <MenuItem key={id} value={name}>
-                                          {name}
-                                        </MenuItem>
-                                      ),
-                                    )
-                                  )}
-                                </Select>
-                              </Grid>
-                              <Grid item xs={3}>
-                                <TextField
-                                  fullWidth
-                                  id="item-value"
-                                  color="secondary"
-                                  name="itemValue"
-                                  placeholder="Value"
-                                  align="right"
-                                  value={value}
-                                  onBlur={() =>
-                                    this.setState({ fastSubmit: false })
-                                  }
-                                  onFocus={() =>
-                                    this.setState({ fastSubmit: true })
-                                  }
-                                  onChange={this.handleChange}
-                                />
-                              </Grid>
-                            </Grid>
-                            <Grid
-                              container
-                              alignItems="flex-start"
-                              justify="flex-end"
-                              direction="row"
-                              spacing={24}
-                            >
-                              <Grid item xs={3}>
-                                <Button
-                                  fullWidth
-                                  variant="contained"
-                                  type="submit"
-                                  color="primary"
-                                  disabled={!this.formLooksGood()}
-                                >
-                                  Add item
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </form>
-                        </Paper>
-                      )
-                    }}
-                  </Query>
-                )
-              }}
-            </Query>
-          )
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault()
+          formLooksGood &&
+            (await addItem({
+              variables: {
+                item: currentItem,
+              },
+              refetchQueries: [
+                {
+                  query: GET_INVENTORY,
+                  variables: { claimId },
+                },
+              ],
+            }))
+          clearNewItem()
         }}
-      </Mutation>
-    )
-  }
+      >
+        <Grid container spacing={24}>
+          <Grid item xs={5}>
+            <TextField
+              fullWidth
+              color="secondary"
+              placeholder="New item"
+              value={name}
+              onChange={({ target: { value } }) => setItemName(value)}
+              helperText={
+                formLooksGood && fastSubmit ? 'Press Return to add item ↩' : ' '
+              }
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Select
+              fullWidth
+              value={category}
+              onChange={({ target: { value } }) => setItemCategory(value)}
+            >
+              <MenuItem value="Övrigt">Övrigt</MenuItem>
+
+              {loadingCategories || errorCategories ? (
+                <MenuItem value="Övrigt">Övrigt</MenuItem>
+              ) : (
+                dataCategories.categories.map(({ name, id }) => (
+                  <MenuItem key={id} value={name}>
+                    {name}
+                  </MenuItem>
+                ))
+              )}
+            </Select>
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              fullWidth
+              color="secondary"
+              placeholder="Value"
+              align="right"
+              value={value}
+              onBlur={() => setFastSubmit(false)}
+              onFocus={() => setFastSubmit(true)}
+              onChange={({ target: { value } }) => setItemValue(value)}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          alignItems="flex-start"
+          justify="flex-end"
+          direction="row"
+          spacing={24}
+        >
+          <Grid item xs={3}>
+            <Button
+              fullWidth
+              variant="contained"
+              type="submit"
+              color="primary"
+              disabled={!formLooksGood}
+            >
+              Add item
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </Paper>
+  )
 }
