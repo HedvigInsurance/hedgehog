@@ -1,41 +1,29 @@
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import {
-  TextField,
   Button,
   Grid,
-  Select,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   IconButton,
   MenuItem,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
   withStyles,
 } from '@material-ui/core'
 import DeleteForeverIcon from '@material-ui/icons/Delete'
+import gql from 'graphql-tag'
 import { formatMoney } from 'lib/intl'
 import React, { useState } from 'react'
-import { Query } from 'react-apollo'
-import { useMutation, useQuery } from '@apollo/react-hooks'
 import { Paper } from '../../../shared/Paper'
-import gql from 'graphql-tag'
 
 const GET_CATEGORIES = gql`
   {
     categories {
       id
       name
-    }
-  }
-`
-
-const SEARCH_ITEMS = gql`
-  query Items($payload: Payload!) {
-    items(payload: $payload) {
-      products {
-        id
-        name
-      }
     }
   }
 `
@@ -89,12 +77,12 @@ const DeleteIcon = withStyles({
   },
 })(DeleteForeverIcon)
 
-const InventoryList = ({ claimId, items }) => {
+const InventoryList = ({ items }) => {
   const [removeItem] = useMutation(REMOVE_ITEM)
   const [itemBeingDeleted, setItemBeingDeleted] = useState(null)
 
   return (
-    <InventoryTable size="small">
+    <InventoryTable>
       <colgroup>
         <col style={{ width: '45%' }} />
         <col style={{ width: '24%' }} />
@@ -112,44 +100,34 @@ const InventoryList = ({ claimId, items }) => {
       </TableHead>
 
       <TableBody>
-        {items.map(
-          ({
-            inventoryItemId,
-            value,
-            itemName: name,
-            categoryName: category,
-          }) => (
-            <TableRow key={inventoryItemId}>
-              <InventoryTableCell>{name}</InventoryTableCell>
-              <InventoryTableCell>{category}</InventoryTableCell>
-              <InventoryTableCell align="right">
-                {formatMoney(
-                  'sv-SE',
-                  0,
-                )({
-                  amount: value,
-                  currency: 'SEK',
-                })}
-              </InventoryTableCell>
-              <InventoryTableCell>
-                <IconButton
-                  disabled={itemBeingDeleted === inventoryItemId}
-                  onClick={() => {
-                    setItemBeingDeleted(inventoryItemId)
-                    removeItem({
-                      variables: {
-                        inventoryItemId: inventoryItemId,
-                      },
-                      refetchQueries: ['Inventory'],
-                    })
-                  }}
-                >
-                  <DeleteIcon style={{color: itemBeingDeleted === inventoryItemId ? '#bbb' : null}} />
-                </IconButton>
-              </InventoryTableCell>
-            </TableRow>
-          ),
-        )}
+        {items.map(({ inventoryItemId, value, itemName, categoryName }) => (
+          <TableRow key={inventoryItemId}>
+            <InventoryTableCell>{itemName}</InventoryTableCell>
+            <InventoryTableCell>{categoryName}</InventoryTableCell>
+            <InventoryTableCell align="right">
+              {formatMoney('sv-SE')({
+                amount: value,
+                currency: 'SEK',
+              })}
+            </InventoryTableCell>
+            <InventoryTableCell>
+              <IconButton
+                disabled={itemBeingDeleted === inventoryItemId}
+                onClick={() => {
+                  setItemBeingDeleted(inventoryItemId)
+                  removeItem({
+                    variables: {
+                      inventoryItemId,
+                    },
+                    refetchQueries: ['Inventory'],
+                  })
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </InventoryTableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </InventoryTable>
   )
@@ -173,11 +151,6 @@ export const ClaimInventory = ({ claimId }) => {
   })
 
   const { inventory: items = [] } = data
-  const { itemName: name, itemCategory: category, itemValue: value } = {
-    itemName,
-    itemCategory,
-    itemValue,
-  }
 
   const formLooksGood =
     /^[0-9]+$/.test(itemValue) && itemValue !== '' && itemName !== ''
@@ -190,7 +163,7 @@ export const ClaimInventory = ({ claimId }) => {
 
   const currentItem = {
     inventoryItemId: null,
-    itemName: itemName,
+    itemName,
     categoryName: itemCategory,
     categoryId: '-1',
     value: itemValue,
@@ -208,13 +181,13 @@ export const ClaimInventory = ({ claimId }) => {
         <h3>Inventory</h3>
       </div>
 
-      {items.length !== 0 && <InventoryList items={items} claimId />}
+      {items.length !== 0 && <InventoryList items={items} />}
 
       <form
         onSubmit={async (e) => {
           e.preventDefault()
-          formLooksGood &&
-            (await addItem({
+          if (formLooksGood) {
+            await addItem({
               variables: {
                 item: currentItem,
               },
@@ -224,7 +197,8 @@ export const ClaimInventory = ({ claimId }) => {
                   variables: { claimId },
                 },
               ],
-            }))
+            })
+          }
           clearNewItem()
         }}
       >
@@ -234,8 +208,8 @@ export const ClaimInventory = ({ claimId }) => {
               fullWidth
               color="secondary"
               placeholder="New item"
-              value={name}
-              onChange={({ target: { value } }) => setItemName(value)}
+              value={itemName}
+              onChange={(e) => setItemName(e.target.value)}
               helperText={
                 formLooksGood && fastSubmit ? 'Press Return to add item ↩' : ' '
               }
@@ -244,8 +218,8 @@ export const ClaimInventory = ({ claimId }) => {
           <Grid item xs={4}>
             <Select
               fullWidth
-              value={category}
-              onChange={({ target: { value } }) => setItemCategory(value)}
+              value={itemCategory}
+              onChange={(e) => setItemCategory(e.target.value)}
             >
               <MenuItem value="Övrigt">Övrigt</MenuItem>
 
@@ -265,11 +239,10 @@ export const ClaimInventory = ({ claimId }) => {
               fullWidth
               color="secondary"
               placeholder="Value"
-              align="right"
-              value={value}
+              value={itemValue}
               onBlur={() => setFastSubmit(false)}
               onFocus={() => setFastSubmit(true)}
-              onChange={({ target: { value } }) => setItemValue(value)}
+              onChange={(e) => setItemValue(e.target.value)}
             />
           </Grid>
         </Grid>
