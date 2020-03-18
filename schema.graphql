@@ -8,17 +8,14 @@ type QueryType {
   member(id: ID!): Member
   claim(id: ID!): Claim
   paymentSchedule(status: ChargeStatus!): [SchedulerState]
-  categories: [Category!]
-  items(payload: Payload!): ItemSearch!
-  prices(date: String!, ids: [String!]!): [PricePoint!]!
   ticket(id: ID!): Ticket
   getFullTicketHistory(id: ID!): TicketHistory
   tickets(resolved: Boolean): [Ticket!]!
   getAnswerSuggestion(question: String): [Suggestion!]!
   me: String
   inventory(claimId: ID!): [InventoryItem]!
-  filters(categoryId: String!): [FilterSuggestion!]!
-  inventoryItemFilters(inventoryItemId: String!): [FilterOutput]
+  categories: [String!]
+  itemSuggestions(query: String!): [SearchItem]!
   switchableSwitcherEmails: [SwitchableSwitcherEmail!]!
 }
 
@@ -90,23 +87,12 @@ type AutoLabel {
   message: Boolean
 }
 
-input FilterPayload {
-  filters: [Filter!]!
-  inventoryItemId: ID!
-}
-
 input InventoryItemInput {
   inventoryItemId: String
   claimId: String!
   itemName: String!
   categoryName: String!
-  categoryId: String!
   value: Float!
-  source: String!
-  upperRange: Float
-  lowerRange: Float
-  itemId: String
-  filters: [Filter]
 }
 
 type InventoryItem {
@@ -114,60 +100,13 @@ type InventoryItem {
   claimId: String!
   itemName: String!
   categoryName: String!
-  categoryId: String!
   value: Float!
-  source: String!
-  upperRange: Float
-  lowerRange: Float
-  itemId: String
-  filters: [FilterOutput]
 }
 
-type PricePoint {
-  id: String!
-  itemId: String!
-  date: String!
-  lower: Float!
-  mean: Float!
-  upper: Float!
-}
-
-type Category {
-  id: String!
+type SearchItem {
+  pricerunnerId: ID!
   name: String!
-}
-
-input Payload {
-  category: String!
-  query: String!
-  filters: [Filter!]!
-}
-
-input Filter {
-  name: String!
-  value: String!
-}
-
-type FilterOutput {
-  name: String!
-  value: String!
-}
-
-type ItemSearch {
-  products: [Item!]!
-  suggestions: [FilterSuggestion!]!
-}
-
-type FilterSuggestion {
-  name: String!
-  items: [String!]!
-  others: [String!]!
-}
-
-type Item {
-  category: String!
-  id: String!
-  name: String!
+  url: String!
 }
 
 type FileUpload {

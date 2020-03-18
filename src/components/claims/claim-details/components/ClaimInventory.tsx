@@ -20,11 +20,8 @@ import React, { useState } from 'react'
 import { Paper } from '../../../shared/Paper'
 
 const GET_CATEGORIES = gql`
-  {
-    categories {
-      id
-      name
-    }
+  query Categories {
+    categories
   }
 `
 
@@ -35,12 +32,16 @@ const GET_INVENTORY = gql`
       claimId
       itemName
       categoryName
-      categoryId
       value
-      source
-      upperRange
-      lowerRange
-      itemId
+    }
+  }
+`
+
+const GET_SUGGESTIONS = gql`
+  query Suggestions($query: String!) {
+    itemSuggestions(query: $query) {
+      name
+      url
     }
   }
 `
@@ -150,6 +151,10 @@ export const ClaimInventory = ({ claimId }) => {
     variables: { claimId },
   })
 
+  const { data: suggestions } = useQuery(GET_SUGGESTIONS, {
+    variables: { query: itemName },
+  })
+
   const { inventory: items = [] } = data
 
   const formLooksGood =
@@ -163,15 +168,9 @@ export const ClaimInventory = ({ claimId }) => {
 
   const currentItem = {
     inventoryItemId: null,
-    itemName,
     categoryName: itemCategory,
-    categoryId: '-1',
     value: itemValue,
-    source: 'Custom',
-    upperRange: null,
-    lowerRange: null,
-    itemId: null,
-    filters: [],
+    itemName,
     claimId,
   }
 
@@ -221,17 +220,15 @@ export const ClaimInventory = ({ claimId }) => {
               value={itemCategory}
               onChange={(e) => setItemCategory(e.target.value)}
             >
-              <MenuItem value="Övrigt">Övrigt</MenuItem>
+              {loadingCategories || errorCategories
+                ? null
+                : dataCategories.categories.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      {name}
+                    </MenuItem>
+                  ))}
 
-              {loadingCategories || errorCategories ? (
-                <MenuItem value="Övrigt">Övrigt</MenuItem>
-              ) : (
-                dataCategories.categories.map(({ name, id }) => (
-                  <MenuItem key={id} value={name}>
-                    {name}
-                  </MenuItem>
-                ))
-              )}
+              <MenuItem value="Övrigt">Övrigt</MenuItem>
             </Select>
           </Grid>
           <Grid item xs={3}>
@@ -264,6 +261,17 @@ export const ClaimInventory = ({ claimId }) => {
               Add item
             </Button>
           </Grid>
+        </Grid>
+        <Grid>
+          {typeof suggestions !== 'undefined' ? (
+            <>
+              {suggestions.itemSuggestions.map(({ name }) => {
+                return <p>{name}</p>
+              })}
+            </>
+          ) : (
+            <></>
+          )}
         </Grid>
       </form>
     </Paper>
