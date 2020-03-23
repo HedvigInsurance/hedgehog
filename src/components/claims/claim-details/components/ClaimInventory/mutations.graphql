@@ -1,0 +1,7 @@
+mutation AddIventoryItem($item: InventoryItemInput!) {
+  addInventoryItem(item: $item)
+}
+
+mutation RemoveIventoryItem($inventoryItemId: ID!) {
+  removeInventoryItem(inventoryItemId: $inventoryItemId)
+}

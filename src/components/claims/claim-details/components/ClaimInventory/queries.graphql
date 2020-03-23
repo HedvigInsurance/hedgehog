@@ -1,0 +1,29 @@
+query GetInventory($claimId: ID!) {
+  inventory(claimId: $claimId) {
+    inventoryItemId
+    claimId
+    itemName
+    categoryName
+    value
+    purchaseDate
+  }
+}
+
+query GetCategories {
+  categories
+}
+
+query GetSuggestions($query: String!) {
+  itemSuggestions(query: $query) {
+    name
+    pricerunnerId
+    url
+  }
+}
+
+query GetDetails($ids: [String!]!) {
+  itemDetails(ids: $ids) {
+    category
+    price
+  }
+}

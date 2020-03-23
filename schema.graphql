@@ -15,7 +15,8 @@ type QueryType {
   me: String
   inventory(claimId: ID!): [InventoryItem]!
   categories: [String!]
-  itemSuggestions(query: String!): [SearchItem]!
+  itemSuggestions(query: String!): [SearchItem!]!
+  itemDetails(ids: [String!]): SearchItem!
   switchableSwitcherEmails: [SwitchableSwitcherEmail!]!
 }
 
@@ -93,6 +94,7 @@ input InventoryItemInput {
   itemName: String!
   categoryName: String!
   value: Float!
+  purchaseDate: LocalDate
 }
 
 type InventoryItem {
@@ -101,13 +103,17 @@ type InventoryItem {
   itemName: String!
   categoryName: String!
   value: Float!
+  purchaseDate: LocalDate
 }
 
 type SearchItem {
-  pricerunnerId: ID!
-  name: String!
-  url: String!
+  name: String
+  category: String
+  url: String
+  pricerunnerId: [String]
+  price: Float
 }
+
 
 type FileUpload {
   fileUploadUrl: URL

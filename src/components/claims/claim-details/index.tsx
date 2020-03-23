@@ -7,7 +7,7 @@ import { CreateTicketStandAlone } from '../../../components/tickets/ticket/creat
 import { ClaimEvents } from './components/ClaimEvents'
 import { ClaimFileTable } from './components/ClaimFileTable'
 import { ClaimInformation } from './components/ClaimInformation'
-import { ClaimInventory } from './components/ClaimInventory'
+import { ClaimInventory } from './components/ClaimInventory/ClaimInventory'
 import { ClaimNotes } from './components/ClaimNotes'
 import { ClaimPayments } from './components/ClaimPayments'
 import { ClaimTypeForm } from './components/ClaimType'
@@ -79,7 +79,7 @@ const ClaimPage: React.SFC<Props> = ({ match }) => (
               refetchPage={refetch}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12}>
             {notes && (
               <ClaimNotes
                 notes={(notes.filter(Boolean) as ClaimNote[]) ?? []}
@@ -88,7 +88,7 @@ const ClaimPage: React.SFC<Props> = ({ match }) => (
               />
             )}
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12}>
             <ClaimInventory claimId={match.params.id} />
           </Grid>
           <Grid item xs={12}>
