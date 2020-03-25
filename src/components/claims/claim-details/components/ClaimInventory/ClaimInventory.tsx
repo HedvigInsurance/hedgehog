@@ -100,7 +100,7 @@ const InventoryList = ({ items, claimId }) => {
           {items.map(
             ({
               inventoryItemId,
-              value,
+              purchaseValue,
               itemName,
               categoryName,
               purchaseDate,
@@ -109,7 +109,7 @@ const InventoryList = ({ items, claimId }) => {
                 <InventoryTableCell>{itemName}</InventoryTableCell>
                 <InventoryTableCell>
                   {formatMoney('sv-SE')({
-                    amount: value,
+                    amount: purchaseValue,
                     currency: 'SEK',
                   })}
                 </InventoryTableCell>
@@ -149,7 +149,7 @@ const InventoryList = ({ items, claimId }) => {
 
 export const ClaimInventory = ({ claimId }) => {
   const [itemName, setItemName] = useState('')
-  const [itemValue, setItemValue] = useState('')
+  const [itemPurchaseValue, setItemPurchaseValue] = useState('')
   const [itemCategory, setItemCategory] = useState('Övrigt')
   const [itemPurchaseDate, setItemPurchaseDate] = useState(null)
 
@@ -157,7 +157,7 @@ export const ClaimInventory = ({ claimId }) => {
 
   const clearNewItem = () => {
     setItemName('')
-    setItemValue('')
+    setItemPurchaseValue('')
     setItemCategory('Övrigt')
     setItemPurchaseDate(null)
   }
@@ -167,7 +167,7 @@ export const ClaimInventory = ({ claimId }) => {
 
     if (itemName !== '' && name && price && category) {
       setItemName(name)
-      setItemValue(price)
+      setItemPurchaseValue(price)
       setItemCategory(category)
     }
   }
@@ -215,11 +215,13 @@ export const ClaimInventory = ({ claimId }) => {
   }
 
   const formLooksGood =
-    /^[0-9]+$/.test(itemValue) && itemValue !== '' && itemName !== ''
+    /^[0-9]+$/.test(itemPurchaseValue) &&
+    itemPurchaseValue !== '' &&
+    itemName !== ''
 
   const currentItem = {
     categoryName: itemCategory,
-    value: parseFloat(itemValue),
+    purchaseValue: parseFloat(itemPurchaseValue),
     itemName,
     claimId,
     purchaseDate: itemPurchaseDate,
@@ -287,9 +289,9 @@ export const ClaimInventory = ({ claimId }) => {
                 <TextField
                   fullWidth
                   color="secondary"
-                  placeholder="Value"
-                  value={itemValue}
-                  onChange={(e) => setItemValue(e.target.value)}
+                  placeholder="Purchase value"
+                  value={itemPurchaseValue}
+                  onChange={(e) => setItemPurchaseValue(e.target.value)}
                 />
               </Grid>
               <Grid item xs={3}>

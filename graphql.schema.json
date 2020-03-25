@@ -5263,7 +5263,7 @@
             "deprecationReason": null
           },
           {
-            "name": "value",
+            "name": "purchaseValue",
             "description": "",
             "args": [],
             "type": {
@@ -7387,7 +7387,7 @@
             "defaultValue": null
           },
           {
-            "name": "value",
+            "name": "purchaseValue",
             "description": "",
             "type": {
               "kind": "NON_NULL",

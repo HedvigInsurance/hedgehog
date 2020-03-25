@@ -4,7 +4,7 @@ query GetInventory($claimId: ID!) {
     claimId
     itemName
     categoryName
-    value
+    purchaseValue
     purchaseDate
   }
 }

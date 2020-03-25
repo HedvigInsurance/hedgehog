@@ -93,7 +93,7 @@ input InventoryItemInput {
   claimId: String!
   itemName: String!
   categoryName: String!
-  value: Float!
+  purchaseValue: Float!
   purchaseDate: LocalDate
 }
 
@@ -102,7 +102,7 @@ type InventoryItem {
   claimId: String!
   itemName: String!
   categoryName: String!
-  value: Float!
+  purchaseValue: Float!
   purchaseDate: LocalDate
 }
 

@@ -480,7 +480,7 @@ export type InventoryItem = {
   claimId: Scalars['String']
   itemName: Scalars['String']
   categoryName: Scalars['String']
-  value: Scalars['Float']
+  purchaseValue: Scalars['Float']
   purchaseDate?: Maybe<Scalars['LocalDate']>
 }
 
@@ -489,7 +489,7 @@ export type InventoryItemInput = {
   claimId: Scalars['String']
   itemName: Scalars['String']
   categoryName: Scalars['String']
-  value: Scalars['Float']
+  purchaseValue: Scalars['Float']
   purchaseDate?: Maybe<Scalars['LocalDate']>
 }
 
@@ -1114,7 +1114,7 @@ export type GetInventoryQuery = { __typename?: 'QueryType' } & {
         | 'claimId'
         | 'itemName'
         | 'categoryName'
-        | 'value'
+        | 'purchaseValue'
         | 'purchaseDate'
       >
     >
@@ -1289,7 +1289,7 @@ export const GetInventoryDocument = gql`
       claimId
       itemName
       categoryName
-      value
+      purchaseValue
       purchaseDate
     }
   }
