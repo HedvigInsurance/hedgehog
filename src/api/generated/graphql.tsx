@@ -505,6 +505,12 @@ export type IQuoteData = {
   livingSpace?: Maybe<Scalars['Int']>
 }
 
+export type ItemCategory = {
+  __typename?: 'ItemCategory'
+  primary?: Maybe<Scalars['String']>
+  secondaries: Array<Maybe<Scalars['String']>>
+}
+
 export type LegalProtectionClaim = {
   __typename?: 'LegalProtectionClaim'
   date?: Maybe<Scalars['LocalDate']>
@@ -787,7 +793,7 @@ export type QueryType = {
   getAnswerSuggestion: Array<Suggestion>
   me?: Maybe<Scalars['String']>
   inventory: Array<Maybe<InventoryItem>>
-  categories?: Maybe<Array<Scalars['String']>>
+  categories?: Maybe<Array<ItemCategory>>
   itemSuggestions: Array<SearchItem>
   itemDetails: SearchItem
   switchableSwitcherEmails: Array<SwitchableSwitcherEmail>
@@ -1123,10 +1129,16 @@ export type GetInventoryQuery = { __typename?: 'QueryType' } & {
 
 export type GetCategoriesQueryVariables = {}
 
-export type GetCategoriesQuery = { __typename?: 'QueryType' } & Pick<
-  QueryType,
-  'categories'
->
+export type GetCategoriesQuery = { __typename?: 'QueryType' } & {
+  categories: Maybe<
+    Array<
+      { __typename?: 'ItemCategory' } & Pick<
+        ItemCategory,
+        'primary' | 'secondaries'
+      >
+    >
+  >
+}
 
 export type GetSuggestionsQueryVariables = {
   query: Scalars['String']
@@ -1345,7 +1357,10 @@ export type GetInventoryQueryResult = ApolloReactCommon.QueryResult<
 >
 export const GetCategoriesDocument = gql`
   query GetCategories {
-    categories
+    categories {
+      primary
+      secondaries
+    }
   }
 `
 

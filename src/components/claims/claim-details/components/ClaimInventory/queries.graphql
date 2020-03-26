@@ -10,7 +10,10 @@ query GetInventory($claimId: ID!) {
 }
 
 query GetCategories {
-  categories
+  categories {
+    primary
+    secondaries
+  }
 }
 
 query GetSuggestions($query: String!) {

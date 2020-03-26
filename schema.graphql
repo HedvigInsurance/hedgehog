@@ -14,7 +14,7 @@ type QueryType {
   getAnswerSuggestion(question: String): [Suggestion!]!
   me: String
   inventory(claimId: ID!): [InventoryItem]!
-  categories: [String!]
+  categories: [ItemCategory!]
   itemSuggestions(query: String!): [SearchItem!]!
   itemDetails(ids: [String!]): SearchItem!
   switchableSwitcherEmails: [SwitchableSwitcherEmail!]!
@@ -114,6 +114,10 @@ type SearchItem {
   price: Float
 }
 
+type ItemCategory {
+  primary: String
+  secondaries: [String]!
+}
 
 type FileUpload {
   fileUploadUrl: URL

@@ -1,9 +1,13 @@
-import { useMutation, useQuery } from '@apollo/react-hooks'
 import {
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grid,
   IconButton,
+  InputLabel,
   MenuItem,
   Select,
   Table,
@@ -70,17 +74,17 @@ const InventoryList = ({ items, claimId }) => {
     <>
       <Table>
         <colgroup>
-          <col style={{ width: '35%' }} />
-          <col style={{ width: '17.5%' }} />
+          <col style={{ width: '34%' }} />
+          <col style={{ width: '16.5%' }} />
           <col style={{ width: '26.5%' }} />
-          <col style={{ width: '20%' }} />
+          <col style={{ width: '22%' }} />
           <col style={{ width: '2%' }} />
         </colgroup>
 
         <TableHead>
           <TableRow>
             <InventoryTableHeadCell>Item</InventoryTableHeadCell>
-            <InventoryTableHeadCell>Value</InventoryTableHeadCell>
+            <InventoryTableHeadCell>Purchase value</InventoryTableHeadCell>
             <InventoryTableHeadCell>Category</InventoryTableHeadCell>
             <InventoryTableHeadCell>Purchase date</InventoryTableHeadCell>
             <InventoryTableHeadCell />
@@ -150,16 +154,22 @@ const InventoryList = ({ items, claimId }) => {
 export const ClaimInventory = ({ claimId }) => {
   const [itemName, setItemName] = useState('')
   const [itemPurchaseValue, setItemPurchaseValue] = useState('')
-  const [itemCategory, setItemCategory] = useState('Övrigt')
+  const [itemCategory, setItemCategory] = useState('Miscellaneous')
   const [itemPurchaseDate, setItemPurchaseDate] = useState(null)
+
+  const [showCategoryPicker, setShowCategoryPicker] = useState(false)
+  const [itemPrimaryCategory, setItemPrimaryCategory] = useState('')
+  const [itemSecondaryCategory, setItemSecondaryCategory] = useState('')
 
   const [addInventoryItem] = useAddIventoryItemMutation()
 
   const clearNewItem = () => {
     setItemName('')
     setItemPurchaseValue('')
-    setItemCategory('Övrigt')
+    setItemCategory('Miscellaneous')
     setItemPurchaseDate(null)
+    setItemPrimaryCategory('')
+    setItemSecondaryCategory('')
   }
 
   const useSuggestion = () => {
@@ -186,11 +196,7 @@ export const ClaimInventory = ({ claimId }) => {
     return { name: null, pricerunnerId: [], url: null }
   }
 
-  const {
-    data: dataCategories,
-    loading: loadingCategories,
-    error: errorCategories,
-  } = useGetCategoriesQuery()
+  const { data: categories } = useGetCategoriesQuery()
 
   const { data = { inventory: undefined } } = useGetInventoryQuery({
     variables: { claimId },
@@ -229,6 +235,7 @@ export const ClaimInventory = ({ claimId }) => {
 
   return (
     <Paper>
+      {console.log(categories)}
       <Grid container spacing={24}>
         <Grid item xs={12}>
           <div>
@@ -295,21 +302,83 @@ export const ClaimInventory = ({ claimId }) => {
                 />
               </Grid>
               <Grid item xs={3}>
-                <Select
+                <TextField
                   fullWidth
+                  color="secondary"
+                  placeholder="Category"
+                  onClick={() => setShowCategoryPicker(true)}
                   value={itemCategory}
-                  onChange={(e) => setItemCategory(e.target.value)}
+                />
+                <Dialog
+                  fullWidth
+                  open={showCategoryPicker}
+                  onClose={() => setShowCategoryPicker(false)}
+                  aria-labelledby="form-dialog-title"
                 >
-                  {loadingCategories || errorCategories
-                    ? null
-                    : dataCategories.categories.map((name) => (
-                        <MenuItem key={name} value={name}>
-                          {name}
-                        </MenuItem>
-                      ))}
-
-                  <MenuItem value="Övrigt">Övrigt</MenuItem>
-                </Select>
+                  <DialogTitle>Select category</DialogTitle>
+                  <DialogContent>
+                    <InputLabel>Primary</InputLabel>
+                    <Select
+                      value={itemPrimaryCategory}
+                      onChange={(e) => {
+                        setItemPrimaryCategory(e.target.value)
+                        setItemSecondaryCategory('')
+                      }}
+                      style={{ marginBottom: '25px' }}
+                    >
+                      {categories?.categories.map(({ primary }) => {
+                        return (
+                          <MenuItem key={primary} value={primary}>
+                            {primary}
+                          </MenuItem>
+                        )
+                      })}
+                    </Select>
+                    <InputLabel>Secondary</InputLabel>
+                    <Select
+                      disabled={false}
+                      value={itemSecondaryCategory}
+                      onChange={(e) => setItemSecondaryCategory(e.target.value)}
+                    >
+                      {categories?.categories.map(
+                        ({ primary, secondaries }) => {
+                          return (
+                            primary === itemPrimaryCategory &&
+                            secondaries.map((secondary) => {
+                              return (
+                                <MenuItem key={secondary} value={secondary}>
+                                  {secondary}
+                                </MenuItem>
+                              )
+                            })
+                          )
+                        },
+                      )}
+                    </Select>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={() => setShowCategoryPicker(false)}
+                      color="primary"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setItemCategory(
+                          itemPrimaryCategory +
+                            (itemSecondaryCategory !== ''
+                              ? ', ' + itemSecondaryCategory
+                              : ''),
+                        )
+                        setShowCategoryPicker(false)
+                      }}
+                      color="primary"
+                    >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </Grid>
               <Grid item xs={3}>
                 <DatePicker
@@ -325,7 +394,7 @@ export const ClaimInventory = ({ claimId }) => {
                       ? setItemPurchaseDate(format(date, 'yyyy-MM-dd'))
                       : setItemPurchaseDate(null)
                   }}
-                  placeholder="Purchase date (optional)"
+                  placeholder="Purchase date"
                 />
               </Grid>
             </Grid>
