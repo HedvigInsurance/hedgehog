@@ -247,12 +247,12 @@ export const ClaimInventory = ({ claimId }) => {
     purchaseDate: itemPurchaseDate === '' ? null : itemPurchaseDate,
   }
 
-  const secondaryCategoryAvailable =
-    categories &&
-    categories.some(
-      ({ primary, secondaries }) =>
-        primary === itemPrimaryCategory && secondaries.length === 0,
-    )
+  const secondaryCategoryDisabled = categories
+    ? categories.some(
+        ({ primary, secondaries }) =>
+          primary === itemPrimaryCategory && secondaries.length === 0,
+      )
+    : false
 
   return (
     <Paper>
@@ -344,10 +344,16 @@ export const ClaimInventory = ({ claimId }) => {
                     </Select>
                     <InputLabel>Secondary</InputLabel>
                     <Select
-                      disabled={!secondaryCategoryAvailable}
+                      disabled={secondaryCategoryDisabled}
                       value={itemSecondaryCategory}
                       onChange={(e) => setItemSecondaryCategory(e.target.value)}
+                      displayEmpty
                     >
+                      {secondaryCategoryDisabled && (
+                        <MenuItem value="" disabled>
+                          Not applicable
+                        </MenuItem>
+                      )}
                       {categories &&
                         categories.map(({ primary, secondaries }) => {
                           return (
