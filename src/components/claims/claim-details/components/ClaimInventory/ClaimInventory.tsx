@@ -66,6 +66,28 @@ const DeleteIcon = withStyles({
   },
 })(DeleteForeverIcon)
 
+const SuggestionChips = ({ suggestion, itemName }) => {
+  return (
+    <>
+      {suggestion.name && itemName !== '' && (
+        <Grid item xs={9}>
+          <Chip
+            style={{ fontWeight: 500, color: '#555' }}
+            icon={<WbIncandescentOutlinedIcon style={{ fontSize: 'medium' }} />}
+            label="Suggestion"
+          />
+          <Chip
+            style={{ fontWeight: 600, marginLeft: '8px' }}
+            color="primary"
+            variant="outlined"
+            label={suggestion.name}
+          />
+        </Grid>
+      )}
+    </>
+  )
+}
+
 const InventoryList = ({ items, claimId }) => {
   const [itemBeingDeleted, setItemBeingDeleted] = useState(null)
   const [removeInventoryItem] = useRemoveIventoryItemMutation()
@@ -155,10 +177,12 @@ export const ClaimInventory = ({ claimId }) => {
   const [itemName, setItemName] = useState('')
   const [itemPurchaseValue, setItemPurchaseValue] = useState('')
   const [itemCategory, setItemCategory] = useState('Miscellaneous')
-  const [itemPurchaseDate, setItemPurchaseDate] = useState(null)
+  const [itemPurchaseDate, setItemPurchaseDate] = useState('')
 
   const [showCategoryPicker, setShowCategoryPicker] = useState(false)
-  const [itemPrimaryCategory, setItemPrimaryCategory] = useState('')
+  const [itemPrimaryCategory, setItemPrimaryCategory] = useState(
+    'Miscellaneous',
+  )
   const [itemSecondaryCategory, setItemSecondaryCategory] = useState('')
 
   const [addInventoryItem] = useAddIventoryItemMutation()
@@ -167,57 +191,47 @@ export const ClaimInventory = ({ claimId }) => {
     setItemName('')
     setItemPurchaseValue('')
     setItemCategory('Miscellaneous')
-    setItemPurchaseDate(null)
-    setItemPrimaryCategory('')
+    setItemPurchaseDate('')
+    setItemPrimaryCategory('Miscellaneous')
     setItemSecondaryCategory('')
   }
 
-  const useSuggestion = () => {
-    const { name, price, category } = suggestion
-
-    if (itemName !== '' && name && price && category) {
-      setItemName(name)
-      setItemPurchaseValue(price)
-      setItemCategory(category)
-    }
-  }
-
   const getAggregatedResult = () => {
-    if (suggestionResult.length !== 0) {
+    if (suggestionResult.itemSuggestions.length !== 0) {
       const aggregatedResult = suggestionResult.itemSuggestions[0]
 
-      if (typeof aggregatedResult !== 'undefined') {
-        if (!aggregatedResult.url) {
-          return aggregatedResult
-        }
+      if (!aggregatedResult?.url) {
+        return aggregatedResult
       }
     }
-
-    return { name: null, pricerunnerId: [], url: null }
+    return { name: null, pricerunnerId: [] }
   }
 
-  const { data: categories } = useGetCategoriesQuery()
+  const {
+    data: { categories } = {
+      categories: [{ primary: 'Miscellaneous', secondaries: [] }],
+    },
+  } = useGetCategoriesQuery()
 
-  const { data = { inventory: undefined } } = useGetInventoryQuery({
+  const { data: { inventory } = { inventory: [] } } = useGetInventoryQuery({
     variables: { claimId },
   })
 
-  const { data: suggestionResult = [] } = useGetSuggestionsQuery({
+  const {
+    data: suggestionResult = { itemSuggestions: [] },
+  } = useGetSuggestionsQuery({
     variables: { query: itemName },
   })
 
-  const {
-    data: smartSuggestion = { itemDetails: { category: null, price: null } },
-  } = useGetDetailsQuery({
+  // @ts-ignore
+  const { data: smartSuggestion } = useGetDetailsQuery({
     variables: { ids: getAggregatedResult().pricerunnerId },
   })
 
-  const { inventory: items = [] } = data
-
   const suggestion = {
-    name: getAggregatedResult().name,
-    category: smartSuggestion.itemDetails.category,
-    price: smartSuggestion.itemDetails.price,
+    name: getAggregatedResult()?.name,
+    category: smartSuggestion?.itemDetails.category,
+    price: smartSuggestion?.itemDetails.price,
   }
 
   const formLooksGood =
@@ -230,41 +244,44 @@ export const ClaimInventory = ({ claimId }) => {
     purchaseValue: parseFloat(itemPurchaseValue),
     itemName,
     claimId,
-    purchaseDate: itemPurchaseDate,
+    purchaseDate: itemPurchaseDate === '' ? null : itemPurchaseDate,
   }
+
+  const secondaryCategoryAvailable =
+    categories &&
+    categories.some(
+      ({ primary, secondaries }) =>
+        primary === itemPrimaryCategory && secondaries.length === 0,
+    )
 
   return (
     <Paper>
-      {console.log(categories)}
       <Grid container spacing={24}>
         <Grid item xs={12}>
           <div>
             <h3>Inventory</h3>
           </div>
 
-          <InventoryList
-            items={items.length !== 0 ? items : []}
-            claimId={claimId}
-          />
+          <InventoryList items={inventory} claimId={claimId} />
 
           <form
             onSubmit={async (e) => {
               e.preventDefault()
-
-              if (formLooksGood) {
-                await addInventoryItem({
-                  variables: {
-                    item: currentItem,
-                  },
-                  refetchQueries: () => [
-                    {
-                      query: GetInventoryDocument,
-                      variables: { claimId },
-                    },
-                  ],
-                })
-                clearNewItem()
+              if (!formLooksGood) {
+                return
               }
+              await addInventoryItem({
+                variables: {
+                  item: currentItem,
+                },
+                refetchQueries: () => [
+                  {
+                    query: GetInventoryDocument,
+                    variables: { claimId },
+                  },
+                ],
+              })
+              clearNewItem()
             }}
           >
             <Grid container spacing={24}>
@@ -275,20 +292,8 @@ export const ClaimInventory = ({ claimId }) => {
                   placeholder="New item"
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.keyCode === 18) {
-                      useSuggestion()
-                    }
-                  }}
                   helperText={
-                    formLooksGood
-                      ? 'Press Return to add item ↩'
-                      : itemName !== '' &&
-                        suggestion.name &&
-                        suggestion.category &&
-                        itemName !== suggestion.name
-                      ? 'Press Alt to use suggestion ⌥'
-                      : ' '
+                    formLooksGood ? 'Press Return to add item ↩' : ' '
                   }
                 />
               </Grid>
@@ -313,7 +318,6 @@ export const ClaimInventory = ({ claimId }) => {
                   fullWidth
                   open={showCategoryPicker}
                   onClose={() => setShowCategoryPicker(false)}
-                  aria-labelledby="form-dialog-title"
                 >
                   <DialogTitle>Select category</DialogTitle>
                   <DialogContent>
@@ -326,34 +330,40 @@ export const ClaimInventory = ({ claimId }) => {
                       }}
                       style={{ marginBottom: '25px' }}
                     >
-                      {categories?.categories.map(({ primary }) => {
-                        return (
-                          <MenuItem key={primary} value={primary}>
-                            {primary}
-                          </MenuItem>
-                        )
-                      })}
+                      {categories &&
+                        categories.map(({ primary }) => {
+                          return (
+                            <MenuItem
+                              key={primary ? primary.toString() : ''}
+                              value={primary ? primary.toString() : ''}
+                            >
+                              {primary}
+                            </MenuItem>
+                          )
+                        })}
                     </Select>
                     <InputLabel>Secondary</InputLabel>
                     <Select
-                      disabled={false}
+                      disabled={!secondaryCategoryAvailable}
                       value={itemSecondaryCategory}
                       onChange={(e) => setItemSecondaryCategory(e.target.value)}
                     >
-                      {categories?.categories.map(
-                        ({ primary, secondaries }) => {
+                      {categories &&
+                        categories.map(({ primary, secondaries }) => {
                           return (
                             primary === itemPrimaryCategory &&
                             secondaries.map((secondary) => {
                               return (
-                                <MenuItem key={secondary} value={secondary}>
-                                  {secondary}
+                                <MenuItem
+                                  key={secondary ? secondary.toString() : ''}
+                                  value={secondary ? secondary.toString() : ''}
+                                >
+                                  {secondary ? secondary.toString() : ''}
                                 </MenuItem>
                               )
                             })
                           )
-                        },
-                      )}
+                        })}
                     </Select>
                   </DialogContent>
                   <DialogActions>
@@ -388,11 +398,11 @@ export const ClaimInventory = ({ claimId }) => {
                     date ? format(date, 'yyyy-MM-dd') : ''
                   }
                   fullWidth
-                  value={itemPurchaseDate}
+                  value={itemPurchaseDate === '' ? null : itemPurchaseDate}
                   onChange={(date: Date) => {
                     date
                       ? setItemPurchaseDate(format(date, 'yyyy-MM-dd'))
-                      : setItemPurchaseDate(null)
+                      : setItemPurchaseDate('')
                   }}
                   placeholder="Purchase date"
                 />
@@ -406,42 +416,7 @@ export const ClaimInventory = ({ claimId }) => {
               spacing={24}
               style={{ marginTop: '10px' }}
             >
-              {suggestion.name && itemName !== '' && (
-                <Grid item xs={9}>
-                  <Chip
-                    style={{ fontWeight: 500, color: '#555' }}
-                    icon={
-                      <WbIncandescentOutlinedIcon
-                        style={{ fontSize: 'medium' }}
-                      />
-                    }
-                    label="Suggestion"
-                  />
-                  <Chip
-                    style={{ fontWeight: 600, marginLeft: '8px' }}
-                    color="primary"
-                    variant="outlined"
-                    label={suggestion.name}
-                  />
-                  {suggestion.category && (
-                    <Chip
-                      style={{ fontWeight: 600, marginLeft: '4px' }}
-                      color="primary"
-                      variant="outlined"
-                      label={suggestion.category}
-                    />
-                  )}
-
-                  {suggestion.price && (
-                    <Chip
-                      style={{ fontWeight: 600, marginLeft: '4px' }}
-                      color="primary"
-                      variant="outlined"
-                      label={suggestion.price + ' kr'}
-                    />
-                  )}
-                </Grid>
-              )}
+              <SuggestionChips suggestion={suggestion} itemName={itemName} />
               <Grid item xs={3}>
                 <Button
                   fullWidth
