@@ -10,6 +10,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Popover,
   Table,
   TableBody,
   TableCell,
@@ -18,8 +19,9 @@ import {
   TextField,
   withStyles,
 } from '@material-ui/core'
+import ArrowRightIcon from '@material-ui/icons/ArrowRight'
+import CloseIcon from '@material-ui/icons/Close'
 import DeleteForeverIcon from '@material-ui/icons/Delete'
-import WbIncandescentOutlinedIcon from '@material-ui/icons/WbIncandescentOutlined'
 import {
   GetInventoryDocument,
   useAddIventoryItemMutation,
@@ -32,6 +34,7 @@ import {
 import format from 'date-fns/format'
 import { DatePicker } from 'material-ui-pickers'
 import React, { useState } from 'react'
+import { Dropdown } from 'semantic-ui-react'
 import { formatMoney } from '../../../../../lib/intl'
 import { Paper } from '../../../../shared/Paper'
 
@@ -66,27 +69,7 @@ const DeleteIcon = withStyles({
   },
 })(DeleteForeverIcon)
 
-const SuggestionChips = ({ suggestion, itemName }) => {
-  return (
-    <>
-      {suggestion.name && itemName !== '' && (
-        <Grid item xs={9}>
-          <Chip
-            style={{ fontWeight: 500, color: '#555' }}
-            icon={<WbIncandescentOutlinedIcon style={{ fontSize: 'medium' }} />}
-            label="Suggestion"
-          />
-          <Chip
-            style={{ fontWeight: 600, marginLeft: '8px' }}
-            color="primary"
-            variant="outlined"
-            label={suggestion.name}
-          />
-        </Grid>
-      )}
-    </>
-  )
-}
+const itemTree = {}
 
 const InventoryList = ({ items, claimId }) => {
   const [itemBeingDeleted, setItemBeingDeleted] = useState(null)
@@ -176,83 +159,12 @@ const InventoryList = ({ items, claimId }) => {
 export const ClaimInventory = ({ claimId }) => {
   const [itemName, setItemName] = useState('')
   const [itemPurchaseValue, setItemPurchaseValue] = useState('')
-  const [itemCategory, setItemCategory] = useState('Miscellaneous')
   const [itemPurchaseDate, setItemPurchaseDate] = useState('')
-
-  const [showCategoryPicker, setShowCategoryPicker] = useState(false)
-  const [itemPrimaryCategory, setItemPrimaryCategory] = useState(
-    'Miscellaneous',
-  )
-  const [itemSecondaryCategory, setItemSecondaryCategory] = useState('')
-
   const [addInventoryItem] = useAddIventoryItemMutation()
-
-  const clearNewItem = () => {
-    setItemName('')
-    setItemPurchaseValue('')
-    setItemCategory('Miscellaneous')
-    setItemPurchaseDate('')
-    setItemPrimaryCategory('Miscellaneous')
-    setItemSecondaryCategory('')
-  }
-
-  const getAggregatedResult = () => {
-    if (suggestionResult.itemSuggestions.length !== 0) {
-      const aggregatedResult = suggestionResult.itemSuggestions[0]
-
-      if (!aggregatedResult?.url) {
-        return aggregatedResult
-      }
-    }
-    return { name: null, pricerunnerId: [] }
-  }
-
-  const {
-    data: { categories } = {
-      categories: [{ primary: 'Miscellaneous', secondaries: [] }],
-    },
-  } = useGetCategoriesQuery()
 
   const { data: { inventory } = { inventory: [] } } = useGetInventoryQuery({
     variables: { claimId },
   })
-
-  const {
-    data: suggestionResult = { itemSuggestions: [] },
-  } = useGetSuggestionsQuery({
-    variables: { query: itemName },
-  })
-
-  // @ts-ignore
-  const { data: smartSuggestion } = useGetDetailsQuery({
-    variables: { ids: getAggregatedResult().pricerunnerId },
-  })
-
-  const suggestion = {
-    name: getAggregatedResult()?.name,
-    category: smartSuggestion?.itemDetails.category,
-    price: smartSuggestion?.itemDetails.price,
-  }
-
-  const formLooksGood =
-    /^[0-9]+$/.test(itemPurchaseValue) &&
-    itemPurchaseValue !== '' &&
-    itemName !== ''
-
-  const currentItem = {
-    categoryName: itemCategory,
-    purchaseValue: parseFloat(itemPurchaseValue),
-    itemName,
-    claimId,
-    purchaseDate: itemPurchaseDate === '' ? null : itemPurchaseDate,
-  }
-
-  const secondaryCategoryDisabled = categories
-    ? categories.some(
-        ({ primary, secondaries }) =>
-          primary === itemPrimaryCategory && secondaries.length === 0,
-      )
-    : false
 
   return (
     <Paper>
@@ -264,26 +176,7 @@ export const ClaimInventory = ({ claimId }) => {
 
           <InventoryList items={inventory} claimId={claimId} />
 
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault()
-              if (!formLooksGood) {
-                return
-              }
-              await addInventoryItem({
-                variables: {
-                  item: currentItem,
-                },
-                refetchQueries: () => [
-                  {
-                    query: GetInventoryDocument,
-                    variables: { claimId },
-                  },
-                ],
-              })
-              clearNewItem()
-            }}
-          >
+          <form>
             <Grid container spacing={24}>
               <Grid item xs={4}>
                 <TextField
@@ -291,10 +184,52 @@ export const ClaimInventory = ({ claimId }) => {
                   color="secondary"
                   placeholder="New item"
                   value={itemName}
+                  InputProps={{
+                    startAdornment: (
+                      <>
+                        <Chip
+                          style={{ fontWeight: 600 }}
+                          color="primary"
+                          label={'Phone'}
+                          deleteIcon={
+                            <ArrowRightIcon style={{ fontSize: 'medium' }} />
+                          }
+                        />
+                        <Chip
+                          style={{ fontWeight: 600, marginLeft: '4px' }}
+                          color="primary"
+                          variant="outlined"
+                          label={'Apple iPhone'}
+                          deleteIcon={
+                            <ArrowRightIcon style={{ fontSize: 'medium' }} />
+                          }
+                        />
+                        <Chip
+                          style={{ fontWeight: 600, marginLeft: '4px' }}
+                          color="primary"
+                          variant="outlined"
+                          label={'8'}
+                          deleteIcon={
+                            <ArrowRightIcon style={{ fontSize: 'medium' }} />
+                          }
+                        />
+                        <Chip
+                          style={{
+                            fontWeight: 600,
+                            marginLeft: '4px',
+                            marginRight: '4px',
+                          }}
+                          color="primary"
+                          variant="outlined"
+                          label={'64GB'}
+                          deleteIcon={
+                            <CloseIcon style={{ fontSize: 'medium' }} />
+                          }
+                        />
+                      </>
+                    ),
+                  }}
                   onChange={(e) => setItemName(e.target.value)}
-                  helperText={
-                    formLooksGood ? 'Press Return to add item ↩' : ' '
-                  }
                 />
               </Grid>
               <Grid item xs={2}>
@@ -305,96 +240,6 @@ export const ClaimInventory = ({ claimId }) => {
                   value={itemPurchaseValue}
                   onChange={(e) => setItemPurchaseValue(e.target.value)}
                 />
-              </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  fullWidth
-                  color="secondary"
-                  placeholder="Category"
-                  onClick={() => setShowCategoryPicker(true)}
-                  value={itemCategory}
-                />
-                <Dialog
-                  fullWidth
-                  open={showCategoryPicker}
-                  onClose={() => setShowCategoryPicker(false)}
-                >
-                  <DialogTitle>Select category</DialogTitle>
-                  <DialogContent>
-                    <InputLabel>Primary</InputLabel>
-                    <Select
-                      value={itemPrimaryCategory}
-                      onChange={(e) => {
-                        setItemPrimaryCategory(e.target.value)
-                        setItemSecondaryCategory('')
-                      }}
-                      style={{ marginBottom: '25px' }}
-                    >
-                      {categories &&
-                        categories.map(({ primary }) => {
-                          return (
-                            <MenuItem
-                              key={primary ? primary.toString() : ''}
-                              value={primary ? primary.toString() : ''}
-                            >
-                              {primary}
-                            </MenuItem>
-                          )
-                        })}
-                    </Select>
-                    <InputLabel>Secondary</InputLabel>
-                    <Select
-                      disabled={secondaryCategoryDisabled}
-                      value={itemSecondaryCategory}
-                      onChange={(e) => setItemSecondaryCategory(e.target.value)}
-                      displayEmpty
-                    >
-                      {secondaryCategoryDisabled && (
-                        <MenuItem value="" disabled>
-                          Not applicable
-                        </MenuItem>
-                      )}
-                      {categories &&
-                        categories.map(({ primary, secondaries }) => {
-                          return (
-                            primary === itemPrimaryCategory &&
-                            secondaries.map((secondary) => {
-                              return (
-                                <MenuItem
-                                  key={secondary ? secondary.toString() : ''}
-                                  value={secondary ? secondary.toString() : ''}
-                                >
-                                  {secondary ? secondary.toString() : ''}
-                                </MenuItem>
-                              )
-                            })
-                          )
-                        })}
-                    </Select>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      onClick={() => setShowCategoryPicker(false)}
-                      color="primary"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setItemCategory(
-                          itemPrimaryCategory +
-                            (itemSecondaryCategory !== ''
-                              ? ', ' + itemSecondaryCategory
-                              : ''),
-                        )
-                        setShowCategoryPicker(false)
-                      }}
-                      color="primary"
-                    >
-                      Confirm
-                    </Button>
-                  </DialogActions>
-                </Dialog>
               </Grid>
               <Grid item xs={3}>
                 <DatePicker
@@ -422,14 +267,13 @@ export const ClaimInventory = ({ claimId }) => {
               spacing={24}
               style={{ marginTop: '10px' }}
             >
-              <SuggestionChips suggestion={suggestion} itemName={itemName} />
               <Grid item xs={3}>
                 <Button
                   fullWidth
                   variant="contained"
                   type="submit"
                   color="primary"
-                  disabled={!formLooksGood}
+                  disabled={true}
                 >
                   Add item
                 </Button>
