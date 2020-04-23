@@ -1,16 +1,7 @@
 import {
   Button,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Grid,
   IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  Popover,
   Table,
   TableBody,
   TableCell,
@@ -19,22 +10,17 @@ import {
   TextField,
   withStyles,
 } from '@material-ui/core'
-import ArrowRightIcon from '@material-ui/icons/ArrowRight'
-import CloseIcon from '@material-ui/icons/Close'
 import DeleteForeverIcon from '@material-ui/icons/Delete'
 import {
   GetInventoryDocument,
   useAddIventoryItemMutation,
-  useGetCategoriesQuery,
-  useGetDetailsQuery,
   useGetInventoryQuery,
-  useGetSuggestionsQuery,
   useRemoveIventoryItemMutation,
 } from 'api/generated/graphql'
 import format from 'date-fns/format'
 import { DatePicker } from 'material-ui-pickers'
 import React, { useState } from 'react'
-import { Dropdown } from 'semantic-ui-react'
+import Select from 'react-select'
 import { formatMoney } from '../../../../../lib/intl'
 import { Paper } from '../../../../shared/Paper'
 
@@ -68,8 +54,6 @@ const DeleteIcon = withStyles({
     fontSize: 'medium',
   },
 })(DeleteForeverIcon)
-
-const itemTree = {}
 
 const InventoryList = ({ items, claimId }) => {
   const [itemBeingDeleted, setItemBeingDeleted] = useState(null)
@@ -156,15 +140,117 @@ const InventoryList = ({ items, claimId }) => {
   )
 }
 
+const customStyles = {
+  control: (base, { isFocused }) => ({
+    ...base,
+    marginTop: '6px',
+    background: 'rgba(0, 0, 0, 0.0)',
+    // match with the menu
+    borderRadius: 0,
+    border: '0px',
+    borderBottom: isFocused ? '1px solid #0f007a' : '1px solid #999999',
+    boxShadow: 'none',
+  }),
+  menu: (base) => ({
+    ...base,
+    borderRadius: 0,
+    hyphens: 'auto',
+    marginTop: 0,
+    textAlign: 'left',
+    wordWrap: 'break-word',
+  }),
+  valueContainer: (base) => ({
+    ...base,
+    paddingLeft: '0px',
+    overflow: 'visible',
+  }),
+  multiValueRemove: (base) => ({ ...base, display: 'none' }),
+  multiValue: (base) => ({
+    ...base,
+    paddingLeft: '5px',
+    paddingRight: '10px',
+    backgroundColor: 'rgba(0, 0, 0, 0.0)',
+    border: '1px solid #5b30f5',
+    borderRadius: 20,
+  }),
+  multiValueLabel: (base) => ({
+    ...base,
+    color: '#5b30f5',
+    fontWeight: 'bold',
+  }),
+}
+
+const itemTree = [
+  {
+    value: 'Phone',
+    children: [
+      {
+        value: 'Apple iPhone',
+        children: [
+          {
+            value: '8',
+            children: [
+              { value: '64GB', children: [] },
+              { value: '256GB', children: [] },
+            ],
+          },
+          {
+            value: '8 Plus',
+            children: [
+              { value: '64GB', children: [] },
+              { value: '256GB', children: [] },
+            ],
+          },
+          { value: 'X', children: [] },
+          { value: '11', children: [] },
+        ],
+      },
+      { value: 'Samsung', children: [] },
+      { value: 'OnePlus', children: [] },
+    ],
+  },
+  {
+    value: 'TV',
+    children: [
+      { value: 'Samsung', children: [] },
+      { value: 'LG', children: [] },
+      { value: 'Toshiba', children: [] },
+    ],
+  },
+]
+
 export const ClaimInventory = ({ claimId }) => {
-  const [itemName, setItemName] = useState('')
+  const [itemName, setItemName] = useState(null)
   const [itemPurchaseValue, setItemPurchaseValue] = useState('')
   const [itemPurchaseDate, setItemPurchaseDate] = useState('')
+  const [itemNote, setItemNote] = useState('')
+  const [currentTree, setCurrentTree] = useState(itemTree)
   const [addInventoryItem] = useAddIventoryItemMutation()
 
   const { data: { inventory } = { inventory: [] } } = useGetInventoryQuery({
     variables: { claimId },
   })
+
+  const getOptions = () => {
+    return currentTree.map(({ value }) => {
+      return { value, label: value }
+    })
+  }
+
+  const navigateTree = (selectedOptions) => {
+    if (!selectedOptions) {
+      setCurrentTree(itemTree)
+      return
+    }
+
+    const lastOption = selectedOptions.slice(-1).pop().value
+    const nextTree =
+      currentTree.find(({ value }) => {
+        return value === lastOption
+      })?.children ?? []
+
+    setCurrentTree(nextTree)
+  }
 
   return (
     <Paper>
@@ -175,61 +261,20 @@ export const ClaimInventory = ({ claimId }) => {
           </div>
 
           <InventoryList items={inventory} claimId={claimId} />
-
           <form>
             <Grid container spacing={24}>
-              <Grid item xs={4}>
-                <TextField
-                  fullWidth
-                  color="secondary"
-                  placeholder="New item"
+              <Grid item xs={6}>
+                <Select
+                  closeMenuOnSelect={false}
+                  isMulti
+                  styles={customStyles}
+                  placeholder={'Phone, TV, Clothing...'}
                   value={itemName}
-                  InputProps={{
-                    startAdornment: (
-                      <>
-                        <Chip
-                          style={{ fontWeight: 600 }}
-                          color="primary"
-                          label={'Phone'}
-                          deleteIcon={
-                            <ArrowRightIcon style={{ fontSize: 'medium' }} />
-                          }
-                        />
-                        <Chip
-                          style={{ fontWeight: 600, marginLeft: '4px' }}
-                          color="primary"
-                          variant="outlined"
-                          label={'Apple iPhone'}
-                          deleteIcon={
-                            <ArrowRightIcon style={{ fontSize: 'medium' }} />
-                          }
-                        />
-                        <Chip
-                          style={{ fontWeight: 600, marginLeft: '4px' }}
-                          color="primary"
-                          variant="outlined"
-                          label={'8'}
-                          deleteIcon={
-                            <ArrowRightIcon style={{ fontSize: 'medium' }} />
-                          }
-                        />
-                        <Chip
-                          style={{
-                            fontWeight: 600,
-                            marginLeft: '4px',
-                            marginRight: '4px',
-                          }}
-                          color="primary"
-                          variant="outlined"
-                          label={'64GB'}
-                          deleteIcon={
-                            <CloseIcon style={{ fontSize: 'medium' }} />
-                          }
-                        />
-                      </>
-                    ),
+                  onChange={(selectedOptions) => {
+                    setItemName(selectedOptions)
+                    navigateTree(selectedOptions)
                   }}
-                  onChange={(e) => setItemName(e.target.value)}
+                  options={getOptions()}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -241,7 +286,7 @@ export const ClaimInventory = ({ claimId }) => {
                   onChange={(e) => setItemPurchaseValue(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <DatePicker
                   autoOk
                   clearable
@@ -258,6 +303,15 @@ export const ClaimInventory = ({ claimId }) => {
                   placeholder="Purchase date"
                 />
               </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  fullWidth
+                  color="secondary"
+                  placeholder="Note"
+                  value={itemNote}
+                  onChange={(e) => setItemNote(e.target.value)}
+                />
+              </Grid>
             </Grid>
             <Grid
               container
@@ -267,7 +321,7 @@ export const ClaimInventory = ({ claimId }) => {
               spacing={24}
               style={{ marginTop: '10px' }}
             >
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <Button
                   fullWidth
                   variant="contained"
