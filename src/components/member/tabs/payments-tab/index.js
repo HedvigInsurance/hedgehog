@@ -12,7 +12,7 @@ import { Market } from 'api/generated/graphql'
 import { formatMoney } from 'utils/money'
 import { GenerateSetupDirectDebitLink } from './generate-setup-direct-debit-link'
 
-const IconWrapper = styled.span`
+const IconWrapper = styled('span')`
   display: inline-block;
   vertical-align: top;
   font-size: 1.5rem;

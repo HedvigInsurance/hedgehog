@@ -6,14 +6,14 @@ import styled from 'react-emotion'
 import { getMemberFlag, getMemberIdColor } from 'utils/member'
 import { QuestionInfo } from './QuestionInfo'
 
-const QuestionGroupInfoWrapper = styled.div`
+const QuestionGroupInfoWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   padding-left: 1.5rem;
   border-left: 7px solid ${({ memberId }) => getMemberIdColor(memberId)};
 `
 
-const MemberInfoWrapper = styled.div`
+const MemberInfoWrapper = styled('div')`
   font-size: 1.5rem;
   padding-bottom: 1rem;
 `

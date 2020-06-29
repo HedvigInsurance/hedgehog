@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'react-emotion'
 
-const Contents = styled.div`
+const Contents = styled('div')`
   position: absolute;
   top: 0;
   left: 50%;
@@ -15,7 +15,7 @@ const Contents = styled.div`
   `}
 `
 
-const PopoverWrapper = styled.div<{ disableHover: boolean }>`
+const PopoverWrapper = styled('div')<{ disableHover: boolean }>`
   position: relative;
   display: inline-block;
 
@@ -32,7 +32,7 @@ const PopoverWrapper = styled.div<{ disableHover: boolean }>`
     `};
 `
 
-const Triangle = styled.div`
+const Triangle = styled('div')`
   position: absolute;
   left: 50%;
   bottom: 0;

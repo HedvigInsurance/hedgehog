@@ -17,7 +17,7 @@ import { withShowNotification } from 'utils/notifications'
 import { InfoRow, InfoText } from '../contract'
 import { CreateQuoteFromAgreement } from './CreateQuoteFromAgreement'
 
-const Divider = styled.hr`
+const Divider = styled('hr')`
   background: transparent;
   border: 0;
   border-top: 1px solid ${({ theme }) => theme.borderStrong};

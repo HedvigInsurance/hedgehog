@@ -11,7 +11,7 @@ import { PerilIconOptions } from './peril-icons'
 
 const Wrapper = styled(Form)``
 
-const PerilEditWrapper = styled.div`
+const PerilEditWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -19,20 +19,20 @@ const PerilEditWrapper = styled.div`
   margin-bottom: 1rem;
 `
 
-const TitleWrapper = styled.div`
+const TitleWrapper = styled('div')`
   padding-top: 1rem;
 `
 
-const CoverageWrapper = styled.div`
+const CoverageWrapper = styled('div')`
   display: flex;
   flex-direction: row;
 `
 
-const CoverageItemWrapper = styled.div`
+const CoverageItemWrapper = styled('div')`
   display: flex;
 `
 
-const Coverage = styled.div`
+const Coverage = styled('div')`
   width: 50%;
   padding: 1rem;
 

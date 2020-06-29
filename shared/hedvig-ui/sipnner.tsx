@@ -9,7 +9,7 @@ const spin = keyframes`
   }
 `
 
-export const Spinner = styled.div`
+export const Spinner = styled('div')`
   display: inline-block;
   width: 0.95em;
   height: 0.95em;

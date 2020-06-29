@@ -24,7 +24,7 @@ const Checkbox = styled(StandardCheckbox)`
   }
 `
 
-const Label = styled.label`
+const Label = styled('label')`
   padding: 0.5rem 1rem 0.5rem 3rem !important;
   border-radius: 100px;
   transition: background 300ms;
@@ -38,7 +38,7 @@ const Label = styled.label`
   }
 `
 
-const TeamBadge = styled.div`
+const TeamBadge = styled('div')`
   display: inline-block;
   width: 1.5em;
   height: 1.5em;

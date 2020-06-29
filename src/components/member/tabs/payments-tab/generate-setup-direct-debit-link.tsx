@@ -9,7 +9,7 @@ import React, { useState } from 'react'
 import styled, { css } from 'react-emotion'
 import { WithShowNotification } from 'store/actions/notificationsActions'
 
-const ActualLink = styled.a`
+const ActualLink = styled('a')`
   white-space: pre-wrap;
 
   &&:hover,

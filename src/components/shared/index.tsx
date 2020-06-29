@@ -1,7 +1,7 @@
 import styled from 'react-emotion'
 import { List, Table } from 'semantic-ui-react'
 
-export const ListPage = styled.div`
+export const ListPage = styled('div')`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -9,13 +9,13 @@ export const ListPage = styled.div`
   margin: 0;
 `
 
-export const PageContainer = styled.div`
+export const PageContainer = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
 `
 
-export const ListContainer = styled.div<{ autoWidth?: string }>`
+export const ListContainer = styled('div')<{ autoWidth?: string }>`
   width: ${(props) => props.autoWidth || '500px'};
   border: solid 1px #dfe0e0;
   border-radius: 5px;
@@ -23,7 +23,7 @@ export const ListContainer = styled.div<{ autoWidth?: string }>`
   margin-bottom: 50px;
 `
 
-export const ItemContent = styled.div`
+export const ItemContent = styled('div')`
   display: flex;
   justify-content: space-between;
   align-items: center;

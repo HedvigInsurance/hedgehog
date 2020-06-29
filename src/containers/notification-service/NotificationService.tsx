@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { TransitionablePortal } from 'semantic-ui-react'
 import actions from 'store/actions'
 
-const NotificationsContainer = styled.div`
+const NotificationsContainer = styled('div')`
   position: fixed;
   bottom: 10px;
   right: 10px;

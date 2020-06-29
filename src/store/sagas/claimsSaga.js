@@ -10,7 +10,6 @@ import {
   CLAIMS_BY_MEMBER,
   CLAIMS_REQUESTING,
 } from '../constants/claims'
-import { ClaimSearchResult } from '../types/claimsTypes'
 
 function* requestFlow({ searchFilter }) {
   try {

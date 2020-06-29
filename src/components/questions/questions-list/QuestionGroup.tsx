@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'react-emotion'
 import { AnswerForm } from './AnswerForm'
 
-const QuestionGroupWrapper = styled.div<{ isVisible: boolean }>`
+const QuestionGroupWrapper = styled('div')<{ isVisible: boolean }>`
   opacity: ${(props) => (props.isVisible ? 1 : 0)};
   transform: ${(props) => (props.isVisible ? 'scale(1)' : 'scale(0.8)')};
   transition: all 0.8s ease-out;

@@ -55,11 +55,11 @@ const Flag = styled('div')`
   font-size: 3rem;
 `
 
-const MemberDetails = styled.div`
+const MemberDetails = styled('div')`
   color: ${({ theme }) => theme.mutedText};
   padding-bottom: 4rem;
 `
-const MemberDetail = styled.span`
+const MemberDetail = styled('span')`
   padding-right: 1rem;
 `
 const MemberDetailLink = MemberDetail.withComponent('a')

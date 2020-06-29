@@ -4,7 +4,7 @@ import React from 'react'
 import styled from 'react-emotion'
 import { Form } from 'semantic-ui-react'
 
-const FileButton = styled.label`
+const FileButton = styled('label')`
   box-sizing: border-box;
   display: inline-block;
   width: 75px;

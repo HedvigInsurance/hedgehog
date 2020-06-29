@@ -4,7 +4,7 @@ import { darkTheme, lightTheme } from 'hedvig-ui/themes'
 import React from 'react'
 import styled from 'react-emotion'
 
-const ThemeWrapper = styled.div`
+const ThemeWrapper = styled('div')`
   min-height: 100%;
   width: 100%;
   background-color: ${({ theme }) => theme.background};

@@ -4,7 +4,7 @@ import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 import { Breadcrumb } from 'semantic-ui-react'
 
-const BreadcrumbsContainer = styled.div`
+const BreadcrumbsContainer = styled('div')`
   display: flex;
   margin: 20px 0;
   text-transform: capitalize;

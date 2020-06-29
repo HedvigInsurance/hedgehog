@@ -9,7 +9,7 @@ export default {
 
 export const StandardSpinner = () => <Spinner />
 
-const BigColoredText = styled.div`
+const BigColoredText = styled('div')`
   color: ${({ theme }) => theme.danger};
   font-size: 5rem;
 `

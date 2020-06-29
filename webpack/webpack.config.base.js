@@ -16,7 +16,7 @@ module.exports = ({
 }) => ({
   mode,
   resolve: {
-    extensions: ['.ts', '.tsx', '.mjs', '.js', '.json', '.css'],
+    extensions: ['.d.ts', '.ts', '.tsx', '.mjs', '.js', '.json', '.css'],
     modules: [
       path.resolve(context, 'node_modules'),
       path.resolve(/**/ context, 'src'),

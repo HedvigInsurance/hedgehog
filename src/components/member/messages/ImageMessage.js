@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'react-emotion'
 
-const Image = styled.img`
+const Image = styled('img')`
   margin-top: 5px;
   background-image: url(${(props) => props.src});
   height: 300px;

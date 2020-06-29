@@ -35,10 +35,10 @@ const Wrapper = styled('div')<{ collapsed: boolean }>(
     minWidth: '6rem',
     minHeight: '100vh',
 
-    [Menu as any]: {
+    '> div > :nth-child(2)': {
       padding: collapsed ? '0 1rem' : '0 2rem',
     },
-    [BottomSection as any]: {
+    '> div > :nth-child(3)': {
       padding: collapsed ? '0 1rem' : '0 2rem',
       alignItems: collapsed ? 'center' : 'flex-start',
     },
@@ -53,7 +53,7 @@ const Wrapper = styled('div')<{ collapsed: boolean }>(
         marginRight: collapsed ? 0 : '1rem',
       },
     },
-    [MenuText as any]: {
+    'svg + div': {
       width: collapsed ? 0 : 'auto',
     },
   }),

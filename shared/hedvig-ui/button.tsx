@@ -96,7 +96,7 @@ export const buttonSizeMap: Record<
   },
 }
 
-export const ButtonComponent = styled.button<ButtonProps>(
+export const ButtonComponent = styled('button')<ButtonProps>(
   ({
     variation = 'default',
     fullWidth,

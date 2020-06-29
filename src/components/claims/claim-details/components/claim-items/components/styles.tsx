@@ -83,7 +83,7 @@ export const PreviousChip = styled(Chip)`
 };
 `
 
-export const ChevronRightWrapper = styled.span`
+export const ChevronRightWrapper = styled('span')`
   margin-right: 3px;
   margin-left: 3px;
   color: ${({ theme }) => theme.foreground};
@@ -91,16 +91,16 @@ export const ChevronRightWrapper = styled.span`
   font-weight: 500;
 `
 
-export const TrashIconWrapper = styled.span`
+export const TrashIconWrapper = styled('span')`
   color: ${({ theme }) => theme.danger};
   font-size: 0.9rem;
 `
 
-export const Bold = styled.span`
+export const Bold = styled('span')`
   font-weight: bold;
 `
 
-export const Placeholder = styled.div`
+export const Placeholder = styled('div')`
   color: ${({ theme }) => theme.placeholderColor};
 `
 

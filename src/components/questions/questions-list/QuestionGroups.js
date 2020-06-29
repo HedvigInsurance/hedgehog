@@ -5,7 +5,7 @@ import { FilterState } from 'components/questions/filter'
 import { isMemberIdEven } from 'utils/member'
 import { useQuestionGroups } from 'graphql/use-question-groups'
 
-const ListContainer = styled.div`
+const ListContainer = styled('div')`
   display: flex;
   flex-direction: column;
   width: 100%;

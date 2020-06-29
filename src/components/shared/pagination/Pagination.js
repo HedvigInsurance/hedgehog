@@ -4,7 +4,7 @@ import React from 'react'
 import { Button } from 'semantic-ui-react'
 import styled from 'react-emotion'
 
-const Paginator = styled.div`
+const Paginator = styled('div')`
   display: flex;
   justify-content: center;
   align-items: center;

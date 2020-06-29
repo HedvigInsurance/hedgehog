@@ -5,14 +5,14 @@ import { useMemberNameAndContractMarketInfoQuery } from '../../api/generated/gra
 import { MemberHistoryContext } from '../../utils/member-history'
 import { MemberFlag } from '../member/shared/member-flag'
 
-const MemberHistoryWrapper = styled.div`
+const MemberHistoryWrapper = styled('div')`
   display: flex;
   flex-wrap: wrap;
   margin-left: -1rem;
   width: calc(100% + 1rem);
 `
 
-const EmptyState = styled.div`
+const EmptyState = styled('div')`
   font-style: italic;
   margin-left: 1rem;
   color: ${({ theme }) => theme.mutedText};
@@ -52,10 +52,10 @@ const MemberHistoryCardWrapper = styled(Link)<{ muted: boolean }>`
     `};
   }
 `
-const MemberName = styled.span`
+const MemberName = styled('span')`
   display: block;
 `
-const MemberId = styled.span`
+const MemberId = styled('span')`
   display: block;
   color: ${({ theme }) => theme.mutedText};
 `

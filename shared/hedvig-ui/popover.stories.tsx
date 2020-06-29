@@ -8,7 +8,7 @@ export default {
   component: Popover,
 }
 
-const PopoverWrapper = styled.div`
+const PopoverWrapper = styled('div')`
   display: inline-block;
   padding-top: 5rem;
   padding-left: 5rem;

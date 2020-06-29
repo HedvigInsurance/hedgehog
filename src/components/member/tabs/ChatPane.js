@@ -18,7 +18,7 @@ const resizableStyles = {
   zIndex: '999',
 }
 
-const ChatHeaderStyle = styled.div`
+const ChatHeaderStyle = styled('div')`
   position: ${(props) => (!props.state ? 'fixed' : '')};
   right: ${(props) => (!props.state ? 0 : '')};
   height: 40px;

@@ -5,7 +5,7 @@ import styled from 'react-emotion'
 import { Button, Form, Icon, Input } from 'semantic-ui-react'
 import TextInput from './TextInput'
 
-const SelectItem = styled.span`
+const SelectItem = styled('span')`
   display: flex;
   justify-content: space-between;
   padding: 0 5px;
@@ -17,7 +17,7 @@ const SelectItem = styled.span`
   border-radius: 3px;
 `
 
-const ListContainer = styled.div`
+const ListContainer = styled('div')`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'react-emotion'
 
-const MessageRow = styled.div<
+const MessageRow = styled('div')<
   WithLeft & { isQuestion?: boolean; isVisible: boolean }
 >`
   display: flex;
@@ -21,7 +21,7 @@ const MessageRow = styled.div<
   transition: all 0.25s ease-out;
 `
 
-const MessageBox = styled.div`
+const MessageBox = styled('div')`
   max-width: 400px;
 `
 
@@ -29,7 +29,7 @@ interface WithLeft {
   left: boolean
 }
 
-const MessageBody = styled.div<WithLeft>`
+const MessageBody = styled('div')<WithLeft>`
   white-space: pre-wrap;
   word-wrap: break-word;
   z-index: 2000;
@@ -67,21 +67,21 @@ const MessageBody = styled.div<WithLeft>`
   }
 `
 
-const MessageInfo = styled.div<WithLeft>`
+const MessageInfo = styled('div')<WithLeft>`
   margin: 0.5em 0;
   font-size: 0.9rem;
   ${({ left }) => left && `text-align: right;`};
 `
-const Timestamp = styled.div`
+const Timestamp = styled('div')`
   color: ${({ theme }) => theme.mutedText};
   font-size: 0.8rem;
 `
 
-const Video = styled.video`
+const Video = styled('video')`
   max-width: 350px;
 `
 
-const Image = styled.img`
+const Image = styled('img')`
   max-width: 350px;
 `
 

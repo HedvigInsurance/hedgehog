@@ -37,7 +37,7 @@ const FormTextArea = styled(StandardForm.Field)`
   }
 `
 
-const MarkAsResolvedWrapper = styled.div`
+const MarkAsResolvedWrapper = styled('div')`
   padding-left: 1rem;
 `
 

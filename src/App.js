@@ -10,7 +10,6 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import React from 'react'
 import styled from 'react-emotion'
 import { ThemeProvider } from 'emotion-theming'
-import { hot } from 'react-hot-loader'
 import { Provider } from 'react-redux'
 import { Redirect, Route, Router, Switch } from 'react-router'
 import Routes from 'routes'
@@ -180,5 +179,4 @@ class App extends React.Component {
   }
 }
 
-export default App
-export const HotApp = hot(module)(App)
+export { App }

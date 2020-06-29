@@ -268,7 +268,7 @@ export const darkUiTheme = createMuiTheme({
   },
 })
 
-export const SemanticOverrides = styled.div`
+export const SemanticOverrides = styled('div')`
   ${({ theme }) => css`
     a {
       color: ${theme.accent};

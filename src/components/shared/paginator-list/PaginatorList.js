@@ -4,7 +4,7 @@ import styled from 'react-emotion'
 import { Table } from 'semantic-ui-react'
 import Pagination from '../pagination/Pagination'
 
-const PaginatorContainer = styled.div`
+const PaginatorContainer = styled('div')`
   display: flex;
   justify-content: center;
   width: 100%;
