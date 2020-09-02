@@ -38,8 +38,12 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
-
-
+      - store_artifacts:
+          path: yarn.lock
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
 workflows:
   node-tests:
