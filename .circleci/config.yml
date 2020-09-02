@@ -5,6 +5,7 @@ jobs:
   test:
     docker:
       - image: 'cimg/node:14.5.0'
+        resource_class: xlarge
     steps:
       - attach_workspace:
           at: .
@@ -28,7 +29,8 @@ jobs:
 
   build_bundle:
     docker:
-      - image: 'cimg/node:14.5.0'
+      - image: 'circleci/node:14.5.0'
+        resource_class: xlarge
     steps:
       - attach_workspace:
           at: .
