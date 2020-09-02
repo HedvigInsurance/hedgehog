@@ -3,35 +3,40 @@ orbs:
   node: circleci/node@3.0.0
 jobs:
   test:
-    executor: node/default
+    docker:
+      - image: 'cimg/node:v14.5.0'
     steps:
       - attach_workspace:
           at: .
       - run: yarn test
 
   lint:
-    executor: node/default
+    docker:
+      - image: 'cimg/node:v14.5.0'
     steps:
       - attach_workspace:
           at: .
       - run: yarn lint
 
   typecheck:
-    executor: node/default
+    docker:
+      - image: 'cimg/node:v14.5.0'
     steps:
       - attach_workspace:
           at: .
       - run: yarn typecheck
 
   build_bundle:
-    executor: node/default
+    docker:
+      - image: 'cimg/node:v14.5.0'
     steps:
       - attach_workspace:
           at: .
       - run: yarn build
 
   setup:
-    executor: node/default
+    docker:
+      - image: 'cimg/node:v14.5.0'
     steps:
       - checkout
       - restore_cache:
