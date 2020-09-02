@@ -1,7 +1,45 @@
 version: 2.1
 orbs:
   node: circleci/node@3.0.0
+jobs:
+  test:
+    executor: node/default
+    steps:
+      - run: yarn test
+
+  lint:
+    executor: node/default
+    steps:
+      - run: yarn lint
+
+  typecheck:
+    executor: node/default
+    steps:
+      - run: yarn typecheck
+
+  build_bundle:
+    executor: node/default
+    steps:
+      - run: yarn build
+
+steps:
+  - restore_cache:
+      name: Restore Yarn Package Cache
+      keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
+  - run:
+      name: Install Dependencies
+      command: yarn install --immutable
+  - save_cache:
+      name: Save Yarn Package Cache
+      key: yarn-packages-{{ checksum "yarn.lock" }}
+      paths:
+        - ~/.cache/yarn
+
 workflows:
   node-tests:
     jobs:
-      - node/test
+      - typecheck
+      - lint
+      - test
+      - build_bundle
