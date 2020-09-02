@@ -22,25 +22,37 @@ jobs:
     steps:
       - run: yarn build
 
-steps:
-  - checkout
-  - restore_cache:
-      name: Restore Yarn Package Cache
-      keys:
-        - yarn-packages-{{ checksum "yarn.lock" }}
-  - run:
-      name: Install Dependencies
-      command: yarn install --immutable
-  - save_cache:
-      name: Save Yarn Package Cache
-      key: yarn-packages-{{ checksum "yarn.lock" }}
-      paths:
-        - ~/.cache/yarn
+  setup:
+    executor: node/default
+    steps:
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --immutable
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+
 
 workflows:
   node-tests:
     jobs:
-      - typecheck
-      - lint
-      - test
-      - build_bundle
+      - setup
+      - typecheck:
+          requires:
+           - setup
+      - lint:
+          requires:
+            - setup
+      - test:
+          requires:
+            - setup
+      - build_bundle:
+          requires:
+            - setup
