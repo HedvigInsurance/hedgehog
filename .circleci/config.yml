@@ -5,21 +5,29 @@ jobs:
   test:
     executor: node/default
     steps:
+      - attach_workspace:
+          at: .
       - run: yarn test
 
   lint:
     executor: node/default
     steps:
+      - attach_workspace:
+          at: .
       - run: yarn lint
 
   typecheck:
     executor: node/default
     steps:
+      - attach_workspace:
+          at: .
       - run: yarn typecheck
 
   build_bundle:
     executor: node/default
     steps:
+      - attach_workspace:
+          at: .
       - run: yarn build
 
   setup:
