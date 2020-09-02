@@ -29,7 +29,6 @@ jobs:
   build_bundle:
     docker:
       - image: 'circleci/node:14.5.0'
-    resource_class: large
     steps:
       - attach_workspace:
           at: .
@@ -38,7 +37,6 @@ jobs:
   setup:
     docker:
       - image: 'cimg/node:14.5.0'
-    resource_class: large
     steps:
       - checkout
       - restore_cache:
