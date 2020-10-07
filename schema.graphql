@@ -13,10 +13,8 @@ type QueryType {
   tickets(resolved: Boolean): [Ticket!]!
   me: String
   switchableSwitcherEmails: [SwitchableSwitcherEmail!]!
-  memberSearch(
-    query: String!
-    options: MemberSearchOptions!
-  ): MemberSearchResult!
+  memberSearch(query: String!, options: MemberSearchOptions!): MemberSearchResult!
+  claimSearch(options: ClaimSearchOptions!): ClaimSearchResult!
   messageHistory(memberId: ID!): [ChatMessage!]!
   questionGroups: [QuestionGroup!]!
   itemCategories(kind: ItemCategoryKind!, parentId: ID): [ItemCategory!]!
@@ -122,7 +120,9 @@ type MutationType {
   assignCampaignToPartnerPercentageDiscount(
     request: AssignVoucherPercentageDiscount
   ): Boolean!
-  assignCampaignToPartnerFreeMonths(request: AssignVoucherFreeMonths): Boolean!
+  assignCampaignToPartnerFreeMonths(
+    request: AssignVoucherFreeMonths
+  ): Boolean!
   assignCampaignToPartnerVisibleNoDiscount(
     request: AssignVoucherVisibleNoDiscount
   ): Boolean!
@@ -138,15 +138,25 @@ type MutationType {
   manualRedeemEnableReferralsCampaign(memberId: ID!, market: Market!): Boolean!
   unsignMember(market: String!, ssn: String!): Boolean!
   editMemberInfo(request: EditMemberInfoInput!): Boolean!
-  setFraudulentStatus(
-    memberId: ID!
-    request: MemberFraudulentStatusInput!
-  ): Boolean!
+  setFraudulentStatus(memberId: ID!, request: MemberFraudulentStatusInput!): Boolean!
 }
 
 input MemberFraudulentStatusInput {
   fraudulentStatus: String!
   fraudulentStatusDescription: String
+}
+
+type ClaimSearchResult {
+  claims: [Claim!]!
+  totalPages: Int!
+  page: Int!
+}
+
+input ClaimSearchOptions {
+  page: Int
+  pageSize: Int
+  sortBy: String
+  sortDirection: String
 }
 
 type MemberSearchResult {
@@ -325,7 +335,7 @@ enum ContractStatus {
 }
 
 union Agreement =
-    SwedishApartment
+  SwedishApartment
   | SwedishHouse
   | NorwegianHomeContent
   | NorwegianTravel
@@ -533,6 +543,7 @@ input AssignVoucherVisibleNoDiscount {
   validUntil: Instant
 }
 
+
 type CampaignOwnerPartner {
   partnerId: String!
 }
@@ -577,7 +588,7 @@ type UnknownIncentive {
 }
 
 union Incentive =
-    MonthlyPercentageDiscountFixedPeriod
+  MonthlyPercentageDiscountFixedPeriod
   | FreeMonths
   | CostDeduction
   | NoDiscount
@@ -842,7 +853,7 @@ enum QuoteState {
 }
 
 union QuoteData =
-    ApartmentQuoteData
+  ApartmentQuoteData
   | HouseQuoteData
   | NorwegianHomeContentQuoteData
   | NorwegianTravelQuoteData
@@ -1140,16 +1151,16 @@ type AccountEntry {
 
 enum AccountEntryType {
   CORRECTION
-  SUBSCRIPTION
-  CAMPAIGN
-  PAYOUT
-  CHARGE
-  REFERRAL_DISCOUNT
-  FREE_MONTH_DISCOUNT
-  PERCENTAGE_MONTH_DISCOUNT
-  BUNDLE_DISCOUNT_COST_DEDUCTION
-  BUNDLE_DISCOUNT_PERCENTAGE_DEDUCTION
-  COST_DEDUCTION
+  SUBSCRIPTION,
+  CAMPAIGN,
+  PAYOUT,
+  CHARGE,
+  REFERRAL_DISCOUNT,
+  FREE_MONTH_DISCOUNT,
+  PERCENTAGE_MONTH_DISCOUNT,
+  BUNDLE_DISCOUNT_COST_DEDUCTION,
+  BUNDLE_DISCOUNT_PERCENTAGE_DEDUCTION,
+  COST_DEDUCTION,
   LOSS
 }
 
@@ -1214,7 +1225,7 @@ enum ClaimTypes {
   TestClaim
 }
 union ClaimType =
-    TheftClaim
+  TheftClaim
   | AccidentalDamageClaim
   | AssaultClaim
   | WaterDamageClaim

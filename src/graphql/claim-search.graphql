@@ -1,0 +1,20 @@
+query ClaimSearch($options: ClaimSearchOptions!) {
+  claimSearch(options: $options) {
+    claims {
+      # TODO: Fix mock db data
+      # member {
+      #   memberId
+      #   firstName
+      #   lastName
+      # }
+      type {
+        __typename
+      }
+      registrationDate
+      state
+      reserves
+    }
+    page
+    totalPages
+  }
+}

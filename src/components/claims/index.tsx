@@ -4,12 +4,10 @@ import { Header } from 'semantic-ui-react'
 import { ClaimSearchFilter, ClaimsStore } from '../../store/types/claimsTypes'
 import BackendServedClaimsList from './claims-list/BackendServedClaimsList'
 
-export interface ClaimsProps {
+const Claims: React.FC<{
   claims: ClaimsStore
   claimsRequest: (filter: ClaimSearchFilter) => void
-}
-
-const Claims: React.SFC<ClaimsProps> = (props) => {
+}> = (props) => {
   const { claimsRequest, claims } = props
 
   const initClaims = () => claimsRequest(claims.searchFilter)

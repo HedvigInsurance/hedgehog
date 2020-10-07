@@ -377,6 +377,20 @@ export enum ClaimPaymentType {
   Automatic = 'Automatic',
 }
 
+export type ClaimSearchOptions = {
+  page?: Maybe<Scalars['Int']>
+  pageSize?: Maybe<Scalars['Int']>
+  sortBy?: Maybe<Scalars['String']>
+  sortDirection?: Maybe<Scalars['String']>
+}
+
+export type ClaimSearchResult = {
+  __typename?: 'ClaimSearchResult'
+  claims: Array<Claim>
+  totalPages: Scalars['Int']
+  page: Scalars['Int']
+}
+
 export enum ClaimSource {
   App = 'APP',
   Email = 'EMAIL',
@@ -1413,6 +1427,7 @@ export type QueryType = {
   me?: Maybe<Scalars['String']>
   switchableSwitcherEmails: Array<SwitchableSwitcherEmail>
   memberSearch: MemberSearchResult
+  claimSearch: ClaimSearchResult
   messageHistory: Array<ChatMessage>
   questionGroups: Array<QuestionGroup>
   itemCategories: Array<ItemCategory>
@@ -1455,6 +1470,10 @@ export type QueryTypeTicketsArgs = {
 export type QueryTypeMemberSearchArgs = {
   query: Scalars['String']
   options: MemberSearchOptions
+}
+
+export type QueryTypeClaimSearchArgs = {
+  options: ClaimSearchOptions
 }
 
 export type QueryTypeMessageHistoryArgs = {
@@ -2195,6 +2214,49 @@ export type ChangeToDateMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'changeToDate'
 >
+
+export type ClaimSearchQueryVariables = {
+  options: ClaimSearchOptions
+}
+
+export type ClaimSearchQuery = { __typename?: 'QueryType' } & {
+  claimSearch: { __typename?: 'ClaimSearchResult' } & Pick<
+    ClaimSearchResult,
+    'page' | 'totalPages'
+  > & {
+      claims: Array<
+        { __typename?: 'Claim' } & Pick<
+          Claim,
+          'registrationDate' | 'state' | 'reserves'
+        > & {
+            type: Maybe<
+              | { __typename: 'TheftClaim' }
+              | { __typename: 'AccidentalDamageClaim' }
+              | { __typename: 'AssaultClaim' }
+              | { __typename: 'WaterDamageClaim' }
+              | { __typename: 'TravelAccidentClaim' }
+              | { __typename: 'LuggageDelayClaim' }
+              | { __typename: 'NotCoveredClaim' }
+              | { __typename: 'FireDamageClaim' }
+              | { __typename: 'ConfirmedFraudClaim' }
+              | { __typename: 'LiabilityClaim' }
+              | { __typename: 'ApplianceClaim' }
+              | { __typename: 'LegalProtectionClaim' }
+              | { __typename: 'WaterDamageBathroomClaim' }
+              | { __typename: 'WaterDamageKitchenClaim' }
+              | { __typename: 'BurglaryClaim' }
+              | { __typename: 'FloodingClaim' }
+              | { __typename: 'EarthquakeClaim' }
+              | { __typename: 'InstallationsClaim' }
+              | { __typename: 'SnowPressureClaim' }
+              | { __typename: 'StormDamageClaim' }
+              | { __typename: 'VerminAndPestsClaim' }
+              | { __typename: 'TestClaim' }
+            >
+          }
+      >
+    }
+}
 
 export type CreatePaymentCompletionLinkMutationVariables = {
   memberId: Scalars['ID']
@@ -4117,6 +4179,69 @@ export type ChangeToDateMutationResult = ApolloReactCommon.MutationResult<
 export type ChangeToDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
   ChangeToDateMutation,
   ChangeToDateMutationVariables
+>
+export const ClaimSearchDocument = gql`
+  query ClaimSearch($options: ClaimSearchOptions!) {
+    claimSearch(options: $options) {
+      claims {
+        type {
+          __typename
+        }
+        registrationDate
+        state
+        reserves
+      }
+      page
+      totalPages
+    }
+  }
+`
+
+/**
+ * __useClaimSearchQuery__
+ *
+ * To run a query within a React component, call `useClaimSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClaimSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useClaimSearchQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useClaimSearchQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    ClaimSearchQuery,
+    ClaimSearchQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<ClaimSearchQuery, ClaimSearchQueryVariables>(
+    ClaimSearchDocument,
+    baseOptions,
+  )
+}
+export function useClaimSearchLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    ClaimSearchQuery,
+    ClaimSearchQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    ClaimSearchQuery,
+    ClaimSearchQueryVariables
+  >(ClaimSearchDocument, baseOptions)
+}
+export type ClaimSearchQueryHookResult = ReturnType<typeof useClaimSearchQuery>
+export type ClaimSearchLazyQueryHookResult = ReturnType<
+  typeof useClaimSearchLazyQuery
+>
+export type ClaimSearchQueryResult = ApolloReactCommon.QueryResult<
+  ClaimSearchQuery,
+  ClaimSearchQueryVariables
 >
 export const CreatePaymentCompletionLinkDocument = gql`
   mutation CreatePaymentCompletionLink($memberId: ID!) {

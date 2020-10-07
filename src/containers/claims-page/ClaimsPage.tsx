@@ -5,11 +5,13 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import actions from 'store/actions'
 
-const ClaimsPage = (props) => (
-  <ListPage>
-    <Claims {...props} />
-  </ListPage>
-)
+const ClaimsPage = (props) => {
+  return (
+    <ListPage>
+      <Claims {...props} />
+    </ListPage>
+  )
+}
 
 export default withRouter(
   // @ts-ignore

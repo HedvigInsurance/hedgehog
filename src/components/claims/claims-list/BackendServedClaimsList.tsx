@@ -2,23 +2,19 @@ import { LinkRow } from 'components/shared'
 import { parseISO } from 'date-fns'
 import formatDate from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
+import { useClaimSearch } from 'graphql/use-claim-search'
 import React from 'react'
 import styled from 'react-emotion'
 import { Table } from 'semantic-ui-react'
 import { history } from 'store'
-import { getMemberIdColor } from 'utils/member'
 import {
   Claim,
   ClaimSearchFilter,
   ClaimSortColumn,
   ClaimsStore,
-} from '../../../store/types/claimsTypes'
+} from 'store/types/claimsTypes'
+import { getMemberIdColor } from 'utils/member'
 import BackendPaginatorList from '../../shared/paginator-list/BackendPaginatorList'
-
-export interface BackendServedClaimsListProps {
-  claims: ClaimsStore
-  claimsRequest: (filter: ClaimSearchFilter) => void
-}
 
 const MemberIdCell = styled(Table.Cell)<{ memberId: string }>(
   ({ memberId }) => ({
@@ -106,20 +102,31 @@ const getTableHeader = (
   )
 }
 
-const BackendServedClaimsList: React.SFC<BackendServedClaimsListProps> = ({
-  claims: { searchResult, searchFilter },
-  claimsRequest,
-}) => (
-  <BackendPaginatorList<Claim>
-    pagedItems={searchResult.claims}
-    itemContent={getTableRow}
-    tableHeader={getTableHeader(searchFilter, claimsRequest)}
-    currentPage={searchResult.page}
-    totalPages={searchResult.totalPages}
-    isSortable={true}
-    keyName="id"
-    changePage={(page) => claimsRequest({ ...searchFilter, page })}
-  />
-)
+const BackendServedClaimsList: React.FC<{
+  claims: ClaimsStore
+  claimsRequest: (filter: ClaimSearchFilter) => void
+}> = ({ claims: { searchResult, searchFilter }, claimsRequest }) => {
+  const [claimSearch, { loading, data, error }] = useClaimSearch()
+
+  React.useEffect(() => {
+    claimSearch({})
+  }, [])
+
+  console.log(loading, error)
+  console.log('HELLO DATA:', data)
+
+  return (
+    <BackendPaginatorList<Claim>
+      pagedItems={searchResult.claims}
+      itemContent={getTableRow}
+      tableHeader={getTableHeader(searchFilter, claimsRequest)}
+      currentPage={searchResult.page}
+      totalPages={searchResult.totalPages}
+      isSortable={true}
+      keyName="id"
+      changePage={(page) => claimsRequest({ ...searchFilter, page })}
+    />
+  )
+}
 
 export default BackendServedClaimsList
