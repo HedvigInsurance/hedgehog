@@ -6,14 +6,15 @@ import { useClaimSearch } from 'graphql/use-claim-search'
 import React from 'react'
 import styled from 'react-emotion'
 import { Table } from 'semantic-ui-react'
+import { Claim } from 'src/api/generated/graphql'
 import { history } from 'store'
 import {
-  Claim,
   ClaimSearchFilter,
   ClaimSortColumn,
   ClaimsStore,
 } from 'store/types/claimsTypes'
 import { getMemberIdColor } from 'utils/member'
+import { formatMoney } from 'utils/money'
 import BackendPaginatorList from '../../shared/paginator-list/BackendPaginatorList'
 
 const MemberIdCell = styled(Table.Cell)<{ memberId: string }>(
@@ -27,18 +28,34 @@ const linkClickHandler = (id: string, userId: string) => {
 }
 
 const getTableRow = (item: Claim) => {
-  const date = parseISO(item.date)
+  console.log(item.registrationDate)
+  const date = parseISO(item.registrationDate)
+  console.log(date)
   const formattedDate = isValidDate(date)
     ? formatDate(date, 'dd MMMM yyyy HH:mm')
     : '-'
 
   return (
-    <LinkRow onClick={() => linkClickHandler(item.id, item.userId)}>
-      <MemberIdCell memberId={item.userId}>{item.userId}</MemberIdCell>
+    <LinkRow
+      onClick={() =>
+        linkClickHandler(
+          item.id ?? '123456',
+          item?.member?.memberId ?? '123456',
+        )
+      }
+    >
+      {
+        // TODO: Don't have staging data right now, will fix this
+      }
+      <MemberIdCell memberId={item?.member?.memberId ?? '123456'}>
+        {item?.member?.memberId ?? '123456'}
+      </MemberIdCell>
       <Table.Cell>{formattedDate}</Table.Cell>
       <Table.Cell>{item.type}</Table.Cell>
       <Table.Cell>{item.state}</Table.Cell>
-      <Table.Cell>{item.reserve}</Table.Cell>
+      <Table.Cell>
+        {formatMoney(item.reserves, { maximumFractionDigits: 0 })}
+      </Table.Cell>
     </LinkRow>
   )
 }
@@ -112,16 +129,13 @@ const BackendServedClaimsList: React.FC<{
     claimSearch({})
   }, [])
 
-  console.log(loading, error)
-  console.log('HELLO DATA:', data)
-
   return (
     <BackendPaginatorList<Claim>
-      pagedItems={searchResult.claims}
+      pagedItems={(data?.claimSearch?.claims as Claim[]) ?? []}
       itemContent={getTableRow}
       tableHeader={getTableHeader(searchFilter, claimsRequest)}
-      currentPage={searchResult.page}
-      totalPages={searchResult.totalPages}
+      currentPage={data?.claimSearch?.page ?? 0}
+      totalPages={data?.claimSearch?.totalPages ?? 0}
       isSortable={true}
       keyName="id"
       changePage={(page) => claimsRequest({ ...searchFilter, page })}
