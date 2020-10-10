@@ -1,0 +1,22 @@
+query GetQuotes($memberId: ID!) {
+  member(id: $memberId) {
+    memberId
+    quotes {
+      id
+      memberId
+      price
+      productType
+      state
+      startDate
+      validity
+      isComplete
+      createdAt
+      breachedUnderwritingGuidelines
+      originatingProductId
+      signedProductId
+      isReadyToSign
+      schema
+      schemaData
+    }
+  }
+}

@@ -5,7 +5,7 @@ import {
   AssignCampaignToPartnerPercentageDiscountMutationVariables,
   AssignVoucherPercentageDiscount,
   useAssignCampaignToPartnerPercentageDiscountMutation,
-} from '../api/generated/graphql'
+} from 'api/generated/graphql'
 
 export const useAddPartnerPercentageDiscountCode = (): AssignCampaignToPartnerPercentageDiscountMutationHookResult =>
   useAssignCampaignToPartnerPercentageDiscountMutation()

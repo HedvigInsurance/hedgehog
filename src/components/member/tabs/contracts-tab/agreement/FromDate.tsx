@@ -1,4 +1,4 @@
-import { Agreement, Contract } from 'api/generated/graphql'
+import { Contract, GenericAgreement } from 'api/generated/graphql'
 import { format } from 'date-fns'
 import {
   changeFromDateOptions,
@@ -15,11 +15,11 @@ import {
 import React from 'react'
 import { Notification } from 'store/actions/notificationsActions'
 
-const initialFromDate = (agreement: Agreement): Date =>
+const initialFromDate = (agreement: GenericAgreement): Date =>
   agreement.fromDate ? new Date(agreement.fromDate) : new Date()
 
 export const FromDate: React.FunctionComponent<{
-  agreement: Agreement
+  agreement: GenericAgreement
   contract: Contract
   showNotification: (data: Notification) => void
 }> = ({ agreement, contract, showNotification }) => {

@@ -23,7 +23,7 @@ import {
   updateClaimStateOptions,
   useUpdateClaimState,
 } from 'graphql/use-update-claim-state'
-import { getAddressFromContract } from 'utils/contract'
+import { currentAgreementForContract } from 'utils/contract'
 
 interface Props {
   recordingUrl: string | null
@@ -190,7 +190,7 @@ const ClaimInformation: React.FC<Props> = ({
               None selected
             </MuiMenuItem>
             {contracts.map((contract) => {
-              const address = getAddressFromContract(contract)
+              const address = currentAgreementForContract(contract)?.address
               return (
                 <MuiMenuItem key={contract.id} value={contract.id}>
                   {contract.contractTypeName}

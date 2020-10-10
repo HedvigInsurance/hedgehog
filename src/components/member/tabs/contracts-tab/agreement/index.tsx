@@ -1,7 +1,7 @@
 import {
-  Agreement as AgreementType,
   AgreementStatus,
   Contract,
+  GenericAgreement as AgreementType,
 } from 'api/generated/graphql'
 import { AgreementInfo } from 'components/member/tabs/contracts-tab/agreement/AgreementInfo'
 import { FromDate } from 'components/member/tabs/contracts-tab/agreement/FromDate'

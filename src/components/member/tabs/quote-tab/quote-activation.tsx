@@ -9,15 +9,8 @@ import { Button } from 'hedvig-ui/button'
 import React, { useState } from 'react'
 import { Checkbox } from 'semantic-ui-react'
 import { noopFunction } from 'utils'
+import { getContractByAgreementId } from 'utils/contract'
 import { BottomSpacerWrapper, ErrorMessage } from './common'
-
-const getContract = (contracts, quote): Contract => {
-  return contracts.find((contract) =>
-    contract.agreements.some(
-      (agreement) => agreement.id === quote.originatingProductId,
-    ),
-  )
-}
 
 const getInitialActiveFrom = (contract: Contract): Date | null =>
   contract.hasPendingAgreement ? null : new Date()
@@ -35,9 +28,22 @@ export const QuoteActivation: React.FC<{
 }) => {
   const [useGap, setUseGap] = useState(false)
   const [contracts, { loading }] = useContracts(memberId)
-  const contract = getContract(contracts, quote)
-  if (!loading && !contract) {
-    return <>Cannot active quote without Originating product id</>
+  if (!quote.originatingProductId) {
+    return (
+      <>
+        Cannot active quote without <strong>Originating Product Id</strong>
+      </>
+    )
+  }
+  if (loading) {
+    return null
+  }
+  const contract = getContractByAgreementId(
+    contracts,
+    quote.originatingProductId,
+  )
+  if (!contract) {
+    return <>Cannot find the contract for the quote, please contact Tech</>
   }
   if (contract.hasPendingAgreement && contract.isTerminated) {
     return <>Cannot active quote for a pending contract that is terminated</>

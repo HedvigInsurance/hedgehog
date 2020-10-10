@@ -28,6 +28,7 @@ type QueryType {
     itemFamilyId: String!
     itemTypeId: ID
   ): CanValuateClaimItem
+  quoteSchemaForContractType(contractType: String!): JSON
 }
 
 type MutationType {
@@ -105,6 +106,16 @@ type MutationType {
   createQuoteForNewContract(
     memberId: ID!
     quoteInput: QuoteInput!
+    bypassUnderwritingGuidelines: Boolean!
+  ): Quote!
+  updateQuoteBySchema(
+    quoteId: ID!
+    schemaData: JSON!
+    bypassUnderwritingGuidelines: Boolean!
+  ): Quote!
+  createQuoteForMemberBySchema(
+    memberId: ID!
+    schemaData: JSON!
     bypassUnderwritingGuidelines: Boolean!
   ): Quote!
   signQuoteForNewContract(quoteId: ID!, activationDate: LocalDate): Quote!
@@ -300,7 +311,7 @@ type Contract {
   terminationDate: LocalDate
   currentAgreementId: ID!
   hasPendingAgreement: Boolean!
-  agreements: [Agreement!]!
+  genericAgreements: [GenericAgreement!]!
   hasQueuedRenewal: Boolean!
   renewal: Renewal
   preferredCurrency: String!
@@ -334,32 +345,23 @@ enum ContractStatus {
   TERMINATED
 }
 
-union Agreement =
-  SwedishApartment
-  | SwedishHouse
-  | NorwegianHomeContent
-  | NorwegianTravel
-
-interface AgreementCore {
+type GenericAgreement {
   id: ID!
   fromDate: LocalDate
   toDate: LocalDate
   premium: MonetaryAmountV2!
   certificateUrl: String
   status: AgreementStatus!
-}
-
-type SwedishApartment implements AgreementCore {
-  id: ID!
-  fromDate: LocalDate
-  toDate: LocalDate
-  premium: MonetaryAmountV2!
-  certificateUrl: String
-  status: AgreementStatus!
-  lineOfBusiness: SwedishApartmentLineOfBusiness!
-  address: Address!
-  numberCoInsured: Int!
-  squareMeters: Int!
+  typeOfContract: TypeOfContract!
+  address: Address
+  numberCoInsured: Int
+  squareMeters: Int
+  ancillaryArea: Int
+  yearOfConstruction: Int
+  numberOfBathrooms: Int
+  extraBuildings: [ExtraBuilding!]
+  isSubleted: Boolean
+  lineOfBusinessName: String!
 }
 
 enum SwedishApartmentLineOfBusiness {
@@ -369,52 +371,11 @@ enum SwedishApartmentLineOfBusiness {
   STUDENT_BRF
 }
 
-type SwedishHouse implements AgreementCore {
-  id: ID!
-  fromDate: LocalDate
-  toDate: LocalDate
-  premium: MonetaryAmountV2!
-  certificateUrl: String
-  status: AgreementStatus!
-  address: Address!
-  numberCoInsured: Int!
-  squareMeters: Int!
-  ancillaryArea: Int!
-  yearOfConstruction: Int!
-  numberOfBathrooms: Int!
-  extraBuildings: [ExtraBuilding!]!
-  isSubleted: Boolean!
-}
-
-type NorwegianHomeContent implements AgreementCore {
-  id: ID!
-  fromDate: LocalDate
-  toDate: LocalDate
-  premium: MonetaryAmountV2!
-  certificateUrl: String
-  status: AgreementStatus!
-  lineOfBusiness: NorwegianHomeContentLineOfBusiness!
-  address: Address!
-  numberCoInsured: Int!
-  squareMeters: Int!
-}
-
 enum NorwegianHomeContentLineOfBusiness {
   RENT
   OWN
   YOUTH_RENT
   YOUTH_OWN
-}
-
-type NorwegianTravel implements AgreementCore {
-  id: ID!
-  fromDate: LocalDate
-  toDate: LocalDate
-  premium: MonetaryAmountV2!
-  certificateUrl: String
-  status: AgreementStatus!
-  lineOfBusiness: NorwegianTravelLineOfBusiness!
-  numberCoInsured: Int!
 }
 
 enum NorwegianTravelLineOfBusiness {
@@ -833,6 +794,8 @@ type Quote {
   breachedUnderwritingGuidelines: [String!]
   isComplete: Boolean
   data: QuoteData
+  schema: JSON
+  schemaData: JSON
   signedProductId: ID
   originatingProductId: ID
   isReadyToSign: Boolean
@@ -1594,3 +1557,5 @@ scalar LocalDateTime
 scalar Instant
 # A String-representation of `java.net.URL`, ex: "https://www.google.com/"
 scalar URL
+# A Json Object represtation of `JsonNode`
+scalar JSON

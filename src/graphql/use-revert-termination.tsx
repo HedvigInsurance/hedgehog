@@ -5,7 +5,7 @@ import {
   RevertTerminationMutationHookResult,
   RevertTerminationMutationVariables,
   useRevertTerminationMutation,
-} from '../api/generated/graphql'
+} from 'api/generated/graphql'
 import { withDelayedRefetchContracts } from './use-contracts'
 
 export const useRevertTermination = (

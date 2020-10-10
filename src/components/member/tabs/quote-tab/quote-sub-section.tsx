@@ -1,26 +1,26 @@
 import { Quote } from 'api/generated/graphql'
-import { signedOrExpiredPredicate, signedPredicate } from 'graphql/use-quotes'
+import { CreateQuoteForm } from 'components/member/tabs/quote-tab/create-quote-form'
 import { Button } from 'hedvig-ui/button'
 import { Card, CardsWrapper } from 'hedvig-ui/card'
 import React from 'react'
 import styled from 'react-emotion'
 import { showNotification } from 'store/actions/notificationsActions'
+import { ContractType } from 'utils/contract'
+import { isSigned, isSignedOrExpired } from 'utils/quote'
 import { ActionsWrapper, Muted } from './common'
 import { QuoteListItem } from './quote-list-item'
-import { QuoteModification } from './quote-modification'
 
 const Headline = styled('h1')({})
 const Wrapper = styled('div')({})
 
 export const QuotesSubSection: React.FunctionComponent<{
   memberId: string
+  contractType: ContractType
   quotes: ReadonlyArray<Quote>
-}> = ({ memberId, quotes }) => {
+}> = ({ memberId, contractType, quotes }) => {
   const [isWip, setIsWip] = React.useState(false)
-  const activeQuotes = quotes.filter(
-    (quote) => !signedOrExpiredPredicate(quote),
-  )
-  const signedQuotes = quotes.filter(signedPredicate)
+  const activeQuotes = quotes.filter((quote) => !isSignedOrExpired(quote))
+  const signedQuotes = quotes.filter(isSigned)
   const hasActiveQuotes = activeQuotes.length > 0
   const hasSignedQuotes = signedQuotes.length > 0
 
@@ -31,11 +31,9 @@ export const QuotesSubSection: React.FunctionComponent<{
       )}
       {!hasActiveQuotes && !hasSignedQuotes && isWip && (
         <ActionsWrapper>
-          <QuoteModification
-            quote={null}
+          <CreateQuoteForm
             memberId={memberId}
-            shouldCreateContract={true}
-            onWipChange={setIsWip}
+            contractType={contractType}
             onSubmitted={() => {
               if (showNotification) {
                 showNotification({
@@ -61,7 +59,7 @@ export const QuotesSubSection: React.FunctionComponent<{
       <Headline>Signed/Expired quotes</Headline>
       <Muted>
         <CardsWrapper>
-          {quotes.filter(signedOrExpiredPredicate).map((quote) => (
+          {quotes.filter(isSignedOrExpired).map((quote) => (
             <Card key={quote.id}>
               <QuoteListItem quote={quote} memberId={memberId} inactionable />
             </Card>

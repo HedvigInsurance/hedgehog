@@ -1,5 +1,4 @@
 import { MutationFunctionOptions } from '@apollo/react-common'
-import { format } from 'date-fns'
 import {
   Contract,
   TerminateContractMutation,
@@ -7,7 +6,8 @@ import {
   TerminateContractMutationVariables,
   TerminationReason,
   useTerminateContractMutation,
-} from '../api/generated/graphql'
+} from 'api/generated/graphql'
+import { format } from 'date-fns'
 import { withDelayedRefetchContracts } from './use-contracts'
 
 export const useTerminateContract = (

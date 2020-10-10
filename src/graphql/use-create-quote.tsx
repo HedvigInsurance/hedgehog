@@ -1,20 +1,20 @@
 import { MutationFunctionOptions } from '@apollo/react-common'
 import {
-  Agreement,
   Contract,
   CreateQuoteFromAgreementMutation,
   CreateQuoteFromAgreementMutationHookResult,
   CreateQuoteFromAgreementMutationVariables,
+  GenericAgreement,
   GetContractsDocument,
+  GetQuotesDocument,
   useCreateQuoteFromAgreementMutation,
-} from '../api/generated/graphql'
-import { QUOTES_QUERY } from './use-quotes'
+} from 'api/generated/graphql'
 
 export const useCreateQuoteFromAgreement = (): CreateQuoteFromAgreementMutationHookResult =>
   useCreateQuoteFromAgreementMutation()
 
 export const createQuoteFromAgreementOptions = (
-  agreement: Agreement,
+  agreement: GenericAgreement,
   contract: Contract,
 ): MutationFunctionOptions<
   CreateQuoteFromAgreementMutation,
@@ -27,7 +27,7 @@ export const createQuoteFromAgreementOptions = (
     },
     refetchQueries: () => [
       {
-        query: QUOTES_QUERY,
+        query: GetQuotesDocument,
         variables: { memberId: contract.holderMemberId },
       },
       {

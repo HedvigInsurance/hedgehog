@@ -1,10 +1,10 @@
 import { MutationFunctionOptions } from '@apollo/react-common'
 import {
-  Agreement,
   ChangeToDateMutation,
   ChangeToDateMutationHookResult,
   ChangeToDateMutationVariables,
   Contract,
+  GenericAgreement,
   useChangeToDateMutation,
 } from 'api/generated/graphql'
 import { format } from 'date-fns'
@@ -20,7 +20,7 @@ export const useChangeToDate = (
 }
 
 export const changeToDateOptions = (
-  agreement: Agreement,
+  agreement: GenericAgreement,
   newToDate: Date,
 ): MutationFunctionOptions<
   ChangeToDateMutation,

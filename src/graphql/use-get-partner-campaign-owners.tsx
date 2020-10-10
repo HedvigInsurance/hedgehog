@@ -2,7 +2,7 @@ import {
   CampaignOwnerPartner,
   GetPartnerCampaignOwnersQueryResult,
   useGetPartnerCampaignOwnersQuery,
-} from '../api/generated/graphql'
+} from 'api/generated/graphql'
 
 type PartnerCampaignOwnersReturnTuple = [
   ReadonlyArray<CampaignOwnerPartner>,

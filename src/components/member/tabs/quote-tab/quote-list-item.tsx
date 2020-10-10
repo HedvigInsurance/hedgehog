@@ -1,21 +1,17 @@
-import { Quote, QuoteProductType } from 'api/generated/graphql'
+import { Quote } from 'api/generated/graphql'
+import { UpdateQuoteForm } from 'components/member/tabs/quote-tab/update-quote-form'
+import { format, parseISO } from 'date-fns'
 import { Button } from 'hedvig-ui/button'
 import React from 'react'
 import styled from 'react-emotion'
 import { connect } from 'react-redux'
 import actions from 'store/actions'
 import { formatMoney } from 'utils/money'
-import {
-  getSubType,
-  isNorwegianHomeContent,
-  isNorwegianTravel,
-  isSwedishApartment,
-  isSwedishHouse,
-} from 'utils/quote'
+import { getSchemaDataInfo } from 'utils/quote'
+import { convertEnumToTitle } from 'utils/text'
 import { ActionsWrapper, BottomSpacerWrapper, Muted } from './common'
 import { QuoteActivation } from './quote-activation'
 import { QuoteContractCreation } from './quote-contract-creation'
-import { QuoteModification } from './quote-modification'
 
 const OuterWrapper = styled('div')(({}) => ({
   width: '100%',
@@ -29,17 +25,10 @@ const QuoteWrapper = styled('div')(() => ({
 const DetailsWrapper = styled('div')({
   width: '100%',
 })
-const AddressNPriceWrapper = styled('div')({
+const PriceWrapper = styled('div')({
   display: 'flex',
   paddingBottom: '1rem',
   lineHeight: 1.2,
-})
-const AddressWrapper = styled('div')(({}) => ({
-  fontStyle: 'italic',
-  fontSize: '1.5rem',
-  width: '50%',
-}))
-const PriceWrapper = styled('div')({
   fontSize: '2rem',
 })
 const DetailWrapper = styled('div')(({ theme }) => ({
@@ -60,66 +49,15 @@ enum Action {
   SIGN,
 }
 
-const getProductTypeValue = (quote: Quote): string => {
-  if (quote.data?.__typename === 'ApartmentQuoteData') {
-    return `${QuoteProductType.Apartment} (${getSubType(quote.data)})`
-  }
-  if (isSwedishHouse(quote?.data)) {
-    return QuoteProductType.House
-  }
-  if (isNorwegianHomeContent(quote?.data)) {
-    return `${QuoteProductType.HomeContent} (${getSubType(quote.data)})`
-  }
-  if (isNorwegianTravel(quote?.data)) {
-    return `${QuoteProductType.Travel} ${getSubType(quote.data)}`
-  }
-  return ''
-}
-
 const QuoteDetails: React.FC<{
   quote: Quote
 }> = ({ quote }) => (
   <DetailsWrapper>
-    <AddressNPriceWrapper>
-      {isSwedishHouse(quote?.data) ||
-      isSwedishApartment(quote?.data) ||
-      isNorwegianHomeContent(quote?.data) ? (
-        <AddressWrapper>
-          {quote.data.street}
-          {quote.data.street && (
-            <>
-              , <br />
-            </>
-          )}
-          {quote.data?.zipCode} {quote.data?.city ?? '🤷️'}
-        </AddressWrapper>
-      ) : (
-        <br />
-      )}
-      <PriceWrapper>
-        {quote.price && formatMoney({ amount: quote.price, currency: 'SEK' })}
-        {!quote.price && '-'}
-      </PriceWrapper>
-    </AddressNPriceWrapper>
-    <DetailWrapper>
-      Product type: <strong>{getProductTypeValue(quote)}</strong>
-      {!isNorwegianTravel(quote?.data) ? (
-        <>
-          <br />
-          Living space:
-          <strong>
-            {' '}
-            {quote.data?.livingSpace} m<sup>2</sup>
-          </strong>
-          <br />
-        </>
-      ) : (
-        <br />
-      )}
-      Household size:
-      <strong> {quote.data?.householdSize} person(s)</strong>
-    </DetailWrapper>
-
+    <PriceWrapper>
+      {quote.price
+        ? formatMoney({ amount: quote.price, currency: 'SEK' })
+        : '-'}
+    </PriceWrapper>
     {quote.breachedUnderwritingGuidelines?.length ||
       (0 > 0 && (
         <DetailWrapper>
@@ -135,15 +73,20 @@ const QuoteDetails: React.FC<{
       ))}
     <DetailWrapper>
       <Muted>
-        Created: <strong>{quote.createdAt}</strong>
+        Created:{' '}
+        <strong>{format(parseISO(quote.createdAt), 'yyyy-MM-dd hh:mm')}</strong>
         <br />
-        State: <strong>{quote.state}</strong>
+        State:{' '}
+        <strong>{quote.state ? convertEnumToTitle(quote.state) : '-'}</strong>
         <br />
-        Originating product id:{' '}
+        Originating Product Id:{' '}
         <strong>{quote.originatingProductId ?? '-'}</strong>
         <br />
         Quote id: <strong>{quote.id}</strong>
       </Muted>
+    </DetailWrapper>
+    <DetailWrapper>
+      {getSchemaDataInfo({ schemaData: quote.schemaData })}
     </DetailWrapper>
   </DetailsWrapper>
 )
@@ -195,7 +138,6 @@ export const QuoteListItemComponent: React.FC<{
     <OuterWrapper>
       <QuoteWrapper>
         <QuoteDetails quote={quote} />
-
         {!!inactionable || (
           <ActionsButtonsWrapper>
             <BottomSpacerWrapper>
@@ -274,11 +216,8 @@ export const QuoteListItemComponent: React.FC<{
 
       {action === Action.MODIFY && (
         <ActionsWrapper>
-          <QuoteModification
+          <UpdateQuoteForm
             quote={quote}
-            memberId={memberId}
-            shouldCreateContract={false}
-            onWipChange={setIsWip}
             onSubmitted={() => {
               if (showNotification) {
                 showNotification({

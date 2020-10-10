@@ -1,15 +1,17 @@
 import {
-  Address,
-  Agreement,
   Contract,
   ContractMarketInfo,
+  GenericAgreement,
+  Market,
   SignSource,
 } from 'api/generated/graphql'
-import {
-  isNorwegianHomeContent,
-  isSwedishApartment,
-  isSwedishHouse,
-} from 'utils/agreement'
+
+export enum ContractType {
+  SwedishApartment = 'SWEDISH_APARTMENT',
+  SwedishHouse = 'SWEDISH_HOUSE',
+  NorwegianHomeContent = 'NORWEGIAN_HOME_CONTENT',
+  NorwegianTravel = 'NORWEGIAN_TRAVEL',
+}
 
 export const getSignSource = (signSource: SignSource): string => {
   if (signSource === SignSource.App) {
@@ -36,32 +38,33 @@ export const getSignSource = (signSource: SignSource): string => {
   return signSource
 }
 
-export const isSwedishMarket = (market: ContractMarketInfo): boolean => {
-  return market.market === 'SWEDEN'
+export const isSwedishMarket = (
+  contractMarketInfo: ContractMarketInfo,
+): boolean => {
+  return contractMarketInfo.market === Market.Sweden
 }
 
-export const isNorwegianMarket = (market: ContractMarketInfo): boolean => {
-  return market.market === 'NORWAY'
+export const isNorwegianMarket = (
+  contractMarketInfo: ContractMarketInfo,
+): boolean => {
+  return contractMarketInfo.market === Market.Norway
 }
 
 export const currentAgreementForContract = (
   contract: Contract,
-): Agreement | undefined | null => {
-  return contract.agreements.find(
+): GenericAgreement | undefined => {
+  return contract.genericAgreements.find(
     (agreement) => agreement.id === contract.currentAgreementId,
   )
 }
 
-export const getAddressFromContract = (contract: Contract): Address | null => {
-  const currentAgreement = currentAgreementForContract(contract)
-  if (
-    currentAgreement != null &&
-    (isSwedishApartment(currentAgreement) ||
-      isSwedishHouse(currentAgreement) ||
-      isNorwegianHomeContent(currentAgreement))
-  ) {
-    return currentAgreement.address
-  } else {
-    return null
-  }
+export const getContractByAgreementId = (
+  contracts: ReadonlyArray<Contract>,
+  agreementId: string,
+): Contract | undefined => {
+  return contracts.find((contract) =>
+    contract.genericAgreements.some(
+      (agreement) => agreement.id === agreementId,
+    ),
+  )
 }

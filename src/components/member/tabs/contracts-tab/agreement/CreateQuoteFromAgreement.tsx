@@ -1,34 +1,40 @@
-import { Agreement, Contract, QuoteState } from 'api/generated/graphql'
+import { Contract, GenericAgreement, QuoteState } from 'api/generated/graphql'
 import {
   createQuoteFromAgreementOptions,
   useCreateQuoteFromAgreement,
 } from 'graphql/use-create-quote'
-import { expiredPredicate, useQuotes } from 'graphql/use-quotes'
+import { useQuotes } from 'graphql/use-get-quotes'
 import { Button } from 'hedvig-ui/button'
 import { ThirdLevelHeadline } from 'hedvig-ui/typography'
 import React from 'react'
 import { Notification } from 'store/actions/notificationsActions'
+import { isExpired } from 'utils/quote'
 
 export const CreateQuoteFromAgreement: React.FunctionComponent<{
-  agreement: Agreement
+  agreement: GenericAgreement
   contract: Contract
   showNotification: (data: Notification) => void
 }> = ({ agreement, contract, showNotification }) => {
   const [createQuote] = useCreateQuoteFromAgreement()
-  const [quotes, loadingQuotes] = useQuotes(contract.holderMemberId)
+  const [quotes, { loading: loadingQuotes }] = useQuotes(
+    contract.holderMemberId,
+  )
+
+  if (loadingQuotes) {
+    return null
+  }
+
+  const quoteAlreadyExists = quotes
+    .filter((quote) => quote.state === QuoteState.Quoted && !isExpired(quote))
+    .map((quote) => quote.originatingProductId)
+    .includes(agreement.id)
 
   return (
     <>
       <ThirdLevelHeadline>Create Quote</ThirdLevelHeadline>
       <>
-        {quotes
-          .filter(
-            (quote) =>
-              quote.state === QuoteState.Quoted && !expiredPredicate(quote),
-          )
-          .map((quote) => quote.originatingProductId)
-          .includes(agreement.id) && !loadingQuotes ? (
-          <>Agreement has an existing quote</>
+        {quoteAlreadyExists ? (
+          <>Agreement already has an existing quote</>
         ) : (
           <Button
             variation="primary"

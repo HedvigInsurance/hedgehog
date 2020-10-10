@@ -13,87 +13,36 @@ query GetContracts($memberId: ID!) {
       terminationDate
       currentAgreementId
       hasPendingAgreement
-      agreements {
-        ... on SwedishApartment {
-          id
-          fromDate
-          toDate
-          certificateUrl
-          status
-          premium {
-            amount
-            currency
-          }
-          swedishApartmentLineOfBusiness: lineOfBusiness
-          address {
-            street
-            postalCode
-            city
-          }
-          numberCoInsured
-          squareMeters
+      genericAgreements {
+        id
+        fromDate
+        toDate
+        premium {
+          amount
+          currency
         }
-        ... on SwedishHouse {
-          id
-          fromDate
-          toDate
-          certificateUrl
-          status
-          premium {
-            amount
-            currency
-          }
-          address {
-            street
-            postalCode
-            city
-          }
-          numberCoInsured
-          squareMeters
-          ancillaryArea
-          yearOfConstruction
-          numberOfBathrooms
-          extraBuildings {
-            id
-            type
-            area
-            hasWaterConnected
-            displayName
-          }
-          isSubleted
+        certificateUrl
+        status
+        typeOfContract
+        address {
+          street
+          city
+          postalCode
         }
-        ... on NorwegianHomeContent {
+        numberCoInsured
+        squareMeters
+        ancillaryArea
+        yearOfConstruction
+        numberOfBathrooms
+        extraBuildings {
           id
-          fromDate
-          toDate
-          certificateUrl
-          status
-          premium {
-            amount
-            currency
-          }
-          norwegianHomeContentLineOfBusiness: lineOfBusiness
-          address {
-            street
-            postalCode
-            city
-          }
-          numberCoInsured
-          squareMeters
+          type
+          area
+          displayName
+          hasWaterConnected
         }
-        ... on NorwegianTravel {
-          id
-          fromDate
-          toDate
-          certificateUrl
-          status
-          premium {
-            amount
-            currency
-          }
-          norwegianTravelLineOfBusiness: lineOfBusiness
-          numberCoInsured
-        }
+        isSubleted
+        lineOfBusinessName
       }
       hasQueuedRenewal
       renewal {

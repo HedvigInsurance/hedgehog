@@ -13,7 +13,7 @@ import { ThirdLevelHeadline } from 'hedvig-ui/typography'
 import React from 'react'
 import styled from 'react-emotion'
 import { getSignSource } from 'utils/contract'
-import { getEnumTitleCase } from 'utils/text'
+import { convertEnumToTitle } from 'utils/text'
 
 const ContractWrapper = styled('div')`
   &:not(:first-of-type) {
@@ -32,7 +32,7 @@ export const Contract: React.FunctionComponent<{
     string | undefined
   >(shouldPreSelectAgreement ? contract.currentAgreementId : undefined)
 
-  const agreementToShow = contract.agreements.find(
+  const agreementToShow = contract.genericAgreements.find(
     (agreement) => agreement.id === selectedAgreement,
   )
 
@@ -53,7 +53,7 @@ export const Contract: React.FunctionComponent<{
               </InfoText>
             </InfoRow>
             <InfoRow>
-              Status <InfoText>{getEnumTitleCase(contract.status)}</InfoText>
+              Status <InfoText>{convertEnumToTitle(contract.status)}</InfoText>
             </InfoRow>
             {contract.switchedFrom && (
               <InfoRow>
@@ -78,7 +78,7 @@ export const Contract: React.FunctionComponent<{
         </Card>
       </CardsWrapper>
       <AgreementsTable
-        agreements={contract.agreements}
+        agreements={contract.genericAgreements}
         selectedAgreement={selectedAgreement}
         setSelectedAgreement={setSelectedAgreement}
       />

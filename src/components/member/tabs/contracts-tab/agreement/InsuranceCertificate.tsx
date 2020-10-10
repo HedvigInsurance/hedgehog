@@ -1,4 +1,4 @@
-import { Agreement, Contract } from 'api/generated/graphql'
+import { GenericAgreement, Contract } from 'api/generated/graphql'
 import {
   regenerateCertificateOptions,
   useRegenerateCertificate,
@@ -11,7 +11,7 @@ import { Notification } from 'store/actions/notificationsActions'
 
 export const InsuranceCertificate: React.FunctionComponent<{
   contract: Contract
-  agreement: Agreement
+  agreement: GenericAgreement
   showNotification: (data: Notification) => void
   refetch: () => Promise<void>
 }> = ({ contract, agreement, showNotification, refetch }) => {

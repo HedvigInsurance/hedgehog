@@ -6,7 +6,7 @@ import { FraudulentStatus } from 'lib/fraudulentStatus'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
-import { getAddressFromContract } from 'utils/contract'
+import { currentAgreementForContract } from 'utils/contract'
 import { formatMoney } from 'utils/money'
 
 import {
@@ -46,7 +46,7 @@ const MemberInformation: React.FC<{
   member: Member
   contract: Contract | null
 }> = ({ member, contract }) => {
-  const address = contract ? getAddressFromContract(contract) : null
+  const address = contract && currentAgreementForContract(contract)?.address
 
   return (
     <Paper>

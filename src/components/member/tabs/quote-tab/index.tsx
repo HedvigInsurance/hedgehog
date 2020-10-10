@@ -1,26 +1,27 @@
 import { Quote } from 'api/generated/graphql'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
-import { useQuotes } from 'graphql/use-quotes'
+import { useQuotes } from 'graphql/use-get-quotes'
+import { getTextFromEnumValue } from 'hedvig-ui/dropdown'
 import * as React from 'react'
 import { Tab } from 'semantic-ui-react'
-import { isNorwegianMarket, isSwedishMarket } from 'utils/contract'
+import {
+  ContractType,
+  isNorwegianMarket,
+  isSwedishMarket,
+} from 'utils/contract'
 import { QuotesSubSection } from './quote-sub-section'
 
 export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
   memberId,
 }) => {
-  const [quotes, quotesLoading] = useQuotes(memberId)
+  const [quotes, { loading: quotesLoading }] = useQuotes(memberId)
   const [contractMarket, { loading }] = useContractMarketInfo(memberId)
 
-  if (loading) {
+  if (loading || quotesLoading) {
     return null
   }
 
-  if (quotesLoading) {
-    return <>Loading...</>
-  }
-
-  if (!quotesLoading && quotes.length === 0) {
+  if (quotes.length === 0) {
     return <em>No quotes :(</em>
   }
 
@@ -28,13 +29,13 @@ export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
     return <>Unable to get Market, please contact Tech</>
   }
 
-  const getUniqueContractTypeNames = () => {
+  const getUniqueContractTypes = () => {
     if (isSwedishMarket(contractMarket)) {
-      return ['Swedish Apartment', 'Swedish House']
+      return [ContractType.SwedishApartment, ContractType.SwedishHouse]
     }
 
     if (isNorwegianMarket(contractMarket)) {
-      return ['Norwegian Home Content', 'Norwegian Travel']
+      return [ContractType.NorwegianHomeContent, ContractType.NorwegianTravel]
     }
 
     return []
@@ -45,16 +46,16 @@ export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
     contractType,
   ): boolean => {
     if (quote.productType === 'HOME_CONTENT') {
-      return contractType === 'Norwegian Home Content'
+      return contractType === ContractType.NorwegianHomeContent
     }
     if (quote.productType === 'TRAVEL') {
-      return contractType === 'Norwegian Travel'
+      return contractType === ContractType.NorwegianTravel
     }
     if (quote.productType === 'APARTMENT') {
-      return contractType === 'Swedish Apartment'
+      return contractType === ContractType.SwedishApartment
     }
     if (quote.productType === 'HOUSE') {
-      return contractType === 'Swedish House'
+      return contractType === ContractType.SwedishHouse
     }
     return false
   }
@@ -68,12 +69,13 @@ export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
   }
 
   const getTabs = () =>
-    getUniqueContractTypeNames().map((contractType) => ({
-      menuItem: contractType,
+    getUniqueContractTypes().map((contractType) => ({
+      menuItem: getTextFromEnumValue(contractType),
       render: () => (
         <Tab.Pane>
           <QuotesSubSection
             memberId={memberId}
+            contractType={contractType}
             quotes={getCategorisedQuotesBasedOnContractType(contractType)}
           />
         </Tab.Pane>

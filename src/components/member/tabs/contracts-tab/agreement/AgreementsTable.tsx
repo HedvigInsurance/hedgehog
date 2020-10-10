@@ -1,10 +1,10 @@
-import { Agreement, AgreementStatus } from 'api/generated/graphql'
+import { AgreementStatus, GenericAgreement } from 'api/generated/graphql'
 import React from 'react'
 import styled, { css } from 'react-emotion'
 import { Table } from 'semantic-ui-react'
-import { getLineOfBusiness, InsuranceStatusBadge } from 'utils/agreement'
+import { InsuranceStatusBadge } from 'utils/agreement'
 import { formatMoney } from 'utils/money'
-import { getEnumTitleCase } from 'utils/text'
+import { convertEnumToTitle } from 'utils/text'
 
 const SelectableTableRow = styled(Table.Row)({
   cursor: 'pointer',
@@ -25,7 +25,7 @@ const SelectableTableCell = styled(Table.Cell)<{
 `
 
 export const AgreementsTable: React.FC<{
-  agreements: ReadonlyArray<Agreement>
+  agreements: ReadonlyArray<GenericAgreement>
   selectedAgreement: string | undefined
   setSelectedAgreement: (agreementId: string | undefined) => void
 }> = ({ agreements, selectedAgreement, setSelectedAgreement }) => {
@@ -58,7 +58,7 @@ export const AgreementsTable: React.FC<{
                 selected={isSelected}
                 status={agreement.status}
               >
-                {getEnumTitleCase(getLineOfBusiness(agreement))}
+                {convertEnumToTitle(agreement.lineOfBusinessName)}
               </SelectableTableCell>
               <SelectableTableCell
                 selected={isSelected}
@@ -83,7 +83,7 @@ export const AgreementsTable: React.FC<{
                 status={agreement.status}
               >
                 <InsuranceStatusBadge status={agreement.status}>
-                  {getEnumTitleCase(agreement.status)}
+                  {convertEnumToTitle(agreement.status)}
                 </InsuranceStatusBadge>
               </SelectableTableCell>
             </SelectableTableRow>

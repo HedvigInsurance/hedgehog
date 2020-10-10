@@ -70,30 +70,12 @@ export const CLAIM_PAGE_QUERY = gql`
       contract {
         id
         currentAgreementId
-        agreements {
-          ... on AgreementCore {
-            id
-          }
-          ... on SwedishApartment {
-            address {
-              street
-              postalCode
-              city
-            }
-          }
-          ... on SwedishHouse {
-            address {
-              street
-              postalCode
-              city
-            }
-          }
-          ... on NorwegianHomeContent {
-            address {
-              street
-              postalCode
-              city
-            }
+        genericAgreements {
+          id
+          address {
+            street
+            postalCode
+            city
           }
         }
         contractTypeName
