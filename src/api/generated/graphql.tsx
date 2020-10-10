@@ -2197,7 +2197,7 @@ export type ClaimSearchQuery = { __typename?: 'QueryType' } & {
       claims: Array<
         { __typename?: 'Claim' } & Pick<
           Claim,
-          'registrationDate' | 'state' | 'reserves'
+          'id' | 'registrationDate' | 'state' | 'reserves'
         > & {
             type: Maybe<
               | { __typename: 'TheftClaim' }
@@ -4164,6 +4164,7 @@ export const ClaimSearchDocument = gql`
   query ClaimSearch($options: ClaimSearchOptions!) {
     claimSearch(options: $options) {
       claims {
+        id
         type {
           __typename
         }

@@ -1,6 +1,7 @@
 query ClaimSearch($options: ClaimSearchOptions!) {
   claimSearch(options: $options) {
     claims {
+      id
       # TODO: Fix mock db data
       # member {
       #   memberId

@@ -3,16 +3,12 @@ import { parseISO } from 'date-fns'
 import formatDate from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import { useClaimSearch } from 'graphql/use-claim-search'
-import React from 'react'
+import React, { Dispatch } from 'react'
 import styled from 'react-emotion'
 import { Table } from 'semantic-ui-react'
-import { Claim } from 'src/api/generated/graphql'
+import { Claim, ClaimSearchOptions } from 'src/api/generated/graphql'
 import { history } from 'store'
-import {
-  ClaimSearchFilter,
-  ClaimSortColumn,
-  ClaimsStore,
-} from 'store/types/claimsTypes'
+import { ClaimSortColumn } from 'store/types/claimsTypes'
 import { getMemberIdColor } from 'utils/member'
 import { formatMoney } from 'utils/money'
 import BackendPaginatorList from '../../shared/paginator-list/BackendPaginatorList'
@@ -28,9 +24,7 @@ const linkClickHandler = (id: string, userId: string) => {
 }
 
 const getTableRow = (item: Claim) => {
-  console.log(item.registrationDate)
   const date = parseISO(item.registrationDate)
-  console.log(date)
   const formattedDate = isValidDate(date)
     ? formatDate(date, 'dd MMMM yyyy HH:mm')
     : '-'
@@ -62,13 +56,13 @@ const getTableRow = (item: Claim) => {
 
 const sortTable = (
   clickedColumn: ClaimSortColumn,
-  searchFilter: ClaimSearchFilter,
-  claimsRequest: (filter: ClaimSearchFilter) => void,
+  searchFilter: ClaimSearchOptions,
+  setSearchFilter: Dispatch<ClaimSearchOptions>,
 ) => {
   if (searchFilter.sortBy !== clickedColumn) {
-    claimsRequest({ ...searchFilter, sortBy: clickedColumn, page: 0 })
+    setSearchFilter({ ...searchFilter, sortBy: clickedColumn, page: 0 })
   } else {
-    claimsRequest({
+    setSearchFilter({
       ...searchFilter,
       sortDirection: searchFilter.sortDirection === 'DESC' ? 'ASC' : 'DESC',
       page: 0,
@@ -77,8 +71,8 @@ const sortTable = (
 }
 
 const getTableHeader = (
-  searchFilter: ClaimSearchFilter,
-  claimsRequest: (filter: ClaimSearchFilter) => void,
+  searchFilter: ClaimSearchOptions,
+  setSearchFilter: Dispatch<ClaimSearchOptions>,
 ) => {
   const { sortDirection, sortBy } = searchFilter
   const direction = sortDirection === 'DESC' ? 'descending' : 'ascending'
@@ -89,28 +83,28 @@ const getTableHeader = (
         <Table.HeaderCell
           width={6}
           sorted={sortBy === 'DATE' ? direction : undefined}
-          onClick={() => sortTable('DATE', searchFilter, claimsRequest)}
+          onClick={() => sortTable('DATE', searchFilter, setSearchFilter)}
         >
           Date
         </Table.HeaderCell>
         <Table.HeaderCell
           width={6}
           sorted={sortBy === 'TYPE' ? direction : undefined}
-          onClick={() => sortTable('TYPE', searchFilter, claimsRequest)}
+          onClick={() => sortTable('TYPE', searchFilter, setSearchFilter)}
         >
           Type
         </Table.HeaderCell>
         <Table.HeaderCell
           width={6}
           sorted={sortBy === 'STATE' ? direction : undefined}
-          onClick={() => sortTable('STATE', searchFilter, claimsRequest)}
+          onClick={() => sortTable('STATE', searchFilter, setSearchFilter)}
         >
           State
         </Table.HeaderCell>
         <Table.HeaderCell
           width={6}
           sorted={sortBy === 'RESERVES' ? direction : undefined}
-          onClick={() => sortTable('RESERVES', searchFilter, claimsRequest)}
+          onClick={() => sortTable('RESERVES', searchFilter, setSearchFilter)}
         >
           Reserves
         </Table.HeaderCell>
@@ -119,26 +113,37 @@ const getTableHeader = (
   )
 }
 
-const BackendServedClaimsList: React.FC<{
-  claims: ClaimsStore
-  claimsRequest: (filter: ClaimSearchFilter) => void
-}> = ({ claims: { searchResult, searchFilter }, claimsRequest }) => {
+const BackendServedClaimsList: React.FC = () => {
   const [claimSearch, { loading, data, error }] = useClaimSearch()
+  const [searchFilter, setSearchFilter] = React.useState<ClaimSearchOptions>({
+    page: 0,
+    pageSize: 20,
+    sortBy: 'DATE',
+    sortDirection: 'DESC',
+  })
 
   React.useEffect(() => {
-    claimSearch({})
-  }, [])
+    claimSearch(searchFilter)
+  }, [searchFilter])
+
+  if (loading) {
+    return <>Loading...</>
+  }
+
+  if (error) {
+    return <>D*shborad, could not retrieve claims!</>
+  }
 
   return (
     <BackendPaginatorList<Claim>
       pagedItems={(data?.claimSearch?.claims as Claim[]) ?? []}
       itemContent={getTableRow}
-      tableHeader={getTableHeader(searchFilter, claimsRequest)}
+      tableHeader={getTableHeader(searchFilter, setSearchFilter)}
       currentPage={data?.claimSearch?.page ?? 0}
       totalPages={data?.claimSearch?.totalPages ?? 0}
       isSortable={true}
       keyName="id"
-      changePage={(page) => claimsRequest({ ...searchFilter, page })}
+      changePage={(page) => claimSearch({ ...searchFilter, page })}
     />
   )
 }
