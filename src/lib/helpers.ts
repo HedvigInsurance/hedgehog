@@ -80,8 +80,8 @@ export const sortMembersList = (list, fieldName, isReverse) => {
 }
 
 /**
- * Sort claims table (ClaimsList page)
- * @param {array} list ClaimsList
+ * Sort claims table (MemberClaimsList page)
+ * @param {array} list MemberClaimsList
  * @param {string} fieldName clicked column name
  * @param {bool} isReverse
  */

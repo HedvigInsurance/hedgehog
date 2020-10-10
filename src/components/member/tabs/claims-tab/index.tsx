@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import ClaimsList from 'components/claims/claims-list/ClaimsList'
+import MemberClaimsList from 'components/member/tabs/claims-tab/components/MemberClaimsList'
 import DateInput from 'components/shared/inputs/DateInput'
 import MaterialModal from 'components/shared/modals/MaterialModal'
 import { ActionMap, Container } from 'constate'
@@ -57,13 +57,6 @@ const CREATE_CLAIM_MUTATION = gql`
   }
 `
 
-interface ClaimsTabProps {
-  classes: any
-  memberClaims: object[]
-  sortClaimsList?: () => void
-  memberId: string
-}
-
 interface State {
   open: boolean
   date?: any
@@ -78,7 +71,12 @@ interface Actions {
   dateChangeHandler?: (type: string, e: any, value: any) => void
 }
 
-const ClaimsTab: React.SFC<ClaimsTabProps> = (props) => {
+const ClaimsTab: React.FC<{
+  classes: any
+  memberClaims: object[]
+  sortClaimsList?: () => void
+  memberId: string
+}> = (props) => {
   return (
     <Container<State, ActionMap<State, Actions>>
       initialState={{
@@ -130,7 +128,7 @@ const ClaimsTab: React.SFC<ClaimsTabProps> = (props) => {
             Add new claim
           </Button>
           {props.memberClaims.length > 0 ? (
-            <ClaimsList
+            <MemberClaimsList
               claims={{ list: props.memberClaims }}
               sortClaimsList={props.sortClaimsList}
             />

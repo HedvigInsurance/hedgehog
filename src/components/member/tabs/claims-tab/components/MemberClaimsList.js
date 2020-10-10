@@ -6,7 +6,7 @@ import React from 'react'
 import { Table } from 'semantic-ui-react'
 import { history } from 'store'
 
-export default class ClaimsList extends React.Component {
+export default class MemberClaimsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -113,7 +113,7 @@ export default class ClaimsList extends React.Component {
   }
 }
 
-ClaimsList.propTypes = {
+MemberClaimsList.propTypes = {
   claims: PropTypes.object.isRequired,
   sortClaimsList: PropTypes.func.isRequired,
 }

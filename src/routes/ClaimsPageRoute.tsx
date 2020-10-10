@@ -1,5 +1,5 @@
 import ClaimDetailsPage from 'containers/claim-details-page/ClaimDetailsPage'
-import ClaimsPage from 'containers/claims-page/ClaimsPage'
+import { ClaimsPage } from 'containers/claims-page/ClaimsPage'
 import * as PropTypes from 'prop-types'
 import * as React from 'react'
 import { Route, Switch } from 'react-router'

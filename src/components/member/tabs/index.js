@@ -1,4 +1,3 @@
-import ClaimsTab from 'components/member/tabs/ClaimsTab'
 import { DetailsTab } from 'components/member/tabs/DetailsTab'
 import MemberFile from 'components/member/tabs/FileTab'
 import PaymentsTab from 'components/member/tabs/payments-tab'
@@ -14,6 +13,7 @@ import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-in
 import { AccountTab } from './account-tab'
 import { DebtTab } from './debt-tab'
 import { CampaignsTab } from './campaigns-tab'
+import ClaimsTab from 'components/member/tabs/claims-tab'
 
 const TabContainer = styled(Tab.Pane)`
   &&& {
