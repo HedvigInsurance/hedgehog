@@ -103,13 +103,6 @@ const ClaimPage: React.SFC<Props> = ({ ...props }) => (
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    {transcriptions && transcriptions.length > 0 && (
-                      <ClaimTranscriptions
-                        transcriptions={transcriptions as ClaimTranscription[]}
-                      />
-                    )}
-                  </Grid>
-                  <Grid item xs={12}>
                     {notes && (
                       <ClaimNotes
                         notes={(notes.filter(Boolean) as ClaimNote[]) ?? []}
@@ -124,6 +117,13 @@ const ClaimPage: React.SFC<Props> = ({ ...props }) => (
                       memberId={member?.memberId ?? null}
                       contract={contract}
                     />
+                  </Grid>
+                  <Grid item xs={12}>
+                    {transcriptions && transcriptions.length > 0 && (
+                      <ClaimTranscriptions
+                        transcriptions={transcriptions as ClaimTranscription[]}
+                      />
+                    )}
                   </Grid>
                   <Grid item xs={12}>
                     {payments && member && (
