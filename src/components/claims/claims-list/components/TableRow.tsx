@@ -1,4 +1,4 @@
-import { Claim } from 'api/generated/graphql'
+import { Claim, Member } from 'api/generated/graphql'
 import { LinkRow } from 'components/shared'
 import { parseISO } from 'date-fns'
 import formatDate from 'date-fns/format'
@@ -26,6 +26,8 @@ export const TableRow: React.FC<{ item: Claim }> = ({ item }) => {
     ? formatDate(date, 'dd MMMM yyyy HH:mm')
     : '-'
 
+  const member = item!!.member as Member
+
   return (
     <LinkRow
       onClick={() =>
@@ -38,7 +40,7 @@ export const TableRow: React.FC<{ item: Claim }> = ({ item }) => {
       {
         // TODO: Don't have staging data right now, will fix this
       }
-      <MemberIdCell memberId={item?.member?.memberId ?? '123456'}>
+      <MemberIdCell memberId={member.memberId}>
         {item?.member?.memberId ?? '123456'}
       </MemberIdCell>
       <Table.Cell>{formattedDate}</Table.Cell>

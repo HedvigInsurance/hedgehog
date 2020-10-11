@@ -1,5 +1,5 @@
-import { TableHeader } from 'containers/claims-page/components/TableHeader'
-import { TableRow } from 'containers/claims-page/components/TableRow'
+import { TableHeader } from 'components/claims/claims-list/components/TableHeader'
+import { TableRow } from 'components/claims/claims-list/components/TableRow'
 import { useClaimSearch } from 'graphql/use-claim-search'
 import React from 'react'
 import { Claim, ClaimSearchOptions } from 'src/api/generated/graphql'
@@ -7,6 +7,7 @@ import BackendPaginatorList from '../../shared/paginator-list/BackendPaginatorLi
 
 const BackendServedClaimsList: React.FC = () => {
   const [claimSearch, { loading, data, error }] = useClaimSearch()
+
   const [searchFilter, setSearchFilter] = React.useState<ClaimSearchOptions>({
     page: 0,
     pageSize: 20,
