@@ -37,20 +37,13 @@ export const ItemList: React.FC<{ claimId: string }> = ({ claimId }) => {
   const [itemToDelete, setItemToDelete] = React.useState<string | null>(null)
 
   return (
-    <Table style={{ marginBottom: '7px' }}>
-      <colgroup>
-        <col style={{ width: '50.5%' }} />
-        <col style={{ width: '17.0%' }} />
-        <col style={{ width: '9.0%' }} />
-        <col style={{ width: '20.0%' }} />
-        <col style={{ width: '3.5%' }} />
-      </colgroup>
-      <TableHead style={{ padding: '0px' }}>
+    <Table>
+      <TableHead>
         <TableRow>
-          <TableCell>Item</TableCell>
-          <TableCell>Purchase price</TableCell>
-          <TableCell>Purchase date</TableCell>
-          <TableCell>Valuation</TableCell>
+          <TableCell style={{ width: '28%' }}>Item</TableCell>
+          <TableCell style={{ width: '24%' }}>Valuation</TableCell>
+          <TableCell style={{ width: '10%' }}>Purchase price</TableCell>
+          <TableCell style={{ width: '15%' }}>Purchase date</TableCell>
           <TableCell />
         </TableRow>
       </TableHead>
@@ -82,6 +75,15 @@ export const ItemList: React.FC<{ claimId: string }> = ({ claimId }) => {
               )
             : null
 
+          const depreciationString =
+            item.valuation?.amount && item.purchasePrice?.amount
+              ? ` ( 2 years old, depreciated by ${(
+                  100 -
+                  (100 * parseFloat(item.valuation.amount)) /
+                    parseFloat(item.purchasePrice.amount)
+                ).toString()}%)`
+              : ''
+
           const toBeDeleted = itemToDelete ? itemToDelete === item.id : false
 
           return (
@@ -110,9 +112,18 @@ export const ItemList: React.FC<{ claimId: string }> = ({ claimId }) => {
                   </>
                 )}
               </TableCell>
+              <TableCell>
+                {valuationString ? (
+                  <>
+                    {valuationString}{' '}
+                    <Placeholder>{depreciationString}</Placeholder>
+                  </>
+                ) : (
+                  <NotSpecified />
+                )}
+              </TableCell>
               <TableCell>{purchasePriceString ?? <NotSpecified />}</TableCell>
               <TableCell>{item.dateOfPurchase ?? <NotSpecified />}</TableCell>
-              <TableCell>{valuationString ?? <NotSpecified />}</TableCell>
               <TableCell>
                 <Grid container spacing={8}>
                   <Grid item xs={6}>

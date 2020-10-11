@@ -94,6 +94,7 @@ export const CategorySelect: React.FC<{
       )}
       <StyledCreatableSelect
         classNamePrefix="custom-select"
+        tabSelectsValue={false}
         closeMenuOnSelect={false}
         isMulti
         placeholder={
