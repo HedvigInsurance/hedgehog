@@ -22,5 +22,5 @@
     }
   },
   "include": ["./shared", "./src"],
-  "exclude": ["node_modules", "./src/components/tickets", "./src/containers/ticket-history-page"]
+  "exclude": ["node_modules"]
 }

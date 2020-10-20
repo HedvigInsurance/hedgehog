@@ -5,6 +5,7 @@ query GetQuotes($memberId: ID!) {
       id
       memberId
       price
+      currency
       productType
       state
       startDate

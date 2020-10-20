@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { parseISO } from 'date-fns'
 import formatDate from 'date-fns/format'
-import moment from 'moment'
 
 export const filterList = (filter: string, list: any[], fieldName: string) =>
   list.filter((item) => item[fieldName] === filter)
@@ -23,27 +22,6 @@ export const updateList = (list: any[], msg: any[]) => {
     }
     return [...result]
   }
-}
-
-/**
- * Hidding inactive members on first render && sort by signup date
- * @param {object} param0 -
- */
-export const filterMembersList = ({ type, members }) =>
-  type !== 'MEMBERS_REQUEST_SUCCESS'
-    ? members
-    : members.filter((item) => item.status !== 'INACTIVATED').reverse()
-
-/**
- * Returns string with member first+last name || member Id
- * @param {array} members
- * @param {string} id
- */
-export const getMemberInfo = (members, id) => {
-  const member = members.find((person) => person.memberId === id)
-  return member && member.firstName
-    ? `${member.firstName} ${member.lastName || ''}`
-    : `${id ? 'Member-' + id : 'No id'}`
 }
 
 const capitalize = (str: string) => {
@@ -189,9 +167,7 @@ function sortListByDate(list, fieldName, isReverse) {
   })
 
   const sortedDates = withDates.sort((a, b) => {
-    const dateA = moment(a[fieldName] || '10000-01-01')
-    const dateB = moment(b[fieldName] || '10000-01-01')
-    return dateA.diff(dateB)
+    return a - b
   })
   const resultList = isReverse ? sortedDates.reverse() : sortedDates
   return [...resultList, ...withoutDates]

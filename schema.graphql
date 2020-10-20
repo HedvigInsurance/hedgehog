@@ -27,6 +27,24 @@ type QueryType {
     itemTypeId: ID
   ): CanValuateClaimItem
   quoteSchemaForContractType(contractType: String!): JSON
+  memberSearch(
+    query: String!
+    options: MemberSearchOptions!
+  ): MemberSearchResult!
+}
+
+type MemberSearchResult {
+  members: [Member!]!
+  totalPages: Int!
+  page: Int!
+}
+
+input MemberSearchOptions {
+  includeAll: Boolean
+  page: Int
+  pageSize: Int
+  sortBy: String
+  sortDirection: String
 }
 
 type DashboardNumbers {
@@ -74,17 +92,7 @@ type MutationType {
     previousAgreementActiveTo: LocalDate
   ): Quote!
 
-  # Creates a quote from a product and returns the quote id
-  createQuoteFromProduct(
-    memberId: ID!
-    quoteData: QuoteFromProductInput!
-  ): Quote!
   createQuoteFromAgreement(agreementId: ID!, memberId: ID!): Quote!
-  updateQuote(
-    quoteId: ID!
-    quoteData: QuoteInput!
-    bypassUnderwritingGuidelines: Boolean
-  ): Quote!
   markSwitchableSwitcherEmailAsReminded(id: ID!): Boolean!
   terminateContract(contractId: ID!, request: TerminateContractInput): Contract!
   activatePendingAgreement(
@@ -106,11 +114,6 @@ type MutationType {
   sendMessage(input: SendMessageInput!): SendMessageResponse!
   markQuestionAsResolved(memberId: ID!): Boolean!
   answerQuestion(memberId: ID!, answer: String!): Boolean!
-  createQuoteForNewContract(
-    memberId: ID!
-    quoteInput: QuoteInput!
-    bypassUnderwritingGuidelines: Boolean!
-  ): Quote!
   updateQuoteBySchema(
     quoteId: ID!
     schemaData: JSON!
@@ -150,6 +153,15 @@ type MutationType {
   manualRedeemEnableReferralsCampaign(memberId: ID!, market: Market!): Boolean!
   unsignMember(market: String!, ssn: String!): Boolean!
   editMemberInfo(request: EditMemberInfoInput!): Boolean!
+  setFraudulentStatus(
+    memberId: ID!
+    request: MemberFraudulentStatusInput!
+  ): Boolean!
+}
+
+input MemberFraudulentStatusInput {
+  fraudulentStatus: String!
+  fraudulentStatusDescription: String
 }
 
 type ClaimItem {
@@ -736,15 +748,11 @@ enum Gender {
   OTHER
 }
 
-interface IQuoteData {
-  id: ID!
-  householdSize: Int
-}
-
 type Quote {
   id: ID!
   createdAt: Instant
   price: Float
+  currency: String
   productType: QuoteProductType
   state: QuoteState
   initiatedFrom: String
@@ -755,7 +763,6 @@ type Quote {
   memberId: ID
   breachedUnderwritingGuidelines: [String!]
   isComplete: Boolean
-  data: QuoteData
   schema: JSON
   schemaData: JSON
   signedProductId: ID
@@ -775,47 +782,6 @@ enum QuoteState {
   QUOTED
   SIGNED
   EXPIRED
-}
-
-union QuoteData =
-    ApartmentQuoteData
-  | HouseQuoteData
-  | NorwegianHomeContentQuoteData
-  | NorwegianTravelQuoteData
-
-type ApartmentQuoteData implements IQuoteData {
-  id: ID!
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-  subType: ApartmentSubType
-}
-
-enum ApartmentSubType {
-  BRF
-  RENT
-  STUDENT_BRF
-  STUDENT_RENT
-}
-
-type HouseQuoteData implements IQuoteData {
-  id: ID!
-  ssn: String
-  firstName: String
-  lastName: String
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-
-  ancillaryArea: Int
-  yearOfConstruction: Int
-  numberOfBathrooms: Int
-  extraBuildings: [ExtraBuilding!]!
-  isSubleted: Boolean
 }
 
 input CampaignFilter {
@@ -848,149 +814,6 @@ enum ExtraBuildingType {
   BARN
   BOATHOUSE
   OTHER
-}
-
-type NorwegianHomeContentQuoteData implements IQuoteData {
-  id: ID!
-  ssn: String
-  firstName: String
-  lastName: String
-
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-  subType: NorwegianHomeContentLineOfBusiness
-}
-
-type NorwegianTravelQuoteData implements IQuoteData {
-  id: ID!
-  ssn: String
-  firstName: String
-  lastName: String
-  householdSize: Int
-  subType: NorwegianTravelLineOfBusiness
-}
-
-input QuoteInput {
-  productType: QuoteProductType
-  currentInsurer: String
-  apartmentData: ApartmentQuoteInput
-  houseData: HouseQuoteInput
-  norwegianHomeContentData: NorwegianHomeContentQuoteInput
-  norwegianTravelData: NorwegianTravelQuoteInput
-  originatingProductId: ID
-}
-
-input ApartmentQuoteInput {
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-
-  subType: ApartmentSubType
-}
-
-input HouseQuoteInput {
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-
-  ancillaryArea: Int
-  yearOfConstruction: Int
-  numberOfBathrooms: Int
-  extraBuildings: [ExtraBuildingInput!]
-  isSubleted: Boolean
-}
-
-input NorwegianHomeContentQuoteInput {
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-
-  subType: NorwegianHomeContentLineOfBusiness
-}
-
-input NorwegianTravelQuoteInput {
-  householdSize: Int
-  subType: NorwegianTravelLineOfBusiness
-}
-
-input QuoteFromProductInput {
-  incompleteHouseQuoteData: HouseQuoteDataInput
-  incompleteApartmentQuoteData: ApartmentQuoteDataInput
-  norwegianHomeContentQuoteData: NorwegianHomeContentQuoteDataInput
-  norwegianTravelQuoteData: NorwegianTravelQuoteDataInput
-  originatingProductId: ID
-  currentInsurer: String
-}
-
-input ApartmentQuoteDataInput {
-  ssn: String
-  firstName: String
-  lastName: String
-
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-
-  subType: ApartmentSubType
-}
-
-input HouseQuoteDataInput {
-  ssn: String
-  firstName: String
-  lastName: String
-
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-
-  ancillaryArea: Int
-  yearOfConstruction: Int
-  numberOfBathrooms: Int
-  extraBuildings: [ExtraBuildingInput!]!
-  isSubleted: Boolean
-}
-
-input ExtraBuildingInput {
-  type: String!
-  area: Int!
-  hasWaterConnected: Boolean!
-  displayName: String
-}
-
-input NorwegianHomeContentQuoteDataInput {
-  ssn: String
-  firstName: String
-  lastName: String
-
-  street: String
-  city: String
-  zipCode: String
-  householdSize: Int
-  livingSpace: Int
-
-  subType: NorwegianHomeContentLineOfBusiness
-}
-
-input NorwegianTravelQuoteDataInput {
-  ssn: String
-  firstName: String
-  lastName: String
-
-  householdSize: Int
-  subType: NorwegianTravelLineOfBusiness
 }
 
 type PaymentCompletionResponse {

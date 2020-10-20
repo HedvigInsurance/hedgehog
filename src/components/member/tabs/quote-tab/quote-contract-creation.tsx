@@ -1,10 +1,10 @@
 import { Quote } from 'api/generated/graphql'
-import { BaseDatePicker } from 'components/shared/inputs/DatePicker'
 import {
   getSignQuoteForNewContractOptions,
   useSignQuoteForNewContract,
 } from 'graphql/use-sign-quote-for-new-contract'
 import { Button } from 'hedvig-ui/button'
+import { DateTimePicker } from 'hedvig-ui/date-time-picker'
 import React from 'react'
 import { noopFunction } from 'utils'
 import { BottomSpacerWrapper, ErrorMessage } from './common'
@@ -47,9 +47,9 @@ export const QuoteContractCreation: React.FC<{
           <strong>Activation date</strong>
         </div>
         <div>
-          <BaseDatePicker
-            value={activeFrom}
-            onChange={(value) => {
+          <DateTimePicker
+            date={activeFrom}
+            setDate={(value) => {
               if (onWipChange) {
                 onWipChange(true)
               }

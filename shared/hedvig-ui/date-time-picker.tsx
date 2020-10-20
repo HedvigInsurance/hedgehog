@@ -1,4 +1,5 @@
 import enGB from 'date-fns/locale/en-GB'
+import { FieldProps } from 'formik'
 import React from 'react'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -10,9 +11,12 @@ interface DatePickerProps {
   date: Date
   setDate: (date: Date) => void
   showTimePicker?: boolean
+  maxDate?: Date
+  minDate?: Date
   fullWidth?: boolean
   placeholder?: string
   disabled?: boolean
+  name?: string
 }
 
 const StyledInput = styled(Input)<{ fullWidth?: boolean }>(
@@ -31,10 +35,13 @@ const StyledInput = styled(Input)<{ fullWidth?: boolean }>(
 export const DateTimePicker: React.FunctionComponent<DatePickerProps> = ({
   date,
   setDate,
+  maxDate,
+  minDate,
   showTimePicker = false,
   fullWidth = false,
   placeholder,
   disabled = false,
+  name,
 }) => {
   return (
     <DatePicker
@@ -46,6 +53,9 @@ export const DateTimePicker: React.FunctionComponent<DatePickerProps> = ({
         setDate(newDate)
       }}
       showTimeSelect={showTimePicker}
+      maxDate={maxDate}
+      minDate={minDate}
+      name={name}
       customInput={
         <StyledInput
           type="text"
@@ -56,6 +66,21 @@ export const DateTimePicker: React.FunctionComponent<DatePickerProps> = ({
         />
       }
       dateFormat={'yyyy-MM-dd'}
+    />
+  )
+}
+
+export const FormikDateTimePicker: React.FC<FieldProps & DatePickerProps> = ({
+  field: { value, name },
+  form: { setFieldValue },
+  ...props
+}) => {
+  return (
+    <DateTimePicker
+      {...props}
+      date={value}
+      setDate={(newValue: Date) => setFieldValue(name, newValue)}
+      name={name}
     />
   )
 }

@@ -9,18 +9,20 @@ export interface BadgeProps {
   centered?: boolean
   bold?: boolean
   variant?: BadgeVariant
+  matchParentSize?: boolean
 }
 
-const getPaddingFromSize = (size?: BadgeSize) => {
+const getPaddingFromSize = (size?: BadgeSize, matchParentSize?: boolean) => {
+  const unit = matchParentSize ? 'em' : 'rem'
   switch (size) {
     case 'small':
-      return '0.5rem 0.5rem'
+      return `0.5${unit} 0.5${unit}`
     case 'medium':
-      return '0.7rem 0.7rem'
+      return `0.7${unit} 0.7${unit}`
     case 'large':
-      return '0.9rem 0.9rem'
+      return `0.9${unit} 0.9${unit}`
     default:
-      return '0.5rem 0.5rem'
+      return `0.5${unit} 0.5${unit}`
   }
 }
 
@@ -39,7 +41,8 @@ const getColorFromVariant = (theme: any, variant?: BadgeVariant) => {
 
 export const Badge = styled.div<BadgeProps>`
   display: inline-block;
-  padding: ${({ size }) => getPaddingFromSize(size)};
+  padding: ${({ size, matchParentSize }) =>
+    getPaddingFromSize(size, matchParentSize)};
   line-height: 1;
   background: ${({ theme, variant }) => getColorFromVariant(theme, variant)};
   border-radius: 13px;
@@ -47,4 +50,5 @@ export const Badge = styled.div<BadgeProps>`
   font-weight: ${({ bold = false }) => (bold ? 'bold' : 'normal')};
   width: ${({ fluid = false }) => (fluid ? '100%' : 'auto')};
   text-align: ${({ centered = true }) => (centered ? 'center' : 'left')};
+  font-size: ${({ matchParentSize }) => matchParentSize && '0.7em'};
 `

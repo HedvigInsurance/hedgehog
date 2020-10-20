@@ -6,13 +6,14 @@ import React from 'react'
 import styled from 'react-emotion'
 import { Table } from 'semantic-ui-react'
 import { history } from 'store'
+import { useVerticalKeyboardNavigation } from 'utils/keyboard-actions'
 import { getMemberIdColor } from 'utils/member'
 import {
   Claim,
   ClaimSearchFilter,
   ClaimSortColumn,
   ClaimsStore,
-} from '../../../store/types/claimsTypes'
+} from 'store/types/claimsTypes'
 import BackendPaginatorList from '../../shared/paginator-list/BackendPaginatorList'
 
 export interface BackendServedClaimsListProps {
@@ -30,14 +31,20 @@ const linkClickHandler = (id: string, userId: string) => {
   history.push(`/claims/${id}/members/${userId}`)
 }
 
-const getTableRow = (item: Claim) => {
+const getTableRow = (currentlyActiveIndex: number) => (
+  item: Claim,
+  itemIndex: number,
+) => {
   const date = parseISO(item.date)
   const formattedDate = isValidDate(date)
     ? formatDate(date, 'dd MMMM yyyy HH:mm')
     : '-'
 
   return (
-    <LinkRow onClick={() => linkClickHandler(item.id, item.userId)}>
+    <LinkRow
+      onClick={() => linkClickHandler(item.id, item.userId)}
+      active={itemIndex === currentlyActiveIndex}
+    >
       <MemberIdCell memberId={item.userId}>{item.userId}</MemberIdCell>
       <Table.Cell>{formattedDate}</Table.Cell>
       <Table.Cell>{item.type}</Table.Cell>
@@ -109,17 +116,29 @@ const getTableHeader = (
 const BackendServedClaimsList: React.SFC<BackendServedClaimsListProps> = ({
   claims: { searchResult, searchFilter },
   claimsRequest,
-}) => (
-  <BackendPaginatorList<Claim>
-    pagedItems={searchResult.claims}
-    itemContent={getTableRow}
-    tableHeader={getTableHeader(searchFilter, claimsRequest)}
-    currentPage={searchResult.page}
-    totalPages={searchResult.totalPages}
-    isSortable={true}
-    keyName="id"
-    changePage={(page) => claimsRequest({ ...searchFilter, page })}
-  />
-)
+}) => {
+  const [currentKeyboardNavigationStep] = useVerticalKeyboardNavigation({
+    maxStep: searchResult.claims.length - 1,
+    onPerformNavigation: (index) => {
+      linkClickHandler(
+        searchResult.claims[index].id,
+        searchResult.claims[index].userId,
+      )
+    },
+  })
+
+  return (
+    <BackendPaginatorList<Claim>
+      pagedItems={searchResult.claims}
+      itemContent={getTableRow(currentKeyboardNavigationStep)}
+      tableHeader={getTableHeader(searchFilter, claimsRequest)}
+      currentPage={searchResult.page}
+      totalPages={searchResult.totalPages}
+      isSortable={true}
+      keyName="id"
+      changePage={(page) => claimsRequest({ ...searchFilter, page })}
+    />
+  )
+}
 
 export default BackendServedClaimsList

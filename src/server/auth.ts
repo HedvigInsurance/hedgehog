@@ -35,7 +35,7 @@ export const loginCallback: Middleware<object> = async (ctx) => {
     method: 'POST',
   })
 
-  ctx.redirect('/dashboard')
+  ctx.redirect('/dashborad')
 }
 
 export const logout: Middleware<object> = async (ctx) => {

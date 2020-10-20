@@ -3,7 +3,6 @@ import {
   ExpansionPanelDetails,
   ExpansionPanelSummary,
 } from '@material-ui/core'
-import { ExpandMoreOutlined } from '@material-ui/icons'
 import { AccountEntryTable } from 'components/member/tabs/account-tab/AccountEntryTable'
 import { AddEntryForm } from 'components/member/tabs/account-tab/AddEntryForm'
 import { BackfillSubscriptionsButton } from 'components/member/tabs/account-tab/BackfillSubscriptionsButton'
@@ -18,7 +17,7 @@ import { Card, CardsWrapper } from 'hedvig-ui/card'
 import { Spacing } from 'hedvig-ui/spacing'
 import { Placeholder, ThirdLevelHeadline } from 'hedvig-ui/typography'
 import React from 'react'
-import { ArrowRepeat } from 'react-bootstrap-icons'
+import { ArrowRepeat, ChevronDown } from 'react-bootstrap-icons'
 import { formatMoney } from 'utils/money'
 import { RefreshButton } from '../shared/refresh-button'
 
@@ -133,7 +132,7 @@ export const AccountTab: React.FC<{
         </Card>
         <Card span={1} style={{ padding: '0.2rem' }}>
           <ExpansionPanel style={{ width: '100%' }}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreOutlined />}>
+            <ExpansionPanelSummary expandIcon={<ChevronDown />}>
               Add entry
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>

@@ -16,7 +16,6 @@ export default connect(
   mapStateToProps,
   {
     claimsByMember: actions.claimsActions.claimsByMember,
-    ...actions.membersActions,
     ...actions.clientActions,
     ...actions.notificationsActions,
     ...actions.payoutDetailsActions,

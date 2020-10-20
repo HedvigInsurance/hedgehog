@@ -145,7 +145,7 @@ export const Member = (props) => {
                 style={{ height: '100%' }}
                 panes={memberPagePanes(props, memberId, member)}
                 renderActiveOnly={true}
-                defaultActiveIndex={4}
+                defaultActiveIndex={3}
               />
             </MemberPageContainer>
             <ChatPane memberId={memberId} />

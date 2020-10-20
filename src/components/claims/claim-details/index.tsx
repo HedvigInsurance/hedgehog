@@ -8,7 +8,6 @@ import { Mount } from 'react-lifecycle-components/dist'
 import { Prompt } from 'react-router'
 import { MemberHistoryContext } from 'utils/member-history'
 // @ts-ignore
-import { CreateTicketStandAlone } from '../../tickets/ticket/create-ticket/create-ticket-stand-alone'
 import { ClaimEvents } from './components/ClaimEvents'
 import { ClaimFileTable } from './components/ClaimFileTable'
 import { ClaimInformation } from './components/ClaimInformation'
@@ -29,7 +28,7 @@ interface Props {
   }
 }
 
-const ClaimPage: React.SFC<Props> = ({ ...props }) => (
+const ClaimPage: React.FC<Props> = ({ ...props }) => (
   <MemberHistoryContext.Consumer>
     {({ pushToMemberHistory }) => (
       <Mount on={() => pushToMemberHistory(props.match.params.memberId)}>
@@ -135,13 +134,6 @@ const ClaimPage: React.SFC<Props> = ({ ...props }) => (
                         refetchPage={refetch}
                       />
                     )}
-                  </Grid>
-                  <Grid item xs={12}>
-                    <CreateTicketStandAlone
-                      referenceId={props.match.params.claimId}
-                      memberId={props.match.params.memberId}
-                      ticketType={'CLAIM'}
-                    />
                   </Grid>
                   <Grid item xs={12}>
                     {member && (

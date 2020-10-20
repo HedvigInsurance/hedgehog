@@ -3,6 +3,7 @@ import { ClaimType } from 'api/generated/graphql'
 import { format, parseISO } from 'date-fns'
 import { Field, Form, Formik } from 'formik'
 import gql from 'graphql-tag'
+import { FormikDateTimePicker } from 'hedvig-ui/date-time-picker'
 import React from 'react'
 import { Mutation } from 'react-apollo'
 import styled from 'react-emotion'
@@ -10,7 +11,6 @@ import { connect } from 'react-redux'
 import { showNotification as createShowNotificationAction } from 'store/actions/notificationsActions'
 import { sleep } from 'utils/sleep'
 
-import { FormikDatePicker } from '../../../shared/inputs/DatePicker'
 import { FieldSelect } from '../../../shared/inputs/FieldSelect'
 import { TextField } from '../../../shared/inputs/TextField'
 import { Paper } from '../../../shared/Paper'
@@ -229,7 +229,7 @@ const handleError = (showNotification: (data: any) => void) => () => {
     headline: '):',
   })
 }
-const ClaimTypeComponent: React.SFC<ClaimTypeProps & {
+const ClaimTypeComponent: React.FC<ClaimTypeProps & {
   showNotification: (data: any) => void
 }> = ({ type, claimId, refetchPage, showNotification }) => {
   const [isSetClaimTypeLoading, setSetClaimTypeLoading] = React.useState(false)
@@ -344,7 +344,7 @@ const ClaimTypeComponent: React.SFC<ClaimTypeProps & {
                       )}
                       <div>
                         <Field
-                          component={FormikDatePicker}
+                          component={FormikDateTimePicker}
                           name="date"
                           placeholder="Date"
                         />

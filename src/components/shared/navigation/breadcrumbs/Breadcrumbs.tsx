@@ -1,6 +1,6 @@
-import { getMemberInfo } from 'lib/helpers'
 import React from 'react'
 import styled from 'react-emotion'
+import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Breadcrumb } from 'semantic-ui-react'
 
@@ -16,8 +16,17 @@ const BreadcrumbsContainer = styled.div`
   }
 `
 
-const Breadcrumbs: React.FC<any> = ({ state, history }) => {
-  const pathname = history.location.pathname
+const Breadcrumbs: React.FC = () => {
+  const history = useHistory()
+
+  const [pathname, setPathname] = React.useState<string>(
+    history.location.pathname,
+  )
+
+  history.listen((location) => {
+    setPathname(location.pathname)
+  })
+
   if (pathname.startsWith('/login')) {
     return null
   }
@@ -28,18 +37,6 @@ const Breadcrumbs: React.FC<any> = ({ state, history }) => {
         key: i,
         content: <span>Dashborad</span>,
         active: true,
-      }
-    }
-
-    if (i === arr.length - 1) {
-      const content =
-        pathname.indexOf('members/') >= 0
-          ? getMemberInfo(state.members.list, path)
-          : path.toLowerCase()
-      return {
-        key: i,
-        content,
-        active: false,
       }
     }
 

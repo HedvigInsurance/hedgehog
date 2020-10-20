@@ -27,12 +27,11 @@ export const getSchemaDataInfo: React.FC<{
   return (
     <>
       {Object.entries(schemaData)
-        .filter((entry) => entry[0] !== 'id' && entry[1] !== null)
-        .map((entry) => {
-          const [key, value] = entry
+        .filter(([key, value]) => key !== 'id' && value !== null)
+        .map(([key, value]) => {
           const valueMessage = valueToMessage(value)
           return (
-            <p>
+            <p key={key}>
               <strong>{convertCamelcaseToTitle(key)}:</strong>{' '}
               {valueMessage && convertEnumOrSentenceToTitle(valueMessage)}
             </p>

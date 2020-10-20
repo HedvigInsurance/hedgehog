@@ -180,9 +180,9 @@ const formatInitialFormData = (
 ): Record<string, unknown> => {
   const properties = schema.properties!
   const formData = { ...initialFormData }
-  Object.entries(properties).forEach((property) => {
-    const [key, value] = property as [string, JSONSchema7]
-    formData[key] = initialFormData[key] ?? value?.default ?? undefined
+  Object.entries(properties).forEach(([key, value]) => {
+    formData[key] =
+      initialFormData[key] ?? (value as JSONSchema7).default ?? undefined
   })
   return formData
 }

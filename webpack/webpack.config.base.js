@@ -51,7 +51,11 @@ module.exports = ({
     children: false,
   },
   output,
-  plugins: [new webpack.NamedModulesPlugin(), ...(plugins || [])],
+  plugins: [
+    new webpack.NamedModulesPlugin(),
+    new webpack.IgnorePlugin(/^moment($|\/)/),
+    ...(plugins || []),
+  ],
   bail: true,
   ...rest,
 })

@@ -1,5 +1,5 @@
 import { IconButton, Snackbar } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
+import { Cross } from 'components/icons'
 import React from 'react'
 
 interface PopupFeedbackBlockProps {
@@ -38,7 +38,7 @@ export default class PopupFeedbackBlock extends React.Component<
             color="inherit"
             onClick={onTimeout}
           >
-            <CloseIcon />
+            <Cross />
           </IconButton>,
         ]}
       />

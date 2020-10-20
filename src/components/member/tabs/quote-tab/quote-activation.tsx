@@ -1,11 +1,11 @@
 import { Contract, Quote } from 'api/generated/graphql'
-import { BaseDatePicker } from 'components/shared/inputs/DatePicker'
 import {
   addAgreementFromQuoteOptions,
   useAddAgreementFromQuote,
 } from 'graphql/use-add-agreement-from-quote'
 import { useContracts } from 'graphql/use-contracts'
 import { Button } from 'hedvig-ui/button'
+import { DateTimePicker } from 'hedvig-ui/date-time-picker'
 import React, { useState } from 'react'
 import { Checkbox } from 'semantic-ui-react'
 import { noopFunction } from 'utils'
@@ -91,9 +91,9 @@ export const QuoteActivation: React.FC<{
               <strong>Activation date</strong>
             </div>
             <div>
-              <BaseDatePicker
-                value={activeFrom}
-                onChange={(value) => {
+              <DateTimePicker
+                date={activeFrom || new Date()}
+                setDate={(value) => {
                   if (onWipChange) {
                     onWipChange(true)
                   }
@@ -125,15 +125,15 @@ export const QuoteActivation: React.FC<{
                 <strong>Terminate current insurance at</strong>
               </div>
               <div>
-                <BaseDatePicker
-                  value={previousAgreementActiveTo}
-                  onChange={(value) => {
+                <DateTimePicker
+                  date={previousAgreementActiveTo || new Date()}
+                  setDate={(value) => {
                     if (onWipChange) {
                       onWipChange(true)
                     }
                     setPreviousAgreementActiveTo(value)
                   }}
-                  maxDate={activeFrom}
+                  maxDate={activeFrom ?? undefined}
                 />
               </div>
             </BottomSpacerWrapper>

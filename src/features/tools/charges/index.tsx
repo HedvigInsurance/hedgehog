@@ -1,8 +1,8 @@
 import { colors } from '@hedviginsurance/brand'
+import { format } from 'date-fns'
 import gql from 'graphql-tag'
 import { MainHeadline } from 'hedvig-ui/typography'
 import { MonetaryAmount } from 'lib/helpers'
-import moment from 'moment'
 import React from 'react'
 import { Mutation, Query } from 'react-apollo'
 import styled from 'react-emotion'
@@ -153,7 +153,7 @@ export class ChargePageComponent extends React.Component<
       <Wrapper>
         <Query<any>
           query={query}
-          variables={{ month: moment().format('YYYY-MM') }}
+          variables={{ month: format(new Date(), 'yyyy-MM') }}
         >
           {({ loading, error, data }) => {
             if (error) {
@@ -189,7 +189,7 @@ export class ChargePageComponent extends React.Component<
                     refetchQueries={() => [
                       {
                         query,
-                        variables: { month: moment().format('YYYY-MM') },
+                        variables: { month: format(new Date(), 'yyyy-MM') },
                       },
                     ]}
                   >

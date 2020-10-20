@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const webpackConfig = require('./webpack.config.base')
 
 const root = path.resolve(__dirname, '..')
@@ -39,6 +40,7 @@ module.exports = webpackConfig({
         NODE_ENV: JSON.stringify('development'),
       },
     }),
+    // new BundleAnalyzerPlugin(),
   ],
   context: root,
 })

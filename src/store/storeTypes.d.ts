@@ -11,7 +11,6 @@ export interface BackofficeStore {
   login: any
   client: any
   poll: any
-  members: MembersStore
   claims: ClaimsStore
   claimDetails: any
   payoutDetails: any
@@ -19,66 +18,4 @@ export interface BackofficeStore {
   memberInsurance: any
 }
 
-type MembersSortBy = 'NAME' | 'CREATED' | 'SIGN_UP'
-type SortDirection = 'ASC' | 'DESC'
-type MemberStatus =
-  | 'INITIATED'
-  | 'ONBOARDING'
-  | 'SIGNED'
-  | 'INACTIVATED'
-  | 'TERMINATED'
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER'
-
-export interface Member {
-  memberId: number
-  status: MemberStatus
-  ssn: string
-  gender: Gender
-  firstName: string
-  lastName: string
-  street: string
-  floor: number
-  apartment: string
-  city: string
-  zipCode: string
-  country: string
-  email: string
-  phoneNumber: string
-  birthDate: string
-  signedOn: string
-  createdOn: string
-  fraudulentStatus: string
-  fraudulentDescription: string
-}
-
-export interface MemberSearchFilter {
-  includeAll?: boolean
-  status?: string
-  query: string
-  sortBy: MembersSortBy
-  sortDirection: SortDirection
-  page: number
-  pageSize: number
-}
-
-export interface MemberSearchResultItem {
-  member: Member
-  firstActiveFrom: string | null
-  lastActiveTo: string | null
-  productStatus: string | null
-  householdSize: number | null
-  livingSpace: number | null
-}
-
-export interface MembersSearchResult {
-  items: MemberSearchResultItem[]
-  totalPages: number
-  page: number
-}
-
-export interface MembersStore {
-  list: Member[]
-  searchResult: MembersSearchResult
-  requesting: boolean
-  searchFilter: MemberSearchFilter
-}

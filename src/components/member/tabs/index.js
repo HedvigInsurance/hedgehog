@@ -4,7 +4,6 @@ import MemberFile from 'components/member/tabs/FileTab'
 import PaymentsTab from 'components/member/tabs/payments-tab'
 import { Quotes } from 'components/member/tabs/quote-tab'
 import { ContractTab } from 'components/member/tabs/contracts-tab'
-import { CreateTicketStandAlone } from 'components/tickets/ticket/create-ticket/create-ticket-stand-alone'
 
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -57,19 +56,6 @@ const memberPagePanes = (props, memberId, member) => [
   {
     menuItem: 'Files',
     render: () => <TabItem props={props} TabContent={MemberFile} />,
-  },
-  {
-    menuItem: 'Tickets',
-    render: () => (
-      <TabItem
-        props={{
-          ...props,
-          memberId,
-          ticketType: 'REMIND',
-        }}
-        TabContent={CreateTicketStandAlone}
-      />
-    ),
   },
   {
     menuItem: 'Contracts',

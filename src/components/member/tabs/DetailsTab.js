@@ -4,21 +4,25 @@ import { FraudulentStatusEdit } from 'lib/fraudulentStatus'
 import { dateTimeFormatter, getFieldName, getFieldValue } from 'lib/helpers'
 import * as PropTypes from 'prop-types'
 import * as React from 'react'
+import { useState } from 'react'
 import { Button, Form, Header, Icon, Modal, Table } from 'semantic-ui-react'
 import InsuranceTrace from './insurance-trace/InsuranceTrace'
-import { Member } from 'api/generated/graphql'
-import { useState } from 'react'
 import {
   getEditMemberInfoOptions,
   useEditMemberInfo,
 } from 'graphql/use-edit-member-info'
+import {
+  getSetFraudulentStatusOptions,
+  useSetFraudulentStatus,
+} from 'graphql/use-set-fraudulent-status'
+import { withShowNotification } from 'utils/notifications'
 
 const memberFieldFormatters = {
   signedOn: (date) => dateTimeFormatter(date, 'yyyy-MM-dd HH:mm:ss'),
   createdOn: (date) => dateTimeFormatter(date, 'yyyy-MM-dd HH:mm:ss'),
 }
 
-export const DetailsTab = (props) => {
+const DetailsTabComponent = (props) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [editMemberInfoRequest, setEditMemberInfoRequest] = useState({
     memberId: props.member.memberId,
@@ -27,6 +31,7 @@ export const DetailsTab = (props) => {
   const [fraudStatus, setFraudStatus] = useState(null)
   const [fraudDescription, setFraudDescription] = useState(null)
   const [editMemberInfo] = useEditMemberInfo()
+  const [setFraudulentStatus] = useSetFraudulentStatus()
 
   const handleOpen = () => setModalOpen(true)
 
@@ -35,7 +40,6 @@ export const DetailsTab = (props) => {
   const isDisabled = (field) => {
     switch (field.toLowerCase()) {
       case 'memberid':
-      case 'status':
       case 'personalnumber':
       case 'birthdate':
       case 'signedon':
@@ -65,8 +69,6 @@ export const DetailsTab = (props) => {
       handleClose(),
     )
   }
-
-  const { saveFraudulentStatus } = props
 
   const {
     traceMemberInfo,
@@ -101,12 +103,27 @@ export const DetailsTab = (props) => {
               setFraudDescription(desc)
             }}
             getState={() => editingFraud}
-            action={(fraudStatus, fraudDescription) => {
-              saveFraudulentStatus(
-                fraudStatus,
-                fraudDescription,
-                memberInfo.memberId,
+            action={(fraudulentStatus, fraudulentStatusDescription) => {
+              setFraudulentStatus(
+                getSetFraudulentStatusOptions(memberInfo.memberId, {
+                  fraudulentStatus,
+                  fraudulentStatusDescription,
+                }),
               )
+                .then(() => {
+                  props.showNotification({
+                    header: 'Success!',
+                    message: 'Changed the fraudulent status',
+                    type: 'green',
+                  })
+                })
+                .catch((error) => {
+                  props.showNotification({
+                    header: 'Error',
+                    message: error.message,
+                    type: 'red',
+                  })
+                })
             }}
           />
         </Table.Body>
@@ -175,7 +192,8 @@ export const DetailsTab = (props) => {
   )
 }
 
-DetailsTab.propTypes = {
+DetailsTabComponent.propTypes = {
   member: PropTypes.object.isRequired,
-  saveFraudulentStatus: PropTypes.func.isRequired,
 }
+
+export const DetailsTab = withShowNotification(DetailsTabComponent)

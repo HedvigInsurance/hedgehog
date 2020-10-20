@@ -55,7 +55,10 @@ const QuoteDetails: React.FC<{
   <DetailsWrapper>
     <PriceWrapper>
       {quote.price
-        ? formatMoney({ amount: quote.price, currency: 'SEK' })
+        ? formatMoney({
+            amount: quote.price,
+            currency: quote.currency ?? 'SEK',
+          })
         : '-'}
     </PriceWrapper>
     {quote.breachedUnderwritingGuidelines?.length ||

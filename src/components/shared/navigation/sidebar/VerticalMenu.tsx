@@ -7,7 +7,6 @@ import {
   CreditCard,
   House,
   Inbox,
-  ListCheck,
   PersonBoundingBox,
   Search,
   ShieldShaded,
@@ -254,7 +253,7 @@ export const VerticalMenuComponent: React.FC<any & { history: History }> = ({
 
             <Menu>
               <MenuGroup>
-                <MenuItem to="/dashboard">
+                <MenuItem to="/dashborad">
                   <House />
                   <MenuText>Dashborad</MenuText>
                 </MenuItem>
@@ -281,10 +280,6 @@ export const VerticalMenuComponent: React.FC<any & { history: History }> = ({
                 </MenuItem>
               </MenuGroup>
               <MenuGroup>
-                <MenuItem to="/taskmanager">
-                  <ListCheck />
-                  <MenuText>Tickets</MenuText>
-                </MenuItem>
                 <MenuItem to="/tools">
                   <Tools />
                   <MenuText>Tools</MenuText>

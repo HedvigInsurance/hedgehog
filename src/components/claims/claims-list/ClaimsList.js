@@ -1,6 +1,6 @@
 import { LinkRow } from 'components/shared'
+import { format, parseISO } from 'date-fns'
 import PaginatorList from 'components/shared/paginator-list/PaginatorList'
-import moment from 'moment'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Table } from 'semantic-ui-react'
@@ -82,10 +82,7 @@ export default class ClaimsList extends React.Component {
   }
 
   getTableRow = (item) => {
-    const date = moment(item.date).local()
-    const formattedDate = date.isValid()
-      ? date.format('DD MMMM YYYY HH:mm')
-      : '-'
+    const formattedDate = format(parseISO(item.date), 'dd MMMM yyyy hh:mm')
     return (
       <LinkRow onClick={this.linkClickHandler.bind(this, item.id, item.userId)}>
         <Table.Cell>{formattedDate}</Table.Cell>

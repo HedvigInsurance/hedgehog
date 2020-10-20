@@ -14,23 +14,6 @@ const initialState: BackofficeStore = {
   poll: {
     polling: false,
   },
-  members: {
-    list: [],
-    searchResult: {
-      items: [],
-      page: 0,
-      totalPages: 1,
-    },
-    requesting: false,
-    searchFilter: {
-      status: undefined,
-      query: '',
-      sortBy: 'SIGN_UP',
-      sortDirection: 'DESC',
-      page: 0,
-      pageSize: 25,
-    },
-  },
   claims: {
     searchFilter: {
       page: 0,

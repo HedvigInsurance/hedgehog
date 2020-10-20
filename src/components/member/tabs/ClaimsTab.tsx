@@ -3,11 +3,11 @@ import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import ClaimsList from 'components/claims/claims-list/ClaimsList'
-import DateInput from 'components/shared/inputs/DateInput'
 import MaterialModal from 'components/shared/modals/MaterialModal'
 import { ActionMap, Container } from 'constate'
+import { format } from 'date-fns'
 import gql from 'graphql-tag'
-import moment from 'moment'
+import { DateTimePicker } from 'hedvig-ui/date-time-picker'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import styled, { css } from 'react-emotion'
@@ -78,12 +78,12 @@ interface Actions {
   dateChangeHandler?: (type: string, e: any, value: any) => void
 }
 
-const ClaimsTab: React.SFC<ClaimsTabProps> = (props) => {
+const ClaimsTab: React.FC<ClaimsTabProps> = (props) => {
   return (
     <Container<State, ActionMap<State, Actions>>
       initialState={{
         open: false,
-        date: moment(),
+        date: new Date(),
         value: 'EMAIL',
       }}
       actions={{
@@ -93,7 +93,7 @@ const ClaimsTab: React.SFC<ClaimsTabProps> = (props) => {
           mutation({
             variables: {
               memberId: props.memberId,
-              date: state.date,
+              date: format(state.date, "yyyy-MM-dd'T'HH:mm:ss"),
               source: state.value,
             },
           }).then((response) => {
@@ -101,14 +101,16 @@ const ClaimsTab: React.SFC<ClaimsTabProps> = (props) => {
               `/claims/${response.data.createClaim}/members/${props.memberId}`,
             )
           })
-          return { date: moment(), value: 'EMAIL', open: false }
+          return { date: new Date(), value: 'EMAIL', open: false }
         },
         typeChangeHandler: (event) => (_) => ({
           value: event.target.value,
         }),
-        dateChangeHandler: (_type, _e, { value }) => ({
-          date: moment(value).format('YYYY-MM-DDTHH:mm:ss'),
-        }),
+        dateChangeHandler: (date) => {
+          return {
+            date,
+          }
+        },
       }}
     >
       {({
@@ -119,6 +121,7 @@ const ClaimsTab: React.SFC<ClaimsTabProps> = (props) => {
         handleClaimSubmit,
         open,
         value,
+        date,
       }) => (
         <>
           <Button
@@ -163,10 +166,12 @@ const ClaimsTab: React.SFC<ClaimsTabProps> = (props) => {
                   </MenuItem>
                 ))}
               </TextField>
-              <DateInput
-                changeHandler={dateChangeHandler as any}
-                forbidFuture={true}
-                label="Notification date"
+              <strong>Notification date</strong>
+              <DateTimePicker
+                date={date}
+                setDate={dateChangeHandler as any}
+                placeholder="Notification date"
+                maxDate={new Date()}
               />
             </InlineFlex>
             <InlineFlexButton>

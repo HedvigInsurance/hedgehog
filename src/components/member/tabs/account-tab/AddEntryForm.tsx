@@ -1,13 +1,13 @@
 import { MenuItem, withStyles } from '@material-ui/core'
 import { useAddAccountEntryToMemberMutation } from 'api/generated/graphql'
 import { AddEntryInformation } from 'components/member/tabs/account-tab/AddEntryInformation'
-import { FormikDatePicker } from 'components/shared/inputs/DatePicker'
 import { FieldSelect } from 'components/shared/inputs/FieldSelect'
 import { TextField as MuiTextField } from 'components/shared/inputs/TextField'
 import { format, startOfDay } from 'date-fns'
 import { Field, Form as FormikForm, Formik } from 'formik'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
 import { Button } from 'hedvig-ui/button'
+import { FormikDateTimePicker } from 'hedvig-ui/date-time-picker'
 import React from 'react'
 import styled from 'react-emotion'
 import { WithShowNotification } from 'store/actions/notificationsActions'
@@ -179,7 +179,12 @@ const AddEntryFormComponent: React.FC<{
             placeholder="(Optional) Notes on what happened"
           />
           <label htmlFor="fromDate">From Date</label>
-          <Field component={FormikDatePicker} type="date" name="fromDate" />
+          <Field
+            component={FormikDateTimePicker}
+            type="date"
+            name="fromDate"
+            minDate={new Date()}
+          />
           <BottomRowWrapper>
             {isValid && (
               <AddEntryInformation

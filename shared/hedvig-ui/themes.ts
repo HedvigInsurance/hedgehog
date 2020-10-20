@@ -432,6 +432,25 @@ export const SemanticOverrides = styled.div`
       tr:first-of-type td {
         border-top: 0;
       }
+
+      tr.active td {
+        position: relative;
+        background: ${theme.accentLight};
+
+        :first-of-type::before {
+          content: ' ';
+          width: 0;
+          height: 0;
+          border-top: 15px solid transparent;
+          border-bottom: 15px solid transparent;
+          border-left: 10px solid ${theme.borderStrong};
+
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
     }
 
     .ui.segment {
