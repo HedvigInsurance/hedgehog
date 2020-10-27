@@ -1,5 +1,10 @@
 import QuestionGroups from 'components/questions/questions-list/QuestionGroups'
 import { useQuestionGroups } from 'graphql/use-question-groups'
+import { FadeIn } from 'hedvig-ui/animations/fade-in'
+import {
+  LoadingMessage,
+  StandaloneMessage,
+} from 'hedvig-ui/animations/standalone-message'
 import { Spacing } from 'hedvig-ui/spacing'
 import * as React from 'react'
 import { useInsecurePersistentState } from 'utils/state'
@@ -20,29 +25,35 @@ const Questions: React.FC = () => {
   const [questionGroups, { loading }] = useQuestionGroups()
 
   if (loading) {
-    return <>Loading...</>
+    return <LoadingMessage paddingTop={'25vh'} />
   }
 
   if (!questionGroups) {
-    return <>Something went wrong :(</>
+    return (
+      <StandaloneMessage paddingTop="25vh">
+        Something went wrong!
+      </StandaloneMessage>
+    )
   }
 
   return (
     <>
       <Spacing bottom="large">
-        <QuestionsFilter
-          questionGroups={questionGroups}
-          selected={selectedFilters}
-          onToggle={(newFilter) => {
-            if (selectedFilters.includes(newFilter)) {
-              setSelectedFilters(
-                selectedFilters.filter((filter) => filter !== newFilter),
-              )
-            } else {
-              setSelectedFilters([...selectedFilters, newFilter])
-            }
-          }}
-        />
+        <FadeIn>
+          <QuestionsFilter
+            questionGroups={questionGroups}
+            selected={selectedFilters}
+            onToggle={(newFilter) => {
+              if (selectedFilters.includes(newFilter)) {
+                setSelectedFilters(
+                  selectedFilters.filter((filter) => filter !== newFilter),
+                )
+              } else {
+                setSelectedFilters([...selectedFilters, newFilter])
+              }
+            }}
+          />
+        </FadeIn>
       </Spacing>
 
       <QuestionGroups

@@ -1,18 +1,17 @@
 import ClaimsTab from 'components/member/tabs/ClaimsTab'
+import { ContractTab } from 'components/member/tabs/contracts-tab'
 import { DetailsTab } from 'components/member/tabs/DetailsTab'
 import MemberFile from 'components/member/tabs/FileTab'
 import PaymentsTab from 'components/member/tabs/payments-tab'
 import { Quotes } from 'components/member/tabs/quote-tab'
-import { ContractTab } from 'components/member/tabs/contracts-tab'
 
-import PropTypes from 'prop-types'
-import React from 'react'
-import { Tab } from 'semantic-ui-react'
-import styled from 'react-emotion'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
+import React from 'react'
+import styled from 'react-emotion'
+import { Tab } from 'semantic-ui-react'
 import { AccountTab } from './account-tab'
-import { DebtTab } from './debt-tab'
 import { CampaignsTab } from './campaigns-tab'
+import { DebtTab } from './debt-tab'
 
 const TabContainer = styled(Tab.Pane)`
   &&& {
@@ -23,7 +22,10 @@ const TabContainer = styled(Tab.Pane)`
   }
 `
 
-const TabItem = ({ props, TabContent }) => {
+const TabItem: React.FC<{ props: any; TabContent: any }> = ({
+  props,
+  TabContent,
+}) => {
   const memberId = props.match.params.memberId
   const [contractMarketInfo] = useContractMarketInfo(memberId)
   return (
@@ -31,13 +33,6 @@ const TabItem = ({ props, TabContent }) => {
       <TabContent {...props} contractMarketInfo={contractMarketInfo} />
     </TabContainer>
   )
-}
-
-TabItem.propTypes = {
-  props: PropTypes.object.isRequired,
-  TabContent: PropTypes.func,
-  isChatTab: PropTypes.bool,
-  hideTab: PropTypes.bool,
 }
 
 const memberPagePanes = (props, memberId, member) => [

@@ -1,6 +1,7 @@
 import { changelog } from 'changelog'
 import { differenceInCalendarDays, format } from 'date-fns'
 import { useDashboardNumbers } from 'graphql/use-dashboard-numbers'
+import { FadeIn } from 'hedvig-ui/animations/fade-in'
 import { Badge } from 'hedvig-ui/badge'
 import { CasualList, CasualListItem } from 'hedvig-ui/casual-list'
 import { Spacing } from 'hedvig-ui/spacing'
@@ -67,18 +68,22 @@ export const Dashboard: React.FC<{ auth: any }> = ({ auth }) => {
         !
       </Headline>
       {dashboardNumbers && (
-        <MetricsWrapper>
-          <Metric to="/claims">
-            <MetricNumber>{dashboardNumbers?.numberOfClaims || 0}</MetricNumber>
-            <MetricName>claims</MetricName>
-          </Metric>
-          <Metric to="/questions">
-            <MetricNumber>
-              {dashboardNumbers?.numberOfQuestions || 0}
-            </MetricNumber>
-            <MetricName>questions</MetricName>
-          </Metric>
-        </MetricsWrapper>
+        <FadeIn>
+          <MetricsWrapper>
+            <Metric to="/claims">
+              <MetricNumber>
+                {dashboardNumbers?.numberOfClaims || 0}
+              </MetricNumber>
+              <MetricName>claims</MetricName>
+            </Metric>
+            <Metric to="/questions">
+              <MetricNumber>
+                {dashboardNumbers?.numberOfQuestions || 0}
+              </MetricNumber>
+              <MetricName>questions</MetricName>
+            </Metric>
+          </MetricsWrapper>
+        </FadeIn>
       )}
       <Spacing top="large">
         <SecondLevelHeadline>Recent changes from Tech</SecondLevelHeadline>
@@ -91,27 +96,29 @@ export const Dashboard: React.FC<{ auth: any }> = ({ auth }) => {
           </MutedText>
         </Spacing>
         <ChangeLogWrapper>
-          {changelog.slice(0, 10).map((change) => {
+          {changelog.slice(0, 10).map((change, index) => {
             const isRecent =
               differenceInCalendarDays(new Date(), change.date) < 3
             return (
-              <ChangeLogItem key={change.change}>
-                <ChangeDescription>
-                  {change.change}
-                  {isRecent && (
-                    <Spacing inline left="small" width="auto">
-                      <Badge variant="success" size="small" matchParentSize>
-                        New!
-                      </Badge>
-                    </Spacing>
-                  )}
-                </ChangeDescription>
-                <MutedText>
-                  {format(change.date, 'iii MMM do')}
-                  {change.authorGithubHandle &&
-                    ` by ${change.authorGithubHandle}`}
-                </MutedText>
-              </ChangeLogItem>
+              <FadeIn delay={`${index * 50}ms`}>
+                <ChangeLogItem key={change.change}>
+                  <ChangeDescription>
+                    {change.change}
+                    {isRecent && (
+                      <Spacing inline left="small" width="auto">
+                        <Badge variant="success" size="small" matchParentSize>
+                          New!
+                        </Badge>
+                      </Spacing>
+                    )}
+                  </ChangeDescription>
+                  <MutedText>
+                    {format(change.date, 'iii MMM do')}
+                    {change.authorGithubHandle &&
+                      ` by ${change.authorGithubHandle}`}
+                  </MutedText>
+                </ChangeLogItem>
+              </FadeIn>
             )
           })}
         </ChangeLogWrapper>

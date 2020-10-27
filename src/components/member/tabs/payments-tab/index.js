@@ -11,6 +11,11 @@ import { Button } from 'hedvig-ui/button'
 import { Market } from 'api/generated/graphql'
 import { formatMoney } from 'utils/money'
 import { GenerateSetupDirectDebitLink } from './generate-setup-direct-debit-link'
+import { FadeIn } from 'hedvig-ui/animations/fade-in'
+import {
+  LoadingMessage,
+  StandaloneMessage,
+} from 'hedvig-ui/animations/standalone-message'
 
 const IconWrapper = styled.span`
   display: inline-block;
@@ -175,15 +180,19 @@ class PaymentsTab extends React.Component {
   // FIXME: Logic whether charge or payout can be performed should be owned by the backend
   render() {
     return (
-      <React.Fragment>
+      <FadeIn>
         <Query query={GET_MEMBER_QUERY} variables={{ id: this.memberId }}>
           {({ loading, error, data }) => {
             if (error) {
-              return <div>{error.message}!</div>
+              return (
+                <StandaloneMessage paddingTop="10vh">
+                  Something went wrong
+                </StandaloneMessage>
+              )
             }
 
             if (loading || !data) {
-              return <div>Loading...</div>
+              return <LoadingMessage paddingTop="10vh" />
             }
 
             return (
@@ -283,7 +292,7 @@ class PaymentsTab extends React.Component {
             )
           }}
         </Query>
-      </React.Fragment>
+      </FadeIn>
     )
   }
 }

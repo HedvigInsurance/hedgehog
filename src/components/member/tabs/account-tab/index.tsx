@@ -13,6 +13,11 @@ import {
 } from 'components/member/tabs/shared/card-components'
 import { Headline } from 'components/member/tabs/shared/headline'
 import { useGetAccount } from 'graphql/use-get-account'
+import { FadeIn } from 'hedvig-ui/animations/fade-in'
+import {
+  LoadingMessage,
+  StandaloneMessage,
+} from 'hedvig-ui/animations/standalone-message'
 import { Card, CardsWrapper } from 'hedvig-ui/card'
 import { Spacing } from 'hedvig-ui/spacing'
 import { Placeholder, ThirdLevelHeadline } from 'hedvig-ui/typography'
@@ -32,33 +37,15 @@ export const AccountTab: React.FC<{
   const [account, { loading, refetch, error }] = useGetAccount(memberId)
 
   if (loading) {
-    return (
-      <>
-        <Headline>
-          Account
-          <RefreshButton onClick={() => refetch()} loading={loading}>
-            <ArrowRepeat />
-          </RefreshButton>
-        </Headline>
-        Loading...
-      </>
-    )
+    return <LoadingMessage paddingTop="10vh" />
   }
   if (error || !account) {
     return (
-      <>
-        <Headline>
-          Account
-          <RefreshButton onClick={() => refetch()} loading={loading}>
-            <ArrowRepeat />
-          </RefreshButton>
-        </Headline>
-        No account found :(
-      </>
+      <StandaloneMessage paddingTop="10vh">No account found</StandaloneMessage>
     )
   }
   return (
-    <>
+    <FadeIn>
       <Headline>
         Account
         <RefreshButton onClick={() => refetch()} loading={loading}>
@@ -143,6 +130,6 @@ export const AccountTab: React.FC<{
       </CardsWrapper>
       <AccountEntryTable accountEntries={account.entries} />
       <BackfillSubscriptionsButton memberId={memberId} />
-    </>
+    </FadeIn>
   )
 }

@@ -1,6 +1,11 @@
 import { Quote } from 'api/generated/graphql'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
 import { useQuotes } from 'graphql/use-get-quotes'
+import { FadeIn } from 'hedvig-ui/animations/fade-in'
+import {
+  LoadingMessage,
+  StandaloneMessage,
+} from 'hedvig-ui/animations/standalone-message'
 import { getTextFromEnumValue } from 'hedvig-ui/dropdown'
 import * as React from 'react'
 import { Tab } from 'semantic-ui-react'
@@ -18,15 +23,19 @@ export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
   const [contractMarket, { loading }] = useContractMarketInfo(memberId)
 
   if (loading || quotesLoading) {
-    return null
+    return <LoadingMessage paddingTop="10vh" />
   }
 
   if (quotes.length === 0) {
-    return <em>No quotes :(</em>
+    return <StandaloneMessage paddingTop="10vh">No quotes</StandaloneMessage>
   }
 
   if (!contractMarket) {
-    return <>Unable to get Market, please contact Tech</>
+    return (
+      <StandaloneMessage paddingTop="10vh">
+        Unable to get Market, contact Tech
+      </StandaloneMessage>
+    )
   }
 
   const getUniqueContractTypes = () => {
@@ -73,11 +82,13 @@ export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
       menuItem: getTextFromEnumValue(contractType),
       render: () => (
         <Tab.Pane>
-          <QuotesSubSection
-            memberId={memberId}
-            contractType={contractType}
-            quotes={getCategorisedQuotesBasedOnContractType(contractType)}
-          />
+          <FadeIn>
+            <QuotesSubSection
+              memberId={memberId}
+              contractType={contractType}
+              quotes={getCategorisedQuotesBasedOnContractType(contractType)}
+            />
+          </FadeIn>
         </Tab.Pane>
       ),
     }))

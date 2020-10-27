@@ -1,3 +1,4 @@
+import { LoadingMessage } from 'hedvig-ui/animations/standalone-message'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Redirect, Route } from 'react-router'
@@ -21,7 +22,9 @@ const PrivateRouteComponent = ({
       {...rest}
       render={(props) => {
         if (authState === AuthState.UNKNOWN) {
-          return 'loading'
+          return (
+            <LoadingMessage paddingTop={'25vh'}>Authenticating</LoadingMessage>
+          )
         }
 
         if (authState === AuthState.UNAUTHENTICATED) {

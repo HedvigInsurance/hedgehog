@@ -7,8 +7,10 @@ import MaterialModal from 'components/shared/modals/MaterialModal'
 import { ActionMap, Container } from 'constate'
 import { format } from 'date-fns'
 import gql from 'graphql-tag'
+import { FadeIn } from 'hedvig-ui/animations/fade-in'
+import { StandaloneMessage } from 'hedvig-ui/animations/standalone-message'
 import { DateTimePicker } from 'hedvig-ui/date-time-picker'
-import * as React from 'react'
+import React from 'react'
 import { Mutation } from 'react-apollo'
 import styled, { css } from 'react-emotion'
 import { history } from 'store'
@@ -80,118 +82,120 @@ interface Actions {
 
 const ClaimsTab: React.FC<ClaimsTabProps> = (props) => {
   return (
-    <Container<State, ActionMap<State, Actions>>
-      initialState={{
-        open: false,
-        date: new Date(),
-        value: 'EMAIL',
-      }}
-      actions={{
-        handleClose: () => (_) => ({ open: false }),
-        handleOpen: () => (_) => ({ open: true }),
-        handleClaimSubmit: (mutation) => (state) => {
-          mutation({
-            variables: {
-              memberId: props.memberId,
-              date: format(state.date, "yyyy-MM-dd'T'HH:mm:ss"),
-              source: state.value,
-            },
-          }).then((response) => {
-            history.push(
-              `/claims/${response.data.createClaim}/members/${props.memberId}`,
-            )
-          })
-          return { date: new Date(), value: 'EMAIL', open: false }
-        },
-        typeChangeHandler: (event) => (_) => ({
-          value: event.target.value,
-        }),
-        dateChangeHandler: (date) => {
-          return {
-            date,
-          }
-        },
-      }}
-    >
-      {({
-        handleClose,
-        handleOpen,
-        dateChangeHandler,
-        typeChangeHandler,
-        handleClaimSubmit,
-        open,
-        value,
-        date,
-      }) => (
-        <>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpen}
-            className={buttonStyle}
-          >
-            Add new claim
-          </Button>
-          {props.memberClaims.length > 0 ? (
-            <ClaimsList
-              claims={{ list: props.memberClaims }}
-              sortClaimsList={props.sortClaimsList}
-            />
-          ) : (
-            <Typography variant="h5" component="h3">
-              Claims list is empty
-            </Typography>
-          )}
-          <MaterialModal handleClose={handleClose} open={open}>
-            <Typography variant="h5" id="modal-title">
-              Create claim
-            </Typography>
-            <Typography variant="subtitle1" id="simple-modal-description">
-              Choose notification date and type of claim.
-            </Typography>
-            <InlineFlex>
-              <TextField
-                id="filled-select-currency"
-                select
-                label="Select"
-                value={value}
-                onChange={typeChangeHandler}
-                helperText="Please select claim type"
-                margin="normal"
-                variant="filled"
-              >
-                {types.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <strong>Notification date</strong>
-              <DateTimePicker
-                date={date}
-                setDate={dateChangeHandler as any}
-                placeholder="Notification date"
-                maxDate={new Date()}
+    <FadeIn>
+      <Container<State, ActionMap<State, Actions>>
+        initialState={{
+          open: false,
+          date: new Date(),
+          value: 'EMAIL',
+        }}
+        actions={{
+          handleClose: () => (_) => ({ open: false }),
+          handleOpen: () => (_) => ({ open: true }),
+          handleClaimSubmit: (mutation) => (state) => {
+            mutation({
+              variables: {
+                memberId: props.memberId,
+                date: format(state.date, "yyyy-MM-dd'T'HH:mm:ss"),
+                source: state.value,
+              },
+            }).then((response) => {
+              history.push(
+                `/claims/${response.data.createClaim}/members/${props.memberId}`,
+              )
+            })
+            return { date: new Date(), value: 'EMAIL', open: false }
+          },
+          typeChangeHandler: (event) => (_) => ({
+            value: event.target.value,
+          }),
+          dateChangeHandler: (date) => {
+            return {
+              date,
+            }
+          },
+        }}
+      >
+        {({
+          handleClose,
+          handleOpen,
+          dateChangeHandler,
+          typeChangeHandler,
+          handleClaimSubmit,
+          open,
+          value,
+          date,
+        }) => (
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpen}
+              className={buttonStyle}
+            >
+              Add new claim
+            </Button>
+            {props.memberClaims.length > 0 ? (
+              <ClaimsList
+                claims={{ list: props.memberClaims }}
+                sortClaimsList={props.sortClaimsList}
               />
-            </InlineFlex>
-            <InlineFlexButton>
-              <Mutation mutation={CREATE_CLAIM_MUTATION}>
-                {(createClaim) => (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleClaimSubmit(createClaim)}
-                    className={buttonStyle}
-                  >
-                    Save
-                  </Button>
-                )}
-              </Mutation>
-            </InlineFlexButton>
-          </MaterialModal>
-        </>
-      )}
-    </Container>
+            ) : (
+              <StandaloneMessage paddingTop="10vh">
+                Claims list is empty
+              </StandaloneMessage>
+            )}
+            <MaterialModal handleClose={handleClose} open={open}>
+              <Typography variant="h5" id="modal-title">
+                Create claim
+              </Typography>
+              <Typography variant="subtitle1" id="simple-modal-description">
+                Choose notification date and type of claim.
+              </Typography>
+              <InlineFlex>
+                <TextField
+                  id="filled-select-currency"
+                  select
+                  label="Select"
+                  value={value}
+                  onChange={typeChangeHandler}
+                  helperText="Please select claim type"
+                  margin="normal"
+                  variant="filled"
+                >
+                  {types.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <strong>Notification date</strong>
+                <DateTimePicker
+                  date={date}
+                  setDate={dateChangeHandler as any}
+                  placeholder="Notification date"
+                  maxDate={new Date()}
+                />
+              </InlineFlex>
+              <InlineFlexButton>
+                <Mutation mutation={CREATE_CLAIM_MUTATION}>
+                  {(createClaim) => (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleClaimSubmit(createClaim)}
+                      className={buttonStyle}
+                    >
+                      Save
+                    </Button>
+                  )}
+                </Mutation>
+              </InlineFlexButton>
+            </MaterialModal>
+          </>
+        )}
+      </Container>
+    </FadeIn>
   )
 }
 

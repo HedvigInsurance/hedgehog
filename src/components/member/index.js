@@ -3,6 +3,7 @@ import { Popover } from 'hedvig-ui/popover'
 import { FraudulentStatus } from 'lib/fraudulentStatus'
 import * as PropTypes from 'prop-types'
 import * as React from 'react'
+import { useEffect } from 'react'
 import styled from 'react-emotion'
 import { Header as SemanticHeader, Tab } from 'semantic-ui-react'
 import {
@@ -11,11 +12,10 @@ import {
   getMemberIdColor,
   MemberAge,
 } from 'utils/member'
-import memberPagePanes from './tabs'
+import memberPagePanes from './tabs/index'
 import { MemberFlag } from './shared/member-flag'
-import { MemberHistoryContext } from '../../utils/member-history'
+import { MemberHistoryContext } from 'utils/member-history'
 import { Mount } from 'react-lifecycle-components/dist'
-import { useEffect } from 'react'
 import { useGetMemberInfo } from 'graphql/use-get-member-info'
 import { ChatPane } from 'components/member/tabs/ChatPane'
 

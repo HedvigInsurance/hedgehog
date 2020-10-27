@@ -1,9 +1,14 @@
 import gql from 'graphql-tag'
+import { FadeIn } from 'hedvig-ui/animations/fade-in'
+import {
+  LoadingMessage,
+  StandaloneMessage,
+} from 'hedvig-ui/animations/standalone-message'
+import { dateTimeFormatter } from 'lib/helpers'
 import React from 'react'
 import { Query } from 'react-apollo'
 import { RouteComponentProps } from 'react-router'
 import { Image, Table } from 'semantic-ui-react'
-import { dateTimeFormatter } from '../../../lib/helpers'
 
 const query = gql`
   query FileUploadsQuery($memberId: ID!) {
@@ -71,30 +76,34 @@ class MemberFile extends React.Component<
 > {
   public render() {
     return (
-      <Query<any>
-        query={query}
-        variables={{ memberId: this.props.match.params.memberId }}
-      >
-        {({ loading, error, data }) => {
-          if (error) {
-            return (
-              <div>
-                Error in GraphQl query here.....:{' '}
-                <pre>{JSON.stringify(error, null, 2)}</pre>
-              </div>
-            )
-          }
-          if (loading || !data) {
-            return <div>Loading...</div>
-          }
+      <FadeIn>
+        <Query<any>
+          query={query}
+          variables={{ memberId: this.props.match.params.memberId }}
+        >
+          {({ loading, error, data }) => {
+            if (error) {
+              return (
+                <div>
+                  Error in GraphQl query here.....:{' '}
+                  <pre>{JSON.stringify(error, null, 2)}</pre>
+                </div>
+              )
+            }
+            if (loading || !data) {
+              return <LoadingMessage paddingTop="10vh" />
+            }
 
-          return data.member.fileUploads.length === 0 ? (
-            <div>No files uploaded for this member</div>
-          ) : (
-            <MemberFileTable memberFiles={data.member.fileUploads} />
-          )
-        }}
-      </Query>
+            return data.member.fileUploads.length === 0 ? (
+              <StandaloneMessage paddingTop="10vh">
+                No files uploaded for this member
+              </StandaloneMessage>
+            ) : (
+              <MemberFileTable memberFiles={data.member.fileUploads} />
+            )
+          }}
+        </Query>
+      </FadeIn>
     )
   }
 }
