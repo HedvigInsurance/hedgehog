@@ -172,6 +172,7 @@ type ClaimItem {
   itemModel: ItemModel
   itemCompany: ItemCompany
   dateOfPurchase: LocalDate
+  itemAge: Float
   purchasePrice: MonetaryAmountV2
   valuation: MonetaryAmountV2
   note: String

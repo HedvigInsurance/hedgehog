@@ -18,6 +18,7 @@ query GetClaimItems($claimId: ID!) {
         displayName
     }
     dateOfPurchase
+    itemAge
     purchasePrice {
       amount
       currency

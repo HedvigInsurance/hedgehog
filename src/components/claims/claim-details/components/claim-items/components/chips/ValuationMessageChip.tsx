@@ -1,4 +1,5 @@
 import { CanValuateClaimItem, ClaimItemValuation } from 'api/generated/graphql'
+import { TotalValuationChip } from 'components/claims/claim-details/components/claim-items/components/chips/components/TotalValuationChip'
 import React from 'react'
 import { getValuationExplanation } from 'utils/claim-item'
 import { ExplanationPopover } from '../styles'
@@ -62,5 +63,5 @@ export const ValuationMessageChip: React.FC<{
     return <NoValuationChip />
   }
 
-  return <></>
+  return <TotalValuationChip totalValuation={valuation?.depreciatedValue} />
 }

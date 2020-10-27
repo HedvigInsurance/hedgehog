@@ -8,8 +8,7 @@ import {
   TableRow,
   withStyles,
 } from '@material-ui/core'
-import { useDeleteClaimItemMutation } from 'api/generated/graphql'
-import { useGetClaimItems } from 'graphql/use-get-claim-items'
+import { ClaimItem, useDeleteClaimItemMutation } from 'api/generated/graphql'
 import { Placeholder } from 'hedvig-ui/typography'
 import React from 'react'
 import { ChevronRight, InfoCircleFill, Trash } from 'react-bootstrap-icons'
@@ -29,8 +28,9 @@ const TableCell = withStyles({
 
 const NotSpecified: React.FC = () => <Placeholder>Not specified</Placeholder>
 
-export const ItemList: React.FC<{ claimId: string }> = ({ claimId }) => {
-  const [claimItems] = useGetClaimItems(claimId)
+export const ItemList: React.FC<{ claimItems: ClaimItem[] }> = ({
+  claimItems,
+}) => {
   const [deleteClaimItem] = useDeleteClaimItemMutation({
     refetchQueries: ['GetClaimItems'],
   })
@@ -52,8 +52,8 @@ export const ItemList: React.FC<{ claimId: string }> = ({ claimId }) => {
           const purchasePriceString = item.purchasePrice?.amount
             ? formatMoney(
                 {
-                  amount: item.purchasePrice?.amount,
-                  currency: item.purchasePrice?.currency,
+                  amount: item.purchasePrice.amount,
+                  currency: item.purchasePrice.currency,
                 },
                 {
                   minimumFractionDigits: 0,
@@ -65,8 +65,8 @@ export const ItemList: React.FC<{ claimId: string }> = ({ claimId }) => {
           const valuationString = item.valuation?.amount
             ? formatMoney(
                 {
-                  amount: item.valuation?.amount,
-                  currency: item.valuation?.currency,
+                  amount: item.valuation.amount,
+                  currency: item.valuation.currency,
                 },
                 {
                   minimumFractionDigits: 0,
@@ -74,15 +74,6 @@ export const ItemList: React.FC<{ claimId: string }> = ({ claimId }) => {
                 },
               )
             : null
-
-          const depreciationString =
-            item.valuation?.amount && item.purchasePrice?.amount
-              ? ` ( 2 years old, depreciated by ${(
-                  100 -
-                  (100 * parseFloat(item.valuation.amount)) /
-                    parseFloat(item.purchasePrice.amount)
-                ).toString()}%)`
-              : ''
 
           const toBeDeleted = itemToDelete ? itemToDelete === item.id : false
 
@@ -113,14 +104,7 @@ export const ItemList: React.FC<{ claimId: string }> = ({ claimId }) => {
                 )}
               </TableCell>
               <TableCell>
-                {valuationString ? (
-                  <>
-                    {valuationString}{' '}
-                    <Placeholder>{depreciationString}</Placeholder>
-                  </>
-                ) : (
-                  <NotSpecified />
-                )}
+                {valuationString ? valuationString : <NotSpecified />}
               </TableCell>
               <TableCell>{purchasePriceString ?? <NotSpecified />}</TableCell>
               <TableCell>{item.dateOfPurchase ?? <NotSpecified />}</TableCell>

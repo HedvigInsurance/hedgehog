@@ -6,7 +6,6 @@ import {
   useUpsertClaimItemMutation,
 } from 'api/generated/graphql'
 import { format, isAfter, isValid, parseISO } from 'date-fns'
-import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
 import React from 'react'
 import { CategorySelect, SelectedItemCategory } from './CategorySelect'
 import { ValuationInfo } from './ValuationInfo'
@@ -21,9 +20,9 @@ const isEmpty = (s: string | null) => s === '' || s === null
 
 export const ItemForm: React.FC<{
   claimId: string
-  memberId: string | null
+  preferredCurrency: string
   contract?: Contract | null
-}> = ({ claimId, memberId, contract }) => {
+}> = ({ claimId, preferredCurrency, contract }) => {
   const [selectedItemCategories, setSelectedItemCategories] = React.useState<
     SelectedItemCategory[]
   >([])
@@ -36,8 +35,6 @@ export const ItemForm: React.FC<{
     null,
   )
   const [customValuationAmount, setCustomValuationAmount] = React.useState('')
-  const [contractMarketInfo] = useContractMarketInfo(memberId ?? '')
-  const defaultCurrency = contractMarketInfo?.preferredCurrency ?? 'SEK'
 
   const [
     upsertClaimItem,
@@ -76,17 +73,13 @@ export const ItemForm: React.FC<{
 
   const resetForm = () => {
     setPurchasePriceAmount('')
-    setPurchasePriceCurrency(defaultCurrency)
+    setPurchasePriceCurrency(preferredCurrency)
     setDateOfPurchase('')
     setSelectedItemCategories([])
     setNote('')
     setCustomValuationAmount('')
     setValuation(null)
   }
-
-  React.useEffect(() => {
-    setPurchasePriceCurrency(defaultCurrency)
-  }, [contractMarketInfo?.preferredCurrency])
 
   return (
     <>
@@ -174,7 +167,7 @@ export const ItemForm: React.FC<{
               setValuation={setValuation}
               customValuationAmount={customValuationAmount}
               setCustomValuationAmount={setCustomValuationAmount}
-              defaultCurrency={defaultCurrency}
+              defaultCurrency={preferredCurrency}
               typeOfContract={contract.typeOfContract}
             />
           )}

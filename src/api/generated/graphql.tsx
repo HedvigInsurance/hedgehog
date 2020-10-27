@@ -269,6 +269,7 @@ export type ClaimItem = {
   itemModel?: Maybe<ItemModel>
   itemCompany?: Maybe<ItemCompany>
   dateOfPurchase?: Maybe<Scalars['LocalDate']>
+  itemAge?: Maybe<Scalars['Float']>
   purchasePrice?: Maybe<MonetaryAmountV2>
   valuation?: Maybe<MonetaryAmountV2>
   note?: Maybe<Scalars['String']>
@@ -2107,7 +2108,7 @@ export type GetClaimItemsQuery = { __typename?: 'QueryType' } & {
   claimItems: Array<
     { __typename?: 'ClaimItem' } & Pick<
       ClaimItem,
-      'id' | 'dateOfPurchase' | 'note'
+      'id' | 'dateOfPurchase' | 'itemAge' | 'note'
     > & {
         itemFamily: { __typename?: 'ItemFamily' } & Pick<
           ItemFamily,
@@ -4330,6 +4331,7 @@ export const GetClaimItemsDocument = gql`
         displayName
       }
       dateOfPurchase
+      itemAge
       purchasePrice {
         amount
         currency
