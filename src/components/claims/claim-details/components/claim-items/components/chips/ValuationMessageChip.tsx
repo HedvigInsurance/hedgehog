@@ -13,7 +13,7 @@ export const ValuationMessageChip: React.FC<{
   itemFamilyId: string
   price?: number | null
   currency: string
-  dateOfPurchase: string
+  dateOfPurchase?: string
   customValuation: string
   loadingValuation: boolean
 }> = ({

@@ -5,20 +5,22 @@ import {
 } from 'api/generated/graphql'
 
 type UpsertClaimItemReturnTuple = [
-  (
-    itemFamilyId: string,
-    itemTypeId: string,
-    itemBrandId?: string,
-    itemModelId?: string,
-    dateOfPurchase?: Date,
-    purchasePriceAmount?: string,
-    purchasePriceCurrency?: string,
-    automaticValuationAmount?: string,
-    customValuationAmount?: string,
-    note?: string,
-  ) => void,
+  (variables: UpsertClaimItemVariables) => void,
   UpsertClaimItemMutationResult,
 ]
+
+export interface UpsertClaimItemVariables {
+  itemFamilyId: string
+  itemTypeId: string
+  itemBrandId?: string
+  itemModelId?: string
+  dateOfPurchase?: string
+  purchasePriceAmount?: string
+  purchasePriceCurrency?: string
+  automaticValuationAmount?: string
+  customValuationAmount?: string
+  note?: string
+}
 
 const isEmpty = (s?: string | null) => s === '' || s === null || s === undefined
 
@@ -27,18 +29,18 @@ export const useUpsertClaimItem = (
 ): UpsertClaimItemReturnTuple => {
   const [upsertClaimItemMutation, mutationResult] = useUpsertClaimItemMutation()
 
-  const upsertClaimItem = (
-    itemFamilyId: string,
-    itemTypeId: string,
-    itemBrandId?: string,
-    itemModelId?: string,
-    dateOfPurchase?: Date,
-    purchasePriceAmount?: string,
-    purchasePriceCurrency?: string,
-    automaticValuationAmount?: string,
-    customValuationAmount?: string,
-    note?: string,
-  ) => {
+  const upsertClaimItem = ({
+    itemFamilyId,
+    itemTypeId,
+    itemBrandId,
+    itemModelId,
+    dateOfPurchase,
+    purchasePriceAmount,
+    purchasePriceCurrency,
+    automaticValuationAmount,
+    customValuationAmount,
+    note,
+  }: UpsertClaimItemVariables) => {
     const request: UpsertClaimItemInput = {
       claimId,
       itemFamilyId,
@@ -52,7 +54,12 @@ export const useUpsertClaimItem = (
             currency: purchasePriceCurrency,
           }
         : null,
-      automaticValuation: automaticValuationAmount,
+      automaticValuation: !isEmpty(automaticValuationAmount)
+        ? {
+            amount: Number(automaticValuationAmount),
+            currency: purchasePriceCurrency,
+          }
+        : null,
       customValuation: !isEmpty(customValuationAmount)
         ? {
             amount: Number(customValuationAmount),
@@ -62,7 +69,7 @@ export const useUpsertClaimItem = (
       note: note || null,
     }
 
-    return upsertClaimItemMutation({
+    upsertClaimItemMutation({
       variables: {
         request,
       },

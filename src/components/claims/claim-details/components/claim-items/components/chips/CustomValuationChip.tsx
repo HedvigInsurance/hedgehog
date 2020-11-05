@@ -1,10 +1,11 @@
-import { ClaimItemValuation, UpsertClaimItemInput } from 'api/generated/graphql'
+import { ClaimItemValuation } from 'api/generated/graphql'
+import { UpsertClaimItemVariables } from 'graphql/use-upsert-claim-item'
 import React from 'react'
 import { DiscardChip } from './components/DiscardChip'
 import { InputChip } from './components/InputChip'
 
 export const CustomValuationChip: React.FC<{
-  request: UpsertClaimItemInput
+  request: UpsertClaimItemVariables
   customValuationAmount: string
   customValuationCurrency: string
   setCustomValuationAmount: React.EventHandler<any>

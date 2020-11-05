@@ -1,8 +1,12 @@
-import { Contract } from 'api/generated/graphql'
+import { Button } from '@material-ui/core'
 import { Paper } from 'components/shared/Paper'
 import { useGetClaimItems } from 'graphql/use-get-claim-items'
 import { useGetClaimValuation } from 'graphql/use-get-claim-valuation'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
+import {
+  UpsertClaimItemVariables,
+  useUpsertClaimItem,
+} from 'graphql/use-upsert-claim-item'
 import { Spacing } from 'hedvig-ui/spacing'
 import React from 'react'
 import { ItemForm } from './components/ItemForm'
@@ -11,16 +15,19 @@ import { ItemList } from './components/ItemList'
 export const ClaimItems: React.FC<{
   claimId: string
   memberId: string
-  contract?: Contract | null
-}> = ({ claimId, memberId, contract }) => {
+}> = ({ claimId, memberId }) => {
   const [claimItems] = useGetClaimItems(claimId)
   const [claimValuation] = useGetClaimValuation(claimId)
   const [contractMarketInfo] = useContractMarketInfo(memberId)
+  const [upsertClaimItem, { loading }] = useUpsertClaimItem(claimId)
 
   const { preferredCurrency = 'SEK' } = { ...contractMarketInfo }
   const { totalValuation, deductible } = { ...claimValuation }
 
-  console.log(totalValuation, deductible)
+  const [
+    upsertRequest,
+    setUpsertRequest,
+  ] = React.useState<UpsertClaimItemVariables | null>(null)
 
   return (
     <Paper>
@@ -30,10 +37,28 @@ export const ClaimItems: React.FC<{
       <ItemList claimItems={claimItems} />
       <Spacing top={'small'} />
       <ItemForm
-        claimId={claimId}
         preferredCurrency={preferredCurrency}
-        contract={contract}
+        onChange={(request) => setUpsertRequest(request)}
       />
+      <Button
+        disabled={loading || !upsertRequest}
+        variant="contained"
+        color="primary"
+        onClick={() => upsertRequest && upsertClaimItem(upsertRequest)}
+      >
+        Add item
+      </Button>
     </Paper>
   )
 }
+
+/*
+<ValuationInfo
+              request={request}
+              setValuation={setAutomaticValuationAmount}
+              customValuationAmount={customValuationAmount}
+              setCustomValuationAmount={setCustomValuationAmount}
+              defaultCurrency={preferredCurrency}
+              typeOfContract={contract.typeOfContract}
+            />
+ */

@@ -1,14 +1,8 @@
-import { Button, Grid, MenuItem, TextField } from '@material-ui/core'
-import {
-  Contract,
-  MonetaryAmountV2,
-  UpsertClaimItemInput,
-  useUpsertClaimItemMutation,
-} from 'api/generated/graphql'
+import { Grid, MenuItem, TextField } from '@material-ui/core'
 import { format, isAfter, isValid, parseISO } from 'date-fns'
+import { UpsertClaimItemVariables } from 'graphql/use-upsert-claim-item'
 import React from 'react'
 import { CategorySelect, SelectedItemCategory } from './CategorySelect'
-import { ValuationInfo } from './ValuationInfo'
 
 const isValidDate = (date: string) =>
   date === ''
@@ -18,65 +12,46 @@ const isValidDate = (date: string) =>
 const isValidNumber = (n: string) => /^[0-9]*$/g.test(n)
 const isEmpty = (s: string | null) => s === '' || s === null
 
+interface ItemFormData {
+  purchasePriceAmount: string
+  dateOfPurchase: string
+  note: string
+  purchasePriceCurrency: string
+  automaticValuationAmount: string
+  customValuationAmount: string
+}
+
+const initialFormData = {
+  purchasePriceAmount: '',
+  dateOfPurchase: '',
+  note: '',
+  purchasePriceCurrency: '',
+  automaticValuationAmount: '',
+  customValuationAmount: '',
+}
+
 export const ItemForm: React.FC<{
-  claimId: string
+  onChange: (request: UpsertClaimItemVariables) => void
   preferredCurrency: string
-  contract?: Contract | null
-}> = ({ claimId, preferredCurrency, contract }) => {
+}> = ({ onChange, preferredCurrency }) => {
   const [selectedItemCategories, setSelectedItemCategories] = React.useState<
     SelectedItemCategory[]
   >([])
 
-  const [purchasePriceAmount, setPurchasePriceAmount] = React.useState('')
-  const [dateOfPurchase, setDateOfPurchase] = React.useState('')
-  const [note, setNote] = React.useState('')
-  const [purchasePriceCurrency, setPurchasePriceCurrency] = React.useState('')
-  const [valuation, setValuation] = React.useState<MonetaryAmountV2 | null>(
-    null,
-  )
-  const [customValuationAmount, setCustomValuationAmount] = React.useState('')
+  const [itemFormData, setItemFormData] = React.useState<ItemFormData>({
+    ...initialFormData,
+    purchasePriceCurrency: preferredCurrency,
+  })
 
-  const [upsertClaimItem, { loading }] = useUpsertClaimItemMutation()
-
-  const request: UpsertClaimItemInput = {
-    claimId,
-    itemFamilyId: selectedItemCategories[0]?.id ?? null,
-    itemTypeId: selectedItemCategories[1]?.id ?? null,
-    itemBrandId: selectedItemCategories[2]?.id ?? null,
-    itemModelId: selectedItemCategories[3]?.id ?? null,
-    dateOfPurchase: dateOfPurchase !== '' ? dateOfPurchase : null,
-    purchasePrice: !isEmpty(purchasePriceAmount)
-      ? {
-          amount: Number(purchasePriceAmount),
-          currency: purchasePriceCurrency,
-        }
-      : null,
-    automaticValuation: valuation,
-    customValuation: !isEmpty(customValuationAmount)
-      ? {
-          amount: Number(customValuationAmount),
-          currency: purchasePriceCurrency,
-        }
-      : null,
-    note: note === '' ? null : note,
-  }
-
-  const formLooksGood =
-    request.itemFamilyId &&
-    request.itemTypeId &&
-    isValidNumber(purchasePriceAmount) &&
-    isValidDate(dateOfPurchase) &&
-    isValidNumber(customValuationAmount)
-
-  const resetForm = () => {
-    setPurchasePriceAmount('')
-    setPurchasePriceCurrency(preferredCurrency)
-    setDateOfPurchase('')
-    setSelectedItemCategories([])
-    setNote('')
-    setCustomValuationAmount('')
-    setValuation(null)
-  }
+  React.useEffect(() => {
+    onChange({
+      itemFamilyId: selectedItemCategories[0]?.id,
+      itemTypeId: selectedItemCategories[1]?.id,
+      itemBrandId: selectedItemCategories[2]?.id,
+      itemModelId: selectedItemCategories[3]?.id,
+      ...itemFormData,
+    })
+  }, [itemFormData])
 
   return (
     <>
@@ -90,10 +65,14 @@ export const ItemForm: React.FC<{
         <Grid item xs={1}>
           <TextField
             placeholder="Price"
-            error={!isValidNumber(purchasePriceAmount)}
-            value={purchasePriceAmount}
-            helperText={!isValidNumber(purchasePriceAmount) && 'Only numbers'}
-            onChange={({ target: { value } }) => setPurchasePriceAmount(value)}
+            error={!isValidNumber(itemFormData.purchasePriceAmount)}
+            value={itemFormData.purchasePriceAmount}
+            helperText={
+              !isValidNumber(itemFormData.purchasePriceAmount) && 'Only numbers'
+            }
+            onChange={({ target: { value } }) =>
+              setItemFormData({ ...itemFormData, purchasePriceAmount: value })
+            }
             fullWidth
             inputProps={{
               style: {
@@ -105,10 +84,10 @@ export const ItemForm: React.FC<{
         <Grid item xs={1}>
           <TextField
             select
-            error={!isValidNumber(purchasePriceAmount)}
-            value={purchasePriceCurrency}
+            error={!isValidNumber(itemFormData.purchasePriceAmount)}
+            value={itemFormData.purchasePriceCurrency}
             onChange={({ target: { value } }) =>
-              setPurchasePriceCurrency(value)
+              setItemFormData({ ...itemFormData, purchasePriceCurrency: value })
             }
             fullWidth
           >
@@ -121,16 +100,28 @@ export const ItemForm: React.FC<{
         </Grid>
         <Grid item>
           <TextField
-            value={dateOfPurchase}
-            error={!isValidDate(dateOfPurchase)}
-            helperText={!isValidDate(dateOfPurchase) && 'Invalid date'}
-            onChange={({ target: { value } }) => setDateOfPurchase(value)}
+            value={itemFormData.dateOfPurchase}
+            error={!isValidDate(itemFormData.dateOfPurchase)}
+            helperText={
+              !isValidDate(itemFormData.dateOfPurchase) && 'Invalid date'
+            }
+            onChange={({ target: { value } }) =>
+              setItemFormData({ ...itemFormData, dateOfPurchase: value })
+            }
             onBlur={() =>
-              isEmpty(dateOfPurchase) || !isValidDate(dateOfPurchase)
-                ? setDateOfPurchase('')
-                : setDateOfPurchase(
-                    format(parseISO(dateOfPurchase), 'yyyy-MM-dd'),
-                  )
+              isEmpty(itemFormData.dateOfPurchase) ||
+              !isValidDate(itemFormData.dateOfPurchase)
+                ? setItemFormData({
+                    ...itemFormData,
+                    dateOfPurchase: '',
+                  })
+                : setItemFormData({
+                    ...itemFormData,
+                    dateOfPurchase: format(
+                      parseISO(itemFormData.dateOfPurchase),
+                      'yyyy-MM-dd',
+                    ),
+                  })
             }
             placeholder="Purchase date"
             inputProps={{
@@ -143,8 +134,10 @@ export const ItemForm: React.FC<{
         </Grid>
         <Grid item xs={true}>
           <TextField
-            value={note}
-            onChange={({ target: { value } }) => setNote(value)}
+            value={itemFormData.note}
+            onChange={({ target: { value } }) =>
+              setItemFormData({ ...itemFormData, note: value })
+            }
             placeholder="Note (optional)"
             fullWidth
             helperText=" "
@@ -154,37 +147,6 @@ export const ItemForm: React.FC<{
               },
             }}
           />
-        </Grid>
-      </Grid>
-      <Grid container spacing={16}>
-        <Grid item xs={10}>
-          {contract?.typeOfContract && (
-            <ValuationInfo
-              request={request}
-              setValuation={setValuation}
-              customValuationAmount={customValuationAmount}
-              setCustomValuationAmount={setCustomValuationAmount}
-              defaultCurrency={preferredCurrency}
-              typeOfContract={contract.typeOfContract}
-            />
-          )}
-        </Grid>
-
-        <Grid item xs={true}>
-          <Button
-            disabled={!formLooksGood || loading}
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={() =>
-              upsertClaimItem({
-                variables: { request },
-                refetchQueries: ['GetClaimItems'],
-              }).then(() => resetForm())
-            }
-          >
-            Add item
-          </Button>
         </Grid>
       </Grid>
     </>
