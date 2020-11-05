@@ -15,6 +15,7 @@ import React from 'react'
 import styled from 'react-emotion'
 import { ItemForm } from './item-form/ItemForm'
 import { ItemList } from './item-list/ItemList'
+import { TotalValuationChip } from 'components/claims/claim-details/components/claim-items/chips/components/TotalValuationChip'
 
 const BottomWrapper = styled.div`
   display: flex;
@@ -81,12 +82,14 @@ export const ClaimItems: React.FC<{
       />
       <BottomWrapper>
         <ChipsWrapper>
-          {typeOfContract && upsertRequest && (
+          {typeOfContract && upsertRequest && upsertRequest.itemFamilyId ? (
             <Chips
               typeOfContract={typeOfContract}
               formData={upsertRequest}
               setFormData={setUpsertRequest}
             />
+          ) : (
+            <TotalValuationChip totalValuation={totalValuation} />
           )}
         </ChipsWrapper>
         <Button
