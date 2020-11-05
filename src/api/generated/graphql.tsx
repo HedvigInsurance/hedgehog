@@ -570,7 +570,7 @@ export type GenericAgreement = {
   lineOfBusinessName: Scalars['String']
 }
 
-export type GetValuationInput = {
+export type GetClaimItemValuationInput = {
   purchasePrice: Scalars['MonetaryAmount']
   itemFamilyId: Scalars['String']
   itemTypeId?: Maybe<Scalars['ID']>
@@ -1289,7 +1289,7 @@ export type QueryTypeFindPartnerCampaignsArgs = {
 }
 
 export type QueryTypeGetClaimItemValuationArgs = {
-  request?: Maybe<GetValuationInput>
+  request?: Maybe<GetClaimItemValuationInput>
 }
 
 export type QueryTypeCanValuateClaimItemArgs = {
@@ -2072,7 +2072,7 @@ export type GetAccountQuery = { __typename?: 'QueryType' } & {
 }
 
 export type GetClaimItemValuationQueryVariables = {
-  request?: Maybe<GetValuationInput>
+  request?: Maybe<GetClaimItemValuationInput>
 }
 
 export type GetClaimItemValuationQuery = { __typename?: 'QueryType' } & {
@@ -4240,7 +4240,7 @@ export type GetAccountQueryResult = ApolloReactCommon.QueryResult<
   GetAccountQueryVariables
 >
 export const GetClaimItemValuationDocument = gql`
-  query GetClaimItemValuation($request: GetValuationInput) {
+  query GetClaimItemValuation($request: GetClaimItemValuationInput) {
     getClaimItemValuation(request: $request) {
       depreciatedValue {
         amount

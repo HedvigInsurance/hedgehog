@@ -1,4 +1,4 @@
-query GetClaimItemValuation($request: GetValuationInput) {
+query GetClaimItemValuation($request: GetClaimItemValuationInput) {
   getClaimItemValuation(request: $request) {
     depreciatedValue {
       amount

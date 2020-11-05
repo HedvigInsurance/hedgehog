@@ -20,7 +20,7 @@ type QueryType {
   findPartnerCampaigns(input: CampaignFilter!): [VoucherCampaign!]!
   getPartnerCampaignOwners: [CampaignOwnerPartner!]!
   dashboardNumbers: DashboardNumbers
-  getClaimItemValuation(request: GetValuationInput): ClaimItemValuation!
+  getClaimItemValuation(request: GetClaimItemValuationInput): ClaimItemValuation!
   canValuateClaimItem(
     typeOfContract: TypeOfContract!
     itemFamilyId: String!
@@ -190,7 +190,7 @@ input EditMemberInfoInput {
   phoneNumber: String
 }
 
-input GetValuationInput {
+input GetClaimItemValuationInput {
   purchasePrice: MonetaryAmount!
   itemFamilyId: String!
   itemTypeId: ID

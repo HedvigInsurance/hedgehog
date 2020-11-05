@@ -489,7 +489,7 @@
                 "description": "",
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "GetValuationInput",
+                  "name": "GetClaimItemValuationInput",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -7933,7 +7933,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "GetValuationInput",
+        "name": "GetClaimItemValuationInput",
         "description": "",
         "fields": null,
         "inputFields": [
