@@ -14,10 +14,13 @@ export const ClaimItems: React.FC<{
   contract?: Contract | null
 }> = ({ claimId, memberId, contract }) => {
   const [claimItems] = useGetClaimItems(claimId)
-  const [{ totalValuation, deductible }] = useGetClaimValuation(claimId)
+  const [claimValuation] = useGetClaimValuation(claimId)
   const [contractMarketInfo] = useContractMarketInfo(memberId)
 
   const { preferredCurrency = 'SEK' } = { ...contractMarketInfo }
+  const { totalValuation, deductible } = { ...claimValuation }
+
+  console.log(totalValuation, deductible)
 
   return (
     <Paper>

@@ -75,7 +75,7 @@ export const ItemList: React.FC<{ claimItems: ClaimItem[] }> = ({
               )
             : null
 
-          const toBeDeleted = itemToDelete ? itemToDelete === item.id : false
+          const toBeDeleted = itemToDelete === item.id
 
           return (
             <TableRow key={item.id}>
@@ -103,9 +103,7 @@ export const ItemList: React.FC<{ claimItems: ClaimItem[] }> = ({
                   </>
                 )}
               </TableCell>
-              <TableCell>
-                {valuationString ? valuationString : <NotSpecified />}
-              </TableCell>
+              <TableCell>{valuationString ?? <NotSpecified />}</TableCell>
               <TableCell>{purchasePriceString ?? <NotSpecified />}</TableCell>
               <TableCell>{item.dateOfPurchase ?? <NotSpecified />}</TableCell>
               <TableCell>
