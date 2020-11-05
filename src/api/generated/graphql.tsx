@@ -396,6 +396,12 @@ export enum ClaimTypes {
   TestClaim = 'TestClaim',
 }
 
+export type ClaimValuation = {
+  __typename?: 'ClaimValuation'
+  totalValuation?: Maybe<MonetaryAmountV2>
+  deductible?: Maybe<MonetaryAmountV2>
+}
+
 export type ConfirmedFraudClaim = {
   __typename?: 'ConfirmedFraudClaim'
   date?: Maybe<Scalars['LocalDate']>
@@ -1238,6 +1244,7 @@ export type QueryType = {
   getPartnerCampaignOwners: Array<CampaignOwnerPartner>
   dashboardNumbers?: Maybe<DashboardNumbers>
   getClaimItemValuation: ClaimItemValuation
+  getClaimValuation: ClaimValuation
   canValuateClaimItem?: Maybe<CanValuateClaimItem>
   quoteSchemaForContractType?: Maybe<Scalars['JSON']>
   memberSearch: MemberSearchResult
@@ -1290,6 +1297,10 @@ export type QueryTypeFindPartnerCampaignsArgs = {
 
 export type QueryTypeGetClaimItemValuationArgs = {
   request?: Maybe<GetClaimItemValuationInput>
+}
+
+export type QueryTypeGetClaimValuationArgs = {
+  claimId: Scalars['ID']
 }
 
 export type QueryTypeCanValuateClaimItemArgs = {
@@ -2136,6 +2147,27 @@ export type GetClaimItemsQuery = { __typename?: 'QueryType' } & {
         >
       }
   >
+}
+
+export type GetClaimValuationQueryVariables = {
+  claimId: Scalars['ID']
+}
+
+export type GetClaimValuationQuery = { __typename?: 'QueryType' } & {
+  getClaimValuation: { __typename?: 'ClaimValuation' } & {
+    totalValuation: Maybe<
+      { __typename?: 'MonetaryAmountV2' } & Pick<
+        MonetaryAmountV2,
+        'amount' | 'currency'
+      >
+    >
+    deductible: Maybe<
+      { __typename?: 'MonetaryAmountV2' } & Pick<
+        MonetaryAmountV2,
+        'amount' | 'currency'
+      >
+    >
+  }
 }
 
 export type GetContractMarketInfoQueryVariables = {
@@ -4389,6 +4421,69 @@ export type GetClaimItemsLazyQueryHookResult = ReturnType<
 export type GetClaimItemsQueryResult = ApolloReactCommon.QueryResult<
   GetClaimItemsQuery,
   GetClaimItemsQueryVariables
+>
+export const GetClaimValuationDocument = gql`
+  query GetClaimValuation($claimId: ID!) {
+    getClaimValuation(claimId: $claimId) {
+      totalValuation {
+        amount
+        currency
+      }
+      deductible {
+        amount
+        currency
+      }
+    }
+  }
+`
+
+/**
+ * __useGetClaimValuationQuery__
+ *
+ * To run a query within a React component, call `useGetClaimValuationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClaimValuationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClaimValuationQuery({
+ *   variables: {
+ *      claimId: // value for 'claimId'
+ *   },
+ * });
+ */
+export function useGetClaimValuationQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetClaimValuationQuery,
+    GetClaimValuationQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<
+    GetClaimValuationQuery,
+    GetClaimValuationQueryVariables
+  >(GetClaimValuationDocument, baseOptions)
+}
+export function useGetClaimValuationLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    GetClaimValuationQuery,
+    GetClaimValuationQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    GetClaimValuationQuery,
+    GetClaimValuationQueryVariables
+  >(GetClaimValuationDocument, baseOptions)
+}
+export type GetClaimValuationQueryHookResult = ReturnType<
+  typeof useGetClaimValuationQuery
+>
+export type GetClaimValuationLazyQueryHookResult = ReturnType<
+  typeof useGetClaimValuationLazyQuery
+>
+export type GetClaimValuationQueryResult = ApolloReactCommon.QueryResult<
+  GetClaimValuationQuery,
+  GetClaimValuationQueryVariables
 >
 export const GetContractMarketInfoDocument = gql`
   query GetContractMarketInfo($memberId: ID!) {

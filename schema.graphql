@@ -21,6 +21,7 @@ type QueryType {
   getPartnerCampaignOwners: [CampaignOwnerPartner!]!
   dashboardNumbers: DashboardNumbers
   getClaimItemValuation(request: GetClaimItemValuationInput): ClaimItemValuation!
+  getClaimValuation(claimId: ID!): ClaimValuation!
   canValuateClaimItem(
     typeOfContract: TypeOfContract!
     itemFamilyId: String!
@@ -202,6 +203,11 @@ input GetClaimItemValuationInput {
 type ClaimItemValuation {
   depreciatedValue: MonetaryAmountV2
   valuationRule: ValuationRule
+}
+
+type ClaimValuation {
+  totalValuation: MonetaryAmountV2
+  deductible: MonetaryAmountV2
 }
 
 type ValuationRule {

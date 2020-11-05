@@ -1,0 +1,12 @@
+query GetClaimValuation($claimId: ID!) {
+  getClaimValuation(claimId: $claimId) {
+    totalValuation {
+      amount
+      currency
+    }
+    deductible {
+      amount
+      currency
+    }
+  }
+}

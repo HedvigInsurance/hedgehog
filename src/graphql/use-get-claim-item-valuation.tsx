@@ -1,7 +1,7 @@
 import {
   ClaimItemValuation,
+  GetClaimItemValuationInput,
   GetClaimItemValuationQueryHookResult,
-  GetValuationInput,
   useGetClaimItemValuationQuery,
 } from 'api/generated/graphql'
 
@@ -11,7 +11,7 @@ type GetClaimItemValuationReturnTuple = [
 ]
 
 export const useGetClaimItemValuation = (
-  request: GetValuationInput,
+  request: GetClaimItemValuationInput,
 ): GetClaimItemValuationReturnTuple => {
   const queryResult = useGetClaimItemValuationQuery({
     variables: {
