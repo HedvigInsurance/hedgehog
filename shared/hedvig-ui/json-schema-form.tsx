@@ -6,7 +6,7 @@ import {
   WidgetProps,
 } from '@rjsf/core'
 import Form from '@rjsf/semantic-ui'
-import { TrashIconWrapper } from 'components/claims/claim-details/components/claim-items/components/styles'
+import { TrashIconWrapper } from 'components/claims/claim-details/components/claim-items/styles'
 import { Button, ButtonsGroup } from 'hedvig-ui/button'
 import { Spacing } from 'hedvig-ui/spacing'
 import { FourthLevelHeadline } from 'hedvig-ui/typography'

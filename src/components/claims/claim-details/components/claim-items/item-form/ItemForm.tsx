@@ -31,9 +31,11 @@ const initialFormData = {
 }
 
 export const ItemForm: React.FC<{
+  resetSwitch: boolean
+  onReset: () => void
   onChange: (request: UpsertClaimItemVariables) => void
   preferredCurrency: string
-}> = ({ onChange, preferredCurrency }) => {
+}> = ({ resetSwitch, onReset, onChange, preferredCurrency }) => {
   const [selectedItemCategories, setSelectedItemCategories] = React.useState<
     SelectedItemCategory[]
   >([])
@@ -51,7 +53,18 @@ export const ItemForm: React.FC<{
       itemModelId: selectedItemCategories[3]?.id,
       ...itemFormData,
     })
-  }, [itemFormData])
+  }, [itemFormData, selectedItemCategories])
+
+  React.useEffect(() => {
+    if (resetSwitch) {
+      setItemFormData({
+        ...initialFormData,
+        purchasePriceCurrency: preferredCurrency,
+      })
+      setSelectedItemCategories([])
+      onReset()
+    }
+  }, [resetSwitch])
 
   return (
     <>

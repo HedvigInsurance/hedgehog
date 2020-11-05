@@ -18,7 +18,7 @@ import {
   InfoWrapper,
   NotePopover,
   TrashIconWrapper,
-} from './styles'
+} from '../styles'
 
 const TableCell = withStyles({
   root: {

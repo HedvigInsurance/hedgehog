@@ -1,12 +1,11 @@
 import {
-  CanValuateClaimItem,
   CanValuateClaimItemQueryHookResult,
   TypeOfContract,
   useCanValuateClaimItemQuery,
 } from 'api/generated/graphql'
 
 type CanValuateClaimItemReturnTuple = [
-  CanValuateClaimItem | undefined,
+  boolean | undefined,
   CanValuateClaimItemQueryHookResult,
 ]
 
@@ -22,8 +21,9 @@ export const useCanValuateClaimItem = (
       itemTypeId,
     },
   })
-  const canValuateClaimItem = queryResult.data?.canValuateClaimItem as
-    | CanValuateClaimItem
+  const canValuate = queryResult.data?.canValuateClaimItem?.canValuate as
+    | boolean
     | undefined
-  return [canValuateClaimItem, queryResult]
+
+  return [canValuate, queryResult]
 }

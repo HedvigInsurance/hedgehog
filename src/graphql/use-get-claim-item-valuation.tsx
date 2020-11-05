@@ -7,7 +7,7 @@ import {
 
 type GetClaimItemValuationReturnTuple = [
   ClaimItemValuation | undefined,
-  GetClaimItemValuationQueryHookResult | undefined,
+  GetClaimItemValuationQueryHookResult,
 ]
 
 export const useGetClaimItemValuation = (

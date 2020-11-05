@@ -2,14 +2,14 @@ import { Typography } from '@material-ui/core'
 import { ItemCategoryKind } from 'api/generated/graphql'
 import React from 'react'
 import { ChevronDoubleRight, ChevronRight } from 'react-bootstrap-icons'
-import { SelectedItemCategory } from './CategorySelect'
 import {
   Bold,
   ChevronRightWrapper,
   CurrentChip,
   PreviousChip,
   UpcomingChip,
-} from './styles'
+} from '../styles'
+import { SelectedItemCategory } from './CategorySelect'
 
 const getTypeInfoSentence = (remainingTypes: string[]) => {
   if (remainingTypes.length === 0) {

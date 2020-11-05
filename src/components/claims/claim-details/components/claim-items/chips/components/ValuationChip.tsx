@@ -1,7 +1,7 @@
+import { MonetaryAmountV2 } from 'api/generated/graphql'
 import React from 'react'
 import { Gem } from 'react-bootstrap-icons'
 import styled from 'react-emotion'
-import { MonetaryAmountV2 } from 'src/api/generated/graphql'
 import { formatMoney } from 'utils/money'
 import { BaseChip, BaseChipProps } from './BaseChip'
 
@@ -28,16 +28,16 @@ const AdornmentChip = styled(BaseChip)`
 `
 
 export const ValuationChip: React.FC<{
-  valuation: MonetaryAmountV2 | string
+  loading: boolean
+  valuation: MonetaryAmountV2
   ignored?: boolean
-}> = ({ valuation, ignored = false }) => {
-  const valuationLabel =
-    typeof valuation !== 'string'
-      ? formatMoney(valuation, {
-          useGrouping: true,
-          maximumFractionDigits: 0,
-        })
-      : '...'
+}> = ({ loading, valuation, ignored = false }) => {
+  const valuationLabel = loading
+    ? '...'
+    : formatMoney(valuation, {
+        useGrouping: true,
+        maximumFractionDigits: 0,
+      })
 
   return (
     <>

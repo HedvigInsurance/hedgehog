@@ -60,7 +60,7 @@ const ClaimPage: React.FC<Props> = ({ ...props }) => (
                 coveringEmployee,
                 claimFiles,
                 contract,
-              } = data?.claim || {}
+              } = { ...data?.claim }
 
               return (
                 <FadeIn>
@@ -117,6 +117,7 @@ const ClaimPage: React.FC<Props> = ({ ...props }) => (
                       <ClaimItems
                         claimId={props.match.params.claimId}
                         memberId={props.match.params.memberId}
+                        contract={contract ?? null}
                       />
                     </Grid>
                     <Grid item xs={12}>

@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'react-emotion'
 import { formatMoney } from 'utils/money'
 import { BaseChip } from './BaseChip'
-import { useGetClaimValuation } from 'src/graphql/use-get-claim-valuation'
 
 const Chip = styled(BaseChip)`
   && {

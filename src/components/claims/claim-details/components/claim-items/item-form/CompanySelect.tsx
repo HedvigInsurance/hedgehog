@@ -14,8 +14,8 @@ import {
 import { useGetItemCategories } from 'graphql/use-get-item-categories'
 import { useUpsertItemCompanyOptions } from 'graphql/use-upsert-item-category'
 import React from 'react'
+import { Bold, StyledCreatableSelect } from '../styles'
 import { ItemCompanySelection } from './CategoryDialog'
-import { Bold, StyledCreatableSelect } from './styles'
 
 export const CompanySelect: React.FC<{
   itemCompany: ItemCompanySelection | null
