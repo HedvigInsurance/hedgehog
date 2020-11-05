@@ -1,32 +1,35 @@
 query GetClaimItems($claimId: ID!) {
   claimItems(claimId: $claimId) {
-    id
-    itemFamily {
+    totalValuation
+    claimItems {
+      id
+      itemFamily {
         id
         displayName
-    }
-    itemType {
+      }
+      itemType {
         id
         displayName
-    }
-    itemBrand {
-        id
-         displayName
-     }
-    itemModel {
+      }
+      itemBrand {
         id
         displayName
+      }
+      itemModel {
+        id
+        displayName
+      }
+      dateOfPurchase
+      itemAge
+      purchasePrice {
+        amount
+        currency
+      }
+      valuation {
+        amount
+        currency
+      }
+      note
     }
-    dateOfPurchase
-    itemAge
-    purchasePrice {
-      amount
-      currency
-    }
-    valuation {
-      amount
-      currency
-    }
-    note
   }
 }

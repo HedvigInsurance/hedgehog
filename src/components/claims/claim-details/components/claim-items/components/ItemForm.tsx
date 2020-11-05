@@ -36,10 +36,7 @@ export const ItemForm: React.FC<{
   )
   const [customValuationAmount, setCustomValuationAmount] = React.useState('')
 
-  const [
-    upsertClaimItem,
-    { loading: loadingUpsertClaimItem },
-  ] = useUpsertClaimItemMutation()
+  const [upsertClaimItem, { loading }] = useUpsertClaimItemMutation()
 
   const request: UpsertClaimItemInput = {
     claimId,
@@ -175,7 +172,7 @@ export const ItemForm: React.FC<{
 
         <Grid item xs={true}>
           <Button
-            disabled={!formLooksGood || loadingUpsertClaimItem}
+            disabled={!formLooksGood || loading}
             fullWidth
             variant="contained"
             color="primary"

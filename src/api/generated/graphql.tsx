@@ -570,6 +570,12 @@ export type GenericAgreement = {
   lineOfBusinessName: Scalars['String']
 }
 
+export type GetClaimItemsResult = {
+  __typename?: 'GetClaimItemsResult'
+  claimItems: Array<ClaimItem>
+  totalValuation?: Maybe<Scalars['Float']>
+}
+
 export type GetValuationInput = {
   purchasePrice: Scalars['MonetaryAmount']
   itemFamilyId: Scalars['String']
@@ -1127,7 +1133,6 @@ export type MutationTypeManualRedeemEnableReferralsCampaignArgs = {
 }
 
 export type MutationTypeUnsignMemberArgs = {
-  market: Scalars['String']
   ssn: Scalars['String']
 }
 
@@ -1234,7 +1239,7 @@ export type QueryType = {
   messageHistory: Array<ChatMessage>
   questionGroups: Array<QuestionGroup>
   itemCategories: Array<ItemCategory>
-  claimItems: Array<ClaimItem>
+  claimItems?: Maybe<GetClaimItemsResult>
   findPartnerCampaigns: Array<VoucherCampaign>
   getPartnerCampaignOwners: Array<CampaignOwnerPartner>
   dashboardNumbers?: Maybe<DashboardNumbers>
@@ -1825,7 +1830,6 @@ export type CreateNorwegianGripenPriceEngineMutation = {
 } & Pick<MutationType, 'createNorwegianGripenPriceEngine'>
 
 export type UnsignMemberMutationVariables = {
-  market: Scalars['String']
   ssn: Scalars['String']
 }
 
@@ -2105,36 +2109,49 @@ export type GetClaimItemsQueryVariables = {
 }
 
 export type GetClaimItemsQuery = { __typename?: 'QueryType' } & {
-  claimItems: Array<
-    { __typename?: 'ClaimItem' } & Pick<
-      ClaimItem,
-      'id' | 'dateOfPurchase' | 'itemAge' | 'note'
+  claimItems: Maybe<
+    { __typename?: 'GetClaimItemsResult' } & Pick<
+      GetClaimItemsResult,
+      'totalValuation'
     > & {
-        itemFamily: { __typename?: 'ItemFamily' } & Pick<
-          ItemFamily,
-          'id' | 'displayName'
-        >
-        itemType: { __typename?: 'ItemType' } & Pick<
-          ItemType,
-          'id' | 'displayName'
-        >
-        itemBrand: Maybe<
-          { __typename?: 'ItemBrand' } & Pick<ItemBrand, 'id' | 'displayName'>
-        >
-        itemModel: Maybe<
-          { __typename?: 'ItemModel' } & Pick<ItemModel, 'id' | 'displayName'>
-        >
-        purchasePrice: Maybe<
-          { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount' | 'currency'
-          >
-        >
-        valuation: Maybe<
-          { __typename?: 'MonetaryAmountV2' } & Pick<
-            MonetaryAmountV2,
-            'amount' | 'currency'
-          >
+        claimItems: Array<
+          { __typename?: 'ClaimItem' } & Pick<
+            ClaimItem,
+            'id' | 'dateOfPurchase' | 'itemAge' | 'note'
+          > & {
+              itemFamily: { __typename?: 'ItemFamily' } & Pick<
+                ItemFamily,
+                'id' | 'displayName'
+              >
+              itemType: { __typename?: 'ItemType' } & Pick<
+                ItemType,
+                'id' | 'displayName'
+              >
+              itemBrand: Maybe<
+                { __typename?: 'ItemBrand' } & Pick<
+                  ItemBrand,
+                  'id' | 'displayName'
+                >
+              >
+              itemModel: Maybe<
+                { __typename?: 'ItemModel' } & Pick<
+                  ItemModel,
+                  'id' | 'displayName'
+                >
+              >
+              purchasePrice: Maybe<
+                { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+              >
+              valuation: Maybe<
+                { __typename?: 'MonetaryAmountV2' } & Pick<
+                  MonetaryAmountV2,
+                  'amount' | 'currency'
+                >
+              >
+            }
         >
       }
   >
@@ -3188,8 +3205,8 @@ export type CreateNorwegianGripenPriceEngineMutationOptions = ApolloReactCommon.
   CreateNorwegianGripenPriceEngineMutationVariables
 >
 export const UnsignMemberDocument = gql`
-  mutation UnsignMember($market: String!, $ssn: String!) {
-    unsignMember(market: $market, ssn: $ssn)
+  mutation UnsignMember($ssn: String!) {
+    unsignMember(ssn: $ssn)
   }
 `
 export type UnsignMemberMutationFn = ApolloReactCommon.MutationFunction<
@@ -3210,7 +3227,6 @@ export type UnsignMemberMutationFn = ApolloReactCommon.MutationFunction<
  * @example
  * const [unsignMemberMutation, { data, loading, error }] = useUnsignMemberMutation({
  *   variables: {
- *      market: // value for 'market'
  *      ssn: // value for 'ssn'
  *   },
  * });
@@ -4313,34 +4329,37 @@ export type GetClaimItemValuationQueryResult = ApolloReactCommon.QueryResult<
 export const GetClaimItemsDocument = gql`
   query GetClaimItems($claimId: ID!) {
     claimItems(claimId: $claimId) {
-      id
-      itemFamily {
+      totalValuation
+      claimItems {
         id
-        displayName
+        itemFamily {
+          id
+          displayName
+        }
+        itemType {
+          id
+          displayName
+        }
+        itemBrand {
+          id
+          displayName
+        }
+        itemModel {
+          id
+          displayName
+        }
+        dateOfPurchase
+        itemAge
+        purchasePrice {
+          amount
+          currency
+        }
+        valuation {
+          amount
+          currency
+        }
+        note
       }
-      itemType {
-        id
-        displayName
-      }
-      itemBrand {
-        id
-        displayName
-      }
-      itemModel {
-        id
-        displayName
-      }
-      dateOfPurchase
-      itemAge
-      purchasePrice {
-        amount
-        currency
-      }
-      valuation {
-        amount
-        currency
-      }
-      note
     }
   }
 `

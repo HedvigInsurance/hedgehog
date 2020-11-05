@@ -1,6 +1,7 @@
 import { MonetaryAmountV2 } from 'api/generated/graphql'
 import React from 'react'
 import styled from 'react-emotion'
+import { formatMoney } from 'utils/money'
 import { BaseChip } from './BaseChip'
 
 const Chip = styled(BaseChip)`
@@ -20,7 +21,12 @@ export const TotalValuationChip: React.FC<{
     return <></>
   }
 
-  const { amount, currency } = totalValuation
-
-  return <Chip label={`Total valuation: ${amount} ${currency}`} />
+  return (
+    <Chip
+      label={`Total valuation: ${formatMoney(totalValuation, {
+        useGrouping: true,
+        maximumFractionDigits: 0,
+      })}`}
+    />
+  )
 }

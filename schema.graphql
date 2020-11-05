@@ -16,7 +16,7 @@ type QueryType {
   messageHistory(memberId: ID!): [ChatMessage!]!
   questionGroups: [QuestionGroup!]!
   itemCategories(kind: ItemCategoryKind!, parentId: ID): [ItemCategory!]!
-  claimItems(claimId: ID!): [ClaimItem!]!
+  claimItems(claimId: ID!): GetClaimItemsResult
   findPartnerCampaigns(input: CampaignFilter!): [VoucherCampaign!]!
   getPartnerCampaignOwners: [CampaignOwnerPartner!]!
   dashboardNumbers: DashboardNumbers
@@ -27,10 +27,7 @@ type QueryType {
     itemTypeId: ID
   ): CanValuateClaimItem
   quoteSchemaForContractType(contractType: String!): JSON
-  memberSearch(
-    query: String!
-    options: MemberSearchOptions!
-  ): MemberSearchResult!
+  memberSearch(query: String!, options: MemberSearchOptions!): MemberSearchResult!
 }
 
 type MemberSearchResult {
@@ -137,7 +134,9 @@ type MutationType {
   assignCampaignToPartnerPercentageDiscount(
     request: AssignVoucherPercentageDiscount
   ): Boolean!
-  assignCampaignToPartnerFreeMonths(request: AssignVoucherFreeMonths): Boolean!
+  assignCampaignToPartnerFreeMonths(
+    request: AssignVoucherFreeMonths
+  ): Boolean!
   assignCampaignToPartnerVisibleNoDiscount(
     request: AssignVoucherVisibleNoDiscount
   ): Boolean!
@@ -151,12 +150,9 @@ type MutationType {
     request: ManualUnRedeemCampaignInput!
   ): Boolean!
   manualRedeemEnableReferralsCampaign(memberId: ID!, market: Market!): Boolean!
-  unsignMember(market: String!, ssn: String!): Boolean!
+  unsignMember(ssn: String!): Boolean!
   editMemberInfo(request: EditMemberInfoInput!): Boolean!
-  setFraudulentStatus(
-    memberId: ID!
-    request: MemberFraudulentStatusInput!
-  ): Boolean!
+  setFraudulentStatus(memberId: ID!, request: MemberFraudulentStatusInput!): Boolean!
 }
 
 input MemberFraudulentStatusInput {
@@ -216,6 +212,11 @@ type ValuationRule {
   valuationTable: String!
   valuationType: String!
   depreciation: Int
+}
+
+type GetClaimItemsResult {
+  claimItems: [ClaimItem!]!
+  totalValuation: Float
 }
 
 type CanValuateClaimItem {
@@ -524,7 +525,7 @@ type UnknownIncentive {
 }
 
 union Incentive =
-    MonthlyPercentageDiscountFixedPeriod
+  MonthlyPercentageDiscountFixedPeriod
   | FreeMonths
   | CostDeduction
   | NoDiscount
@@ -974,7 +975,7 @@ enum ClaimTypes {
   TestClaim
 }
 union ClaimType =
-    TheftClaim
+  TheftClaim
   | AccidentalDamageClaim
   | AssaultClaim
   | WaterDamageClaim
