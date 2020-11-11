@@ -2,8 +2,12 @@ import { Button } from '@material-ui/core'
 import { Contract } from 'api/generated/graphql'
 import { Chips } from 'components/claims/claim-details/components/claim-items/chips/Chips'
 import { TotalValuationChip } from 'components/claims/claim-details/components/claim-items/chips/components/TotalValuationChip'
+import {
+  isEmpty,
+  isValidDate,
+  isValidNumber,
+} from 'components/claims/claim-details/components/claim-items/utils'
 import { Paper } from 'components/shared/Paper'
-import { isAfter, isValid, parseISO } from 'date-fns'
 import { useGetClaimItems } from 'graphql/use-get-claim-items'
 import { useGetClaimValuation } from 'graphql/use-get-claim-valuation'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
@@ -24,13 +28,33 @@ const BottomWrapper = styled.div`
 
 const ChipsWrapper = styled.div``
 
-const isValidDate = (date?: string) =>
-  !!date &&
-  (date === ''
-    ? true
-    : isValid(parseISO(date)) && !isAfter(parseISO(date), new Date()))
+const formLooksGood = (request: UpsertClaimItemVariables) => {
+  if (!request) {
+    return false
+  }
 
-const isValidNumber = (n?: string) => (n ? /^[0-9]*$/g.test(n) : false)
+  const {
+    itemFamilyId,
+    itemTypeId,
+    purchasePriceAmount = '',
+    dateOfPurchase = '',
+    customValuationAmount = '',
+  } = request
+
+  if (!itemFamilyId || !itemTypeId) {
+    return false
+  }
+
+  if (!isEmpty(purchasePriceAmount) && !isValidNumber(purchasePriceAmount)) {
+    return false
+  }
+
+  if (!isEmpty(dateOfPurchase) && !isValidDate(dateOfPurchase)) {
+    return false
+  }
+
+  return isEmpty(customValuationAmount) || isValidNumber(customValuationAmount)
+}
 
 export const ClaimItems: React.FC<{
   claimId: string
@@ -52,20 +76,6 @@ export const ClaimItems: React.FC<{
   ] = React.useState<UpsertClaimItemVariables | null>(null)
 
   const [resetSwitch, setResetSwitch] = React.useState(false)
-
-  const formLooksGood =
-    upsertRequest &&
-    upsertRequest.itemFamilyId &&
-    upsertRequest.itemTypeId &&
-    (upsertRequest.customValuationAmount !== ''
-      ? isValidNumber(upsertRequest.purchasePriceAmount)
-      : true) &&
-    (upsertRequest.customValuationAmount !== ''
-      ? isValidDate(upsertRequest.dateOfPurchase)
-      : true) &&
-    (upsertRequest.customValuationAmount !== ''
-      ? isValidNumber(upsertRequest.customValuationAmount)
-      : true)
 
   return (
     <Paper>
