@@ -2,18 +2,19 @@ import { LinkRow } from 'components/shared'
 import { parseISO } from 'date-fns'
 import formatDate from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
+import { withFadeIn } from 'hedvig-ui/animations/fade-in'
 import React from 'react'
 import styled from 'react-emotion'
-import { Table } from 'semantic-ui-react'
+import { Table, TableRowProps } from 'semantic-ui-react'
 import { history } from 'store'
-import { useVerticalKeyboardNavigation } from 'utils/keyboard-actions'
-import { getMemberIdColor } from 'utils/member'
 import {
   Claim,
   ClaimSearchFilter,
   ClaimSortColumn,
   ClaimsStore,
 } from 'store/types/claimsTypes'
+import { useVerticalKeyboardNavigation } from 'utils/keyboard-actions'
+import { getMemberIdColor } from 'utils/member'
 import BackendPaginatorList from '../../shared/paginator-list/BackendPaginatorList'
 
 export interface BackendServedClaimsListProps {
@@ -31,6 +32,8 @@ const linkClickHandler = (id: string, userId: string) => {
   history.push(`/claims/${id}/members/${userId}`)
 }
 
+const FadeInLinkRow = withFadeIn<TableRowProps>(LinkRow)
+
 const getTableRow = (currentlyActiveIndex: number) => (
   item: Claim,
   itemIndex: number,
@@ -41,7 +44,8 @@ const getTableRow = (currentlyActiveIndex: number) => (
     : '-'
 
   return (
-    <LinkRow
+    <FadeInLinkRow
+      delay={`${itemIndex * 50}ms`}
       onClick={() => linkClickHandler(item.id, item.userId)}
       active={itemIndex === currentlyActiveIndex}
     >
@@ -50,7 +54,7 @@ const getTableRow = (currentlyActiveIndex: number) => (
       <Table.Cell>{item.type}</Table.Cell>
       <Table.Cell>{item.state}</Table.Cell>
       <Table.Cell>{item.reserve}</Table.Cell>
-    </LinkRow>
+    </FadeInLinkRow>
   )
 }
 

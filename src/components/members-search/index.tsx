@@ -111,6 +111,7 @@ export const MembersSearch: React.FC = () => {
               pagedItems={members}
               itemContent={(member, index) => (
                 <ListItem
+                  index={index}
                   member={member}
                   active={currentKeyboardNavigationStep === index}
                 />
