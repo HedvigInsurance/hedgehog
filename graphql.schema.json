@@ -524,6 +524,16 @@
                   }
                 },
                 "defaultValue": null
+              },
+              {
+                "name": "typeOfContract",
+                "description": "",
+                "type": {
+                  "kind": "ENUM",
+                  "name": "TypeOfContract",
+                  "ofType": null
+                },
+                "defaultValue": null
               }
             ],
             "type": {

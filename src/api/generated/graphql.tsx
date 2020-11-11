@@ -1301,6 +1301,7 @@ export type QueryTypeGetClaimItemValuationArgs = {
 
 export type QueryTypeGetClaimValuationArgs = {
   claimId: Scalars['ID']
+  typeOfContract?: Maybe<TypeOfContract>
 }
 
 export type QueryTypeCanValuateClaimItemArgs = {
@@ -2151,6 +2152,7 @@ export type GetClaimItemsQuery = { __typename?: 'QueryType' } & {
 
 export type GetClaimValuationQueryVariables = {
   claimId: Scalars['ID']
+  typeOfContract?: Maybe<TypeOfContract>
 }
 
 export type GetClaimValuationQuery = { __typename?: 'QueryType' } & {
@@ -4423,8 +4425,8 @@ export type GetClaimItemsQueryResult = ApolloReactCommon.QueryResult<
   GetClaimItemsQueryVariables
 >
 export const GetClaimValuationDocument = gql`
-  query GetClaimValuation($claimId: ID!) {
-    getClaimValuation(claimId: $claimId) {
+  query GetClaimValuation($claimId: ID!, $typeOfContract: TypeOfContract) {
+    getClaimValuation(claimId: $claimId, typeOfContract: $typeOfContract) {
       totalValuation {
         amount
         currency
@@ -4450,6 +4452,7 @@ export const GetClaimValuationDocument = gql`
  * const { data, loading, error } = useGetClaimValuationQuery({
  *   variables: {
  *      claimId: // value for 'claimId'
+ *      typeOfContract: // value for 'typeOfContract'
  *   },
  * });
  */

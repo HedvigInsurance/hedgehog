@@ -1,5 +1,5 @@
-query GetClaimValuation($claimId: ID!) {
-  getClaimValuation(claimId: $claimId) {
+query GetClaimValuation($claimId: ID!, $typeOfContract: TypeOfContract) {
+  getClaimValuation(claimId: $claimId, typeOfContract: $typeOfContract) {
     totalValuation {
       amount
       currency

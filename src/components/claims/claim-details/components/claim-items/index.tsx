@@ -1,6 +1,7 @@
 import { Button } from '@material-ui/core'
 import { Contract } from 'api/generated/graphql'
 import { Chips } from 'components/claims/claim-details/components/claim-items/chips/Chips'
+import { TotalValuationChip } from 'components/claims/claim-details/components/claim-items/chips/components/TotalValuationChip'
 import { Paper } from 'components/shared/Paper'
 import { isAfter, isValid, parseISO } from 'date-fns'
 import { useGetClaimItems } from 'graphql/use-get-claim-items'
@@ -15,7 +16,6 @@ import React from 'react'
 import styled from 'react-emotion'
 import { ItemForm } from './item-form/ItemForm'
 import { ItemList } from './item-list/ItemList'
-import { TotalValuationChip } from 'components/claims/claim-details/components/claim-items/chips/components/TotalValuationChip'
 
 const BottomWrapper = styled.div`
   display: flex;
@@ -38,13 +38,13 @@ export const ClaimItems: React.FC<{
   contract: Contract | null
 }> = ({ claimId, memberId, contract }) => {
   const [claimItems] = useGetClaimItems(claimId)
-  const [claimValuation] = useGetClaimValuation(claimId)
   const [contractMarketInfo] = useContractMarketInfo(memberId)
+  const { typeOfContract } = { ...contract }
+  const [claimValuation] = useGetClaimValuation(claimId, typeOfContract)
   const [upsertClaimItem, { loading }] = useUpsertClaimItem(claimId)
 
   const { preferredCurrency = 'SEK' } = { ...contractMarketInfo }
   const { totalValuation, deductible } = { ...claimValuation }
-  const { typeOfContract } = { ...contract }
 
   const [
     upsertRequest,

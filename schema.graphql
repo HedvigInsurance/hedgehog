@@ -21,7 +21,7 @@ type QueryType {
   getPartnerCampaignOwners: [CampaignOwnerPartner!]!
   dashboardNumbers: DashboardNumbers
   getClaimItemValuation(request: GetClaimItemValuationInput): ClaimItemValuation!
-  getClaimValuation(claimId: ID!): ClaimValuation!
+  getClaimValuation(claimId: ID!, typeOfContract: TypeOfContract): ClaimValuation!
   canValuateClaimItem(
     typeOfContract: TypeOfContract!
     itemFamilyId: String!
