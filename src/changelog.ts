@@ -12,6 +12,12 @@ export interface Change {
 
 export const changelog: ReadonlyArray<Change> = [
   {
+    date: '2020-11-17',
+    change:
+      'Unsign tool now notifies if the ssn was signed or not on unsigning',
+    authorGithubHandle: 'fredrikareschoug',
+  },
+  {
     date: '2020-10-13',
     change:
       "Use your your keyboard's up and down arrow keys to navigate the member search and claims list",
