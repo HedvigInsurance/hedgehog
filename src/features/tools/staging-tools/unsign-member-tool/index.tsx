@@ -40,12 +40,20 @@ const UnsignMemberToolComponent: React.FC<{} & WithShowNotification> = ({
               ssn,
             },
           })
-            .then(() => {
-              showNotification({
-                type: 'olive',
-                header: 'Success',
-                message: `Successfully unsigned member`,
-              })
+            .then((result) => {
+              if (result) {
+                showNotification({
+                  type: 'olive',
+                  header: 'Success',
+                  message: `Successfully unsigned member`,
+                })
+              } else {
+                showNotification({
+                  type: 'olive',
+                  header: 'Success',
+                  message: `Member was not signed!`,
+                })
+              }
             })
             .catch((error) => {
               showNotification({
