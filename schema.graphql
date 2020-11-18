@@ -4,7 +4,6 @@ schema {
 }
 
 type QueryType {
-  monthlyPayments(month: YearMonth!): [MonthlySubscription]
   member(id: ID!): Member
   claim(id: ID!): Claim
   paymentSchedule(status: ChargeStatus!): [SchedulerState]
@@ -20,15 +19,23 @@ type QueryType {
   findPartnerCampaigns(input: CampaignFilter!): [VoucherCampaign!]!
   getPartnerCampaignOwners: [CampaignOwnerPartner!]!
   dashboardNumbers: DashboardNumbers
-  getClaimItemValuation(request: GetClaimItemValuationInput): ClaimItemValuation!
-  getClaimValuation(claimId: ID!, typeOfContract: TypeOfContract): ClaimValuation!
+  getClaimItemValuation(
+    request: GetClaimItemValuationInput
+  ): ClaimItemValuation!
+  getClaimValuation(
+    claimId: ID!
+    typeOfContract: TypeOfContract
+  ): ClaimValuation!
   canValuateClaimItem(
     typeOfContract: TypeOfContract!
     itemFamilyId: String!
     itemTypeId: ID
   ): CanValuateClaimItem
   quoteSchemaForContractType(contractType: String!): JSON
-  memberSearch(query: String!, options: MemberSearchOptions!): MemberSearchResult!
+  memberSearch(
+    query: String!
+    options: MemberSearchOptions!
+  ): MemberSearchResult!
 }
 
 type MemberSearchResult {
@@ -56,6 +63,11 @@ type MutationType {
     memberId: ID!
     accountEntry: AccountEntryInput!
   ): Member!
+  addMonthlyEntryToMember(
+    memberId: ID!
+    monthlyEntry: MonthlyEntryInput!
+  ): Member!
+  removeMonthlyEntry(id: ID!): Boolean
   approveMemberCharge(approvals: [MemberChargeApproval!]!): Boolean
   createPaymentCompletionLink(memberId: ID!): PaymentCompletionResponse!
   updateClaimState(id: ID!, state: ClaimState!): Claim
@@ -123,6 +135,7 @@ type MutationType {
     bypassUnderwritingGuidelines: Boolean!
   ): Quote!
   signQuoteForNewContract(quoteId: ID!, activationDate: LocalDate): Quote!
+  removeItemCategory(itemCategoryId: ID!): Boolean
   upsertItemCompany(request: UpsertItemCompanyInput): ID!
   upsertItemType(request: UpsertItemTypeInput): ID!
   upsertItemBrand(request: UpsertItemBrandInput): ID!
@@ -135,9 +148,7 @@ type MutationType {
   assignCampaignToPartnerPercentageDiscount(
     request: AssignVoucherPercentageDiscount
   ): Boolean!
-  assignCampaignToPartnerFreeMonths(
-    request: AssignVoucherFreeMonths
-  ): Boolean!
+  assignCampaignToPartnerFreeMonths(request: AssignVoucherFreeMonths): Boolean!
   assignCampaignToPartnerVisibleNoDiscount(
     request: AssignVoucherVisibleNoDiscount
   ): Boolean!
@@ -153,7 +164,10 @@ type MutationType {
   manualRedeemEnableReferralsCampaign(memberId: ID!, market: Market!): Boolean!
   unsignMember(ssn: String!): Boolean!
   editMemberInfo(request: EditMemberInfoInput!): Boolean!
-  setFraudulentStatus(memberId: ID!, request: MemberFraudulentStatusInput!): Boolean!
+  setFraudulentStatus(
+    memberId: ID!
+    request: MemberFraudulentStatusInput!
+  ): Boolean!
 }
 
 input MemberFraudulentStatusInput {
@@ -526,7 +540,7 @@ type UnknownIncentive {
 }
 
 union Incentive =
-  MonthlyPercentageDiscountFixedPeriod
+    MonthlyPercentageDiscountFixedPeriod
   | FreeMonths
   | CostDeduction
   | NoDiscount
@@ -853,6 +867,19 @@ type Account {
   totalBalance: MonetaryAmountV2!
   chargeEstimation: AccountChargeEstimation!
   entries: [AccountEntry!]!
+  monthlyEntries: [MonthlyEntry!]!
+}
+
+type MonthlyEntry {
+  id: ID!
+  externalId: String
+  amount: MonetaryAmountV2!
+  type: AccountEntryType!
+  source: String!
+  addedBy: String!
+  addedAt: Instant!
+  title: String!
+  comment: String!
 }
 
 type AccountChargeEstimation {
@@ -875,6 +902,15 @@ type SchedulerState {
 input MemberChargeApproval {
   memberId: ID!
   amount: MonetaryAmount!
+}
+
+input MonthlyEntryInput {
+  externalId: String
+  amount: MonetaryAmount!
+  type: AccountEntryType!
+  source: String!
+  title: String!
+  comment: String!
 }
 
 input AccountEntryInput {
@@ -976,7 +1012,7 @@ enum ClaimTypes {
   TestClaim
 }
 union ClaimType =
-  TheftClaim
+    TheftClaim
   | AccidentalDamageClaim
   | AssaultClaim
   | WaterDamageClaim
