@@ -12,6 +12,12 @@ export interface Change {
 
 export const changelog: ReadonlyArray<Change> = [
   {
+    date: '2020-11-25',
+    change:
+      'Inventory now shows Total Valuation, Deduction and calculation details for valuations',
+    authorGithubHandle: 'rasmusguterstam',
+  },
+  {
     date: '2020-11-24',
     change: 'Add ability to remove a monthly entry from a member',
     authorGithubHandle: 'vonElfvin',
