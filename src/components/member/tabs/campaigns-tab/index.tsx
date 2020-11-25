@@ -1,7 +1,6 @@
 import { ContractMarketInfo } from 'api/generated/graphql'
 import { CampaignsInfo } from 'components/member/tabs/campaigns-tab/campaigns/CampaignsInfo'
 import { ReferralsInfo } from 'components/member/tabs/campaigns-tab/referrals/ReferralsInfo'
-import { Headline } from 'components/member/tabs/shared/headline'
 import { RefreshButton } from 'components/member/tabs/shared/refresh-button'
 import { useGetReferralInformation } from 'graphql/use-get-referral-information'
 import { FadeIn } from 'hedvig-ui/animations/fade-in'
@@ -9,6 +8,7 @@ import {
   LoadingMessage,
   StandaloneMessage,
 } from 'hedvig-ui/animations/standalone-message'
+import { MainHeadline } from 'hedvig-ui/typography'
 import React from 'react'
 import { ArrowRepeat } from 'react-bootstrap-icons'
 
@@ -35,18 +35,18 @@ export const CampaignsTab: React.FunctionComponent<{
 
   return (
     <FadeIn>
-      <Headline>
+      <MainHeadline>
         Campaigns
         <RefreshButton onClick={() => refetch()} loading={loading}>
           <ArrowRepeat />
         </RefreshButton>
-      </Headline>
+      </MainHeadline>
       <CampaignsInfo
         memberId={memberId}
         referralInformation={referralInformation}
       />
 
-      <Headline>Referrals</Headline>
+      <MainHeadline>Referrals</MainHeadline>
       <ReferralsInfo
         memberId={memberId}
         referralInformation={referralInformation}

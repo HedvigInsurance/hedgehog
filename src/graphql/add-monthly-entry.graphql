@@ -1,0 +1,5 @@
+mutation AddMonthlyEntry($memberId: ID!, $input: MonthlyEntryInput!) {
+  addMonthlyEntryToMember(memberId: $memberId, monthlyEntry: $input) {
+    memberId
+  }
+}

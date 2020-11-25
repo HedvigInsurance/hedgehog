@@ -1,0 +1,3 @@
+mutation RemoveMonthlyEntry($id: ID!) {
+  removeMonthlyEntry(id: $id)
+}

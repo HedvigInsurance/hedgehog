@@ -1,5 +1,4 @@
 import { Contract } from 'components/member/tabs/contracts-tab/contract'
-import { Headline } from 'components/member/tabs/shared/headline'
 import { RefreshButton } from 'components/member/tabs/shared/refresh-button'
 import { useContracts } from 'graphql/use-contracts'
 import { FadeIn } from 'hedvig-ui/animations/fade-in'
@@ -7,6 +6,7 @@ import {
   LoadingMessage,
   StandaloneMessage,
 } from 'hedvig-ui/animations/standalone-message'
+import { MainHeadline } from 'hedvig-ui/typography'
 import React from 'react'
 import { ArrowRepeat } from 'react-bootstrap-icons'
 
@@ -29,12 +29,12 @@ export const ContractTab: React.FunctionComponent<{
 
   return (
     <FadeIn>
-      <Headline>
+      <MainHeadline>
         Contracts
         <RefreshButton onClick={() => refetch()} loading={loading}>
           <ArrowRepeat />
         </RefreshButton>
-      </Headline>
+      </MainHeadline>
       {contracts.map((contract) => (
         <Contract
           key={contract.id}

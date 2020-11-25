@@ -1,6 +1,7 @@
 import { Input } from 'hedvig-ui/input'
 import { Spacing } from 'hedvig-ui/spacing'
 import {
+  Bold,
   Capitalized,
   FourthLevelHeadline,
   MainHeadline,
@@ -22,6 +23,7 @@ export const Headlines: React.FC = () => (
     <ThirdLevelHeadline>Third level headline</ThirdLevelHeadline>
     <FourthLevelHeadline>Fourth level headline</FourthLevelHeadline>
     <Paragraph>Paragraph</Paragraph>
+    <Bold>Bold</Bold>
   </>
 )
 

@@ -9,15 +9,25 @@ export const CardsWrapper = styled('div')`
   margin: -0.5rem;
 `
 
+type PaddingSize = 'none' | 'small' | 'medium' | 'large'
+
+export const paddingMap: Record<PaddingSize, string> = {
+  none: '0',
+  small: '0.5rem',
+  medium: '2rem',
+  large: '3rem',
+}
+
 export interface CardProps {
   span?: number
+  padding?: PaddingSize
 }
 
 export const Card = styled('div')<CardProps>`
   display: inline-flex;
   min-width: ${({ span }) => `calc(100%/${span ?? 1} - 1rem)`};
   margin: 0.5rem;
-  padding: 2rem;
+  padding: ${({ padding = 'medium' }) => paddingMap[padding]};
   align-items: flex-start;
   flex-direction: column;
   flex-grow: 1;

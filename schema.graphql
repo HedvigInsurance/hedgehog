@@ -4,7 +4,6 @@ schema {
 }
 
 type QueryType {
-  monthlyPayments(month: YearMonth!): [MonthlySubscription]
   member(id: ID!): Member
   claim(id: ID!): Claim
   paymentSchedule(status: ChargeStatus!): [SchedulerState]
@@ -23,7 +22,7 @@ type QueryType {
   getClaimItemValuation(request: GetClaimItemValuationInput): ClaimItemValuation!
   getClaimValuation(claimId: ID!, typeOfContract: TypeOfContract): ClaimValuation!
   canValuateClaimItem(
-    typeOfContract: TypeOfContract!
+    typeOfContract: String!
     itemFamilyId: String!
     itemTypeId: ID
   ): CanValuateClaimItem
@@ -56,6 +55,11 @@ type MutationType {
     memberId: ID!
     accountEntry: AccountEntryInput!
   ): Member!
+  addMonthlyEntryToMember(
+    memberId: ID!
+    monthlyEntry: MonthlyEntryInput!
+  ): Member!
+  removeMonthlyEntry(id: ID!): Boolean
   approveMemberCharge(approvals: [MemberChargeApproval!]!): Boolean
   createPaymentCompletionLink(memberId: ID!): PaymentCompletionResponse!
   updateClaimState(id: ID!, state: ClaimState!): Claim
@@ -195,7 +199,7 @@ input GetClaimItemValuationInput {
   purchasePrice: MonetaryAmount!
   itemFamilyId: String!
   itemTypeId: ID
-  typeOfContract: TypeOfContract!
+  typeOfContract: String!
   purchaseDate: LocalDate!
   baseDate: LocalDate
 }
@@ -222,7 +226,7 @@ type ValuationRule {
 
 type CanValuateClaimItem {
   canValuate: Boolean!
-  typeOfContract: TypeOfContract
+  typeOfContract: String
   itemFamily: String
   itemTypeId: ID
 }
@@ -269,7 +273,7 @@ input UpsertValuationRuleInput {
   id: ID
   name: String!
   ageLimit: Float!
-  typeOfContract: TypeOfContract!
+  typeOfContract: String!
   itemFamilyId: String!
   itemTypeId: String
   valuationType: String!
@@ -284,7 +288,7 @@ type Contract {
   switchedFrom: String
   masterInception: LocalDate
   status: ContractStatus!
-  typeOfContract: TypeOfContract!
+  typeOfContract: String!
   isTerminated: Boolean!
   terminationDate: LocalDate
   currentAgreementId: ID!
@@ -297,20 +301,6 @@ type Contract {
   signSource: SignSource
   contractTypeName: String!
   createdAt: Instant!
-}
-
-enum TypeOfContract {
-  SE_HOUSE
-  SE_APARTMENT_BRF
-  SE_APARTMENT_RENT
-  SE_APARTMENT_STUDENT_BRF
-  SE_APARTMENT_STUDENT_RENT
-  NO_HOME_CONTENT_OWN
-  NO_HOME_CONTENT_RENT
-  NO_HOME_CONTENT_YOUTH_OWN
-  NO_HOME_CONTENT_YOUTH_RENT
-  NO_TRAVEL
-  NO_TRAVEL_YOUTH
 }
 
 enum ContractStatus {
@@ -330,7 +320,7 @@ type GenericAgreement {
   premium: MonetaryAmountV2!
   certificateUrl: String
   status: AgreementStatus!
-  typeOfContract: TypeOfContract!
+  typeOfContract: String!
   address: Address
   numberCoInsured: Int
   squareMeters: Int
@@ -437,6 +427,7 @@ enum TerminationReason {
   DISCOUNT_PERIOD_OVER
   CONFIRMED_FRAUD
   SUSPECTED_FRAUD
+  SIGNED_BY_MISTAKE
   OTHER
   UNKNOWN
 }
@@ -853,6 +844,19 @@ type Account {
   totalBalance: MonetaryAmountV2!
   chargeEstimation: AccountChargeEstimation!
   entries: [AccountEntry!]!
+  monthlyEntries: [MonthlyEntry!]!
+}
+
+type MonthlyEntry {
+  id: ID!
+  externalId: String
+  amount: MonetaryAmountV2!
+  type: AccountEntryType!
+  source: String!
+  addedBy: String!
+  addedAt: Instant!
+  title: String!
+  comment: String!
 }
 
 type AccountChargeEstimation {
@@ -875,6 +879,15 @@ type SchedulerState {
 input MemberChargeApproval {
   memberId: ID!
   amount: MonetaryAmount!
+}
+
+input MonthlyEntryInput {
+  externalId: String
+  amount: MonetaryAmount!
+  type: AccountEntryType!
+  source: String!
+  title: String!
+  comment: String!
 }
 
 input AccountEntryInput {

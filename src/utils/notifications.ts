@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {
   showNotification,
   WithShowNotification,
-} from '../store/actions/notificationsActions'
+} from 'store/actions/notificationsActions'
 
 export const withShowNotification = <P extends {}>(
   Component: React.ComponentType<P & WithShowNotification>,

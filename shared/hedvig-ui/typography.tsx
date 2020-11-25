@@ -23,3 +23,7 @@ export const Placeholder = styled('div')`
     color: ${({ theme }) => theme.placeholderColor};
   }
 `
+
+export const Bold = styled('strong')`
+  color: inherit !important;
+`

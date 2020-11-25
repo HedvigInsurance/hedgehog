@@ -15,9 +15,6 @@ const Wrapper = styled.div`
   flex-direction: column;
 `
 
-const Headline = styled(MainHeadline)`
-  margin-bottom: 2rem;
-`
 const MetricsWrapper = styled.div({
   display: 'flex',
 })
@@ -60,13 +57,15 @@ export const Dashboard: React.FC<{ auth: any }> = ({ auth }) => {
 
   return (
     <Wrapper>
-      <Headline>
-        Hi there{' '}
-        <span css={{ textTransform: 'capitalize' }}>
-          {auth?.email && getLowercaseNameFromEmail(auth.email)}
-        </span>
-        !
-      </Headline>
+      <Spacing bottom>
+        <MainHeadline>
+          Hi there{' '}
+          <span css={{ textTransform: 'capitalize' }}>
+            {auth?.email && getLowercaseNameFromEmail(auth.email)}
+          </span>
+          !
+        </MainHeadline>
+      </Spacing>
       {dashboardNumbers && (
         <FadeIn>
           <MetricsWrapper>

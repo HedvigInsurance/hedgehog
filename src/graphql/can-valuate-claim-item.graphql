@@ -1,5 +1,13 @@
-query CanValuateClaimItem($typeOfContract: TypeOfContract!, $itemFamilyId: String!, $itemTypeId: ID) {
-  canValuateClaimItem(typeOfContract: $typeOfContract, itemFamilyId: $itemFamilyId, itemTypeId: $itemTypeId) {
+query CanValuateClaimItem(
+  $typeOfContract: String!
+  $itemFamilyId: String!
+  $itemTypeId: ID
+) {
+  canValuateClaimItem(
+    typeOfContract: $typeOfContract
+    itemFamilyId: $itemFamilyId
+    itemTypeId: $itemTypeId
+  ) {
     canValuate
     typeOfContract
     itemFamily

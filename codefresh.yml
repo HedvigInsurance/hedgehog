@@ -1,65 +1,65 @@
-version: "1.0"
+version: '1.0'
 stages:
-  - "clone"
-  - "install"
-  - "checks"
+  - 'clone'
+  - 'install'
+  - 'checks'
 
 steps:
   clone:
-    title: "Cloning repository"
-    type: "git-clone"
-    repo: "HedvigInsurance/hedgehog"
-    revision: "${{CF_BRANCH}}"
-    git: "github"
-    stage: "clone"
+    title: 'Cloning repository'
+    type: 'git-clone'
+    repo: 'HedvigInsurance/hedgehog'
+    revision: '${{CF_BRANCH}}'
+    git: 'github'
+    stage: 'clone'
 
   build_dependency_container:
-    title: "Building Docker image"
-    type: "build"
-    image_name: "hedviginsurance/hedgehog"
+    title: 'Building Docker image'
+    type: 'build'
+    image_name: 'hedviginsurance/hedgehog'
     disable_push: true
-    working_directory: "${{clone}}"
+    working_directory: '${{clone}}'
     dockerfile: .ci/Dockerfile
-    stage: "install"
+    stage: 'install'
 
   install_deps:
-    title: "Installing dependencies"
-    type: "freestyle"
-    image: "${{build_dependency_container}}"
-    working_directory: "${{clone}}"
+    title: 'Installing dependencies'
+    type: 'freestyle'
+    image: '${{build_dependency_container}}'
+    working_directory: '${{clone}}'
     commands:
       - yarn
-    stage: "install"
+    stage: 'install'
 
   checks:
-    title: "Running checks"
-    type: "parallel"
+    title: 'Running checks'
+    type: 'parallel'
     steps:
-      - title: "Linting"
-        type: "freestyle"
-        image: "${{build_dependency_container}}"
-        working_directory: "${{clone}}"
+      - title: 'Linting'
+        type: 'freestyle'
+        image: '${{build_dependency_container}}'
+        working_directory: '${{clone}}'
         commands:
           - yarn lint
-      - title: "Testing"
-        type: "freestyle"
-        image: "${{build_dependency_container}}"
-        working_directory: "${{clone}}"
+      - title: 'Testing'
+        type: 'freestyle'
+        image: '${{build_dependency_container}}'
+        working_directory: '${{clone}}'
         commands:
           - yarn test
-      - title: "Typecheck"
-        type: "freestyle"
-        image: "${{build_dependency_container}}"
-        working_directory: "${{clone}}"
+      - title: 'Typecheck'
+        type: 'freestyle'
+        image: '${{build_dependency_container}}'
+        working_directory: '${{clone}}'
         commands:
           - yarn typecheck
-    stage: "checks"
+    stage: 'checks'
 
   build_client:
-    title: "Building client"
-    type: "freestyle"
-    image: "${{build_dependency_container}}"
-    working_directory: "${{clone}}"
+    title: 'Building client'
+    type: 'freestyle'
+    image: '${{build_dependency_container}}'
+    working_directory: '${{clone}}'
     commands:
       - yarn build
-    stage: "checks"
+    stage: 'checks'

@@ -11,7 +11,6 @@ import {
   InfoRow,
   InfoText,
 } from 'components/member/tabs/shared/card-components'
-import { Headline } from 'components/member/tabs/shared/headline'
 import { RefreshButton } from 'components/member/tabs/shared/refresh-button'
 import { useGetPerson } from 'graphql/use-get-person'
 import { FadeIn } from 'hedvig-ui/animations/fade-in'
@@ -22,6 +21,7 @@ import {
 import { Card, CardsWrapper } from 'hedvig-ui/card'
 import { FlagOrbIndicator } from 'hedvig-ui/orb-indicator'
 import { Spacing } from 'hedvig-ui/spacing'
+import { MainHeadline } from 'hedvig-ui/typography'
 import React from 'react'
 import { ArrowRepeat } from 'react-bootstrap-icons'
 
@@ -57,12 +57,12 @@ export const DebtTab: React.FC<{
 
   return (
     <FadeIn>
-      <Headline>
+      <MainHeadline>
         Debt
         <RefreshButton onClick={() => refetch()} loading={loading}>
           <ArrowRepeat />
         </RefreshButton>
-      </Headline>
+      </MainHeadline>
       <CardsWrapper>
         <Card span={2}>
           <InfoContainer>

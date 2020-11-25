@@ -86,7 +86,7 @@ class FileUploadComponent extends React.Component<{
     })
       .then(() => {
         this.props.showNotification({
-          message: 'upload successful!',
+          message: 'Upload successful!',
           header: 'Approved',
           type: 'olive',
         })

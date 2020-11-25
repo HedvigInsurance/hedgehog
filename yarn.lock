@@ -1592,6 +1592,11 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-3.0.7.tgz#5d27831b41a7edfe678190f57e7e9b790842fd50"
   integrity sha512-RJAzXXqYGpsz6DK9St9Zb7Y4DdhBXF9rBx4ZINtxiAJrFGiBry7Hfnq0RbiBnR/USJR0P5GQYKe4VgLa98uAYg==
 
+"@hookform/error-message@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@hookform/error-message/-/error-message-0.0.4.tgz#a499aa62994af44da3d207f6ed01232f43b3a549"
+  integrity sha512-as5acnxkWuF5XrzHhZlzdXUk4zpHNzFLe+uGyaJtSrMbDVTvcNL62ESRK5DTVGPix8shJnt6G2LfrobHBPpvYg==
+
 "@icons/material@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
@@ -12403,6 +12408,11 @@ react-helmet-async@^1.0.2, react-helmet-async@^1.0.4:
     prop-types "^15.7.2"
     react-fast-compare "^2.0.4"
     shallowequal "^1.1.0"
+
+react-hook-form@^6.11.2:
+  version "6.11.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.11.2.tgz#a0d81f71f85551457aa06892599aa07605f42154"
+  integrity sha512-3Go23kq3JAsUi5xNtOBi2YVJALufmycyS8eA/hdriAbj3U7/lffPlcl0QWviSy4L0EE+dsQwEX2YSTyMMADQsw==
 
 react-hot-loader@*, react-hot-loader@^4.3.11:
   version "4.12.19"

@@ -37,9 +37,24 @@ query GetAccount($memberId: ID!) {
         title
         source
         reference
+        comment
         type
         failedAt
         chargedAt
+      }
+      monthlyEntries {
+        id
+        externalId
+        amount {
+          amount
+          currency
+        }
+        type
+        source
+        addedAt
+        addedBy
+        title
+        comment
       }
     }
   }

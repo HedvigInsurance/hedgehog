@@ -2,6 +2,7 @@ import { Quote } from 'api/generated/graphql'
 import { CreateQuoteForm } from 'components/member/tabs/quote-tab/create-quote-form'
 import { Button } from 'hedvig-ui/button'
 import { Card, CardsWrapper } from 'hedvig-ui/card'
+import { MainHeadline } from 'hedvig-ui/typography'
 import React from 'react'
 import styled from 'react-emotion'
 import { showNotification } from 'store/actions/notificationsActions'
@@ -10,7 +11,6 @@ import { isSigned, isSignedOrExpired } from 'utils/quote'
 import { ActionsWrapper, Muted } from './common'
 import { QuoteListItem } from './quote-list-item'
 
-const Headline = styled('h1')({})
 const Wrapper = styled('div')({})
 
 export const QuotesSubSection: React.FunctionComponent<{
@@ -47,7 +47,7 @@ export const QuotesSubSection: React.FunctionComponent<{
           />
         </ActionsWrapper>
       )}
-      <Headline>Quotes</Headline>
+      <MainHeadline>Quotes</MainHeadline>
       <CardsWrapper>
         {activeQuotes.map((quote) => (
           <Card key={quote.id}>
@@ -56,7 +56,7 @@ export const QuotesSubSection: React.FunctionComponent<{
         ))}
       </CardsWrapper>
 
-      <Headline>Signed/Expired quotes</Headline>
+      <MainHeadline>Signed/Expired quotes</MainHeadline>
       <Muted>
         <CardsWrapper>
           {quotes.filter(isSignedOrExpired).map((quote) => (
