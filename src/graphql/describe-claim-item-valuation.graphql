@@ -1,0 +1,3 @@
+query DescribeClaimItemValuation($claimItemId: ID!, $typeOfContract: String!) {
+  describeClaimItemValuation(claimItemId: $claimItemId, typeOfContract: $typeOfContract)
+}

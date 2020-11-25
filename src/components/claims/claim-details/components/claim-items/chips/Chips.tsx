@@ -1,4 +1,3 @@
-import { TypeOfContract } from 'api/generated/graphql'
 import { NoValuationChip } from 'components/claims/claim-details/components/claim-items/chips/components/NoValuationChip'
 import { MessageChip } from 'components/claims/claim-details/components/claim-items/chips/MessageChip'
 import { useCanValuateClaimItem } from 'graphql/use-can-valuate-claim-item'
@@ -7,7 +6,7 @@ import React from 'react'
 import { CustomValuationChip } from './CustomValuationChip'
 
 export const Chips: React.FC<{
-  typeOfContract: TypeOfContract
+  typeOfContract: string
   formData: UpsertClaimItemVariables
   setFormData: (formData: UpsertClaimItemVariables) => void
 }> = ({ typeOfContract, formData, setFormData }) => {

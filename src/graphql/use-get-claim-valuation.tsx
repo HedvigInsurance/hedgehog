@@ -1,7 +1,6 @@
 import {
   ClaimValuation,
   GetClaimValuationQueryHookResult,
-  TypeOfContract,
   useGetClaimValuationQuery,
 } from 'api/generated/graphql'
 
@@ -12,7 +11,7 @@ type GetClaimValuationReturnTuple = [
 
 export const useGetClaimValuation = (
   claimId: string,
-  typeOfContract?: TypeOfContract,
+  typeOfContract?: string,
 ): GetClaimValuationReturnTuple => {
   const queryResult = useGetClaimValuationQuery({
     variables: {

@@ -9,6 +9,7 @@ import {
   withStyles,
 } from '@material-ui/core'
 import { ClaimItem, useDeleteClaimItemMutation } from 'api/generated/graphql'
+import { useDescribeClaimItemValuation } from 'graphql/use-describe-claim-item-valuation'
 import { Placeholder } from 'hedvig-ui/typography'
 import React from 'react'
 import { ChevronRight, InfoCircleFill, Trash } from 'react-bootstrap-icons'
@@ -28,14 +29,115 @@ const TableCell = withStyles({
 
 const NotSpecified: React.FC = () => <Placeholder>Not specified</Placeholder>
 
-export const ItemList: React.FC<{ claimItems: ClaimItem[] }> = ({
-  claimItems,
+const ItemRow: React.FC<{ item: ClaimItem; typeOfContract?: string }> = ({
+  item,
+  typeOfContract,
 }) => {
   const [deleteClaimItem] = useDeleteClaimItemMutation({
-    refetchQueries: ['GetClaimItems'],
+    refetchQueries: ['GetClaimItems', 'GetClaimValuation'],
   })
-  const [itemToDelete, setItemToDelete] = React.useState<string | null>(null)
 
+  const [description] = useDescribeClaimItemValuation(
+    item.id,
+    typeOfContract ?? 'SE_APARTMENT_RENT',
+  )
+
+  const purchasePriceString = item.purchasePrice?.amount
+    ? formatMoney(
+        {
+          amount: item.purchasePrice.amount,
+          currency: item.purchasePrice.currency,
+        },
+        {
+          minimumFractionDigits: 0,
+          useGrouping: true,
+        },
+      )
+    : null
+
+  const valuationString = item.valuation?.amount
+    ? formatMoney(
+        {
+          amount: item.valuation.amount,
+          currency: item.valuation.currency,
+        },
+        {
+          minimumFractionDigits: 0,
+          useGrouping: true,
+        },
+      )
+    : null
+
+  return (
+    <>
+      <TableRow key={item.id}>
+        <TableCell>
+          {item.itemFamily.displayName}
+          <ChevronRightWrapper>
+            <ChevronRight />
+          </ChevronRightWrapper>
+
+          {item.itemType.displayName}
+          {item.itemBrand && (
+            <>
+              <ChevronRightWrapper>
+                <ChevronRight />
+              </ChevronRightWrapper>
+              {item.itemBrand.displayName}
+            </>
+          )}
+          {item.itemModel && (
+            <>
+              <ChevronRightWrapper>
+                <ChevronRight />
+              </ChevronRightWrapper>{' '}
+              {item.itemModel.displayName}
+            </>
+          )}
+        </TableCell>
+        <TableCell>
+          {valuationString ?? <NotSpecified />}{' '}
+          <Placeholder>
+            {valuationString && typeOfContract ? ` (${description})` : ''}
+          </Placeholder>
+        </TableCell>
+        <TableCell>{purchasePriceString ?? <NotSpecified />}</TableCell>
+        <TableCell>{item.dateOfPurchase ?? <NotSpecified />}</TableCell>
+        <TableCell>
+          <Grid container spacing={8}>
+            <Grid item xs={6}>
+              {item?.note && (
+                <NotePopover contents={<>{item?.note}</>}>
+                  <InfoWrapper>
+                    <InfoCircleFill />
+                  </InfoWrapper>
+                </NotePopover>
+              )}
+            </Grid>
+            <Grid item xs={6}>
+              <IconButton
+                onClick={() => {
+                  deleteClaimItem({
+                    variables: { claimItemId: item.id },
+                  })
+                }}
+              >
+                <TrashIconWrapper>
+                  <Trash />
+                </TrashIconWrapper>
+              </IconButton>
+            </Grid>
+          </Grid>
+        </TableCell>
+      </TableRow>
+    </>
+  )
+}
+
+export const ItemList: React.FC<{
+  claimItems: ClaimItem[]
+  typeOfContract?: string
+}> = ({ claimItems, typeOfContract }) => {
   return (
     <Table>
       <TableHead>
@@ -48,94 +150,9 @@ export const ItemList: React.FC<{ claimItems: ClaimItem[] }> = ({
         </TableRow>
       </TableHead>
       <TableBody>
-        {claimItems.map((item) => {
-          const purchasePriceString = item.purchasePrice?.amount
-            ? formatMoney(
-                {
-                  amount: item.purchasePrice.amount,
-                  currency: item.purchasePrice.currency,
-                },
-                {
-                  minimumFractionDigits: 0,
-                  useGrouping: true,
-                },
-              )
-            : null
-
-          const valuationString = item.valuation?.amount
-            ? formatMoney(
-                {
-                  amount: item.valuation.amount,
-                  currency: item.valuation.currency,
-                },
-                {
-                  minimumFractionDigits: 0,
-                  useGrouping: true,
-                },
-              )
-            : null
-
-          const toBeDeleted = itemToDelete === item.id
-
-          return (
-            <TableRow key={item.id}>
-              <TableCell>
-                {item.itemFamily.displayName}
-                <ChevronRightWrapper>
-                  <ChevronRight />
-                </ChevronRightWrapper>
-
-                {item.itemType.displayName}
-                {item.itemBrand && (
-                  <>
-                    <ChevronRightWrapper>
-                      <ChevronRight />
-                    </ChevronRightWrapper>
-                    {item.itemBrand.displayName}
-                  </>
-                )}
-                {item.itemModel && (
-                  <>
-                    <ChevronRightWrapper>
-                      <ChevronRight />
-                    </ChevronRightWrapper>{' '}
-                    {item.itemModel.displayName}
-                  </>
-                )}
-              </TableCell>
-              <TableCell>{valuationString ?? <NotSpecified />}</TableCell>
-              <TableCell>{purchasePriceString ?? <NotSpecified />}</TableCell>
-              <TableCell>{item.dateOfPurchase ?? <NotSpecified />}</TableCell>
-              <TableCell>
-                <Grid container spacing={8}>
-                  <Grid item xs={6}>
-                    {item?.note && (
-                      <NotePopover contents={<>{item?.note}</>}>
-                        <InfoWrapper>
-                          <InfoCircleFill />
-                        </InfoWrapper>
-                      </NotePopover>
-                    )}
-                  </Grid>
-                  <Grid item xs={6}>
-                    <IconButton
-                      disabled={toBeDeleted}
-                      onClick={() => {
-                        deleteClaimItem({
-                          variables: { claimItemId: item.id },
-                        }).then(() => setItemToDelete(null))
-                      }}
-                    >
-                      <TrashIconWrapper>
-                        <Trash />
-                      </TrashIconWrapper>
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </TableCell>
-            </TableRow>
-          )
-        })}
+        {claimItems.map((item) => (
+          <ItemRow key={item.id} item={item} typeOfContract={typeOfContract} />
+        ))}
       </TableBody>
     </Table>
   )

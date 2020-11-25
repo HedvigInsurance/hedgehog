@@ -1278,6 +1278,7 @@ export type QueryType = {
   dashboardNumbers?: Maybe<DashboardNumbers>
   getClaimItemValuation: ClaimItemValuation
   getClaimValuation: ClaimValuation
+  describeClaimItemValuation: Scalars['String']
   canValuateClaimItem?: Maybe<CanValuateClaimItem>
   quoteSchemaForContractType?: Maybe<Scalars['JSON']>
   memberSearch: MemberSearchResult
@@ -1330,7 +1331,12 @@ export type QueryTypeGetClaimItemValuationArgs = {
 
 export type QueryTypeGetClaimValuationArgs = {
   claimId: Scalars['ID']
-  typeOfContract?: Maybe<TypeOfContract>
+  typeOfContract?: Maybe<Scalars['String']>
+}
+
+export type QueryTypeDescribeClaimItemValuationArgs = {
+  claimItemId: Scalars['ID']
+  typeOfContract: Scalars['String']
 }
 
 export type QueryTypeCanValuateClaimItemArgs = {
@@ -2042,6 +2048,15 @@ export type DeleteClaimItemMutation = { __typename?: 'MutationType' } & Pick<
   'deleteClaimItem'
 >
 
+export type DescribeClaimItemValuationQueryVariables = {
+  claimItemId: Scalars['ID']
+  typeOfContract: Scalars['String']
+}
+
+export type DescribeClaimItemValuationQuery = {
+  __typename?: 'QueryType'
+} & Pick<QueryType, 'describeClaimItemValuation'>
+
 export type EditMemberInfoMutationVariables = {
   request: EditMemberInfoInput
 }
@@ -2196,7 +2211,7 @@ export type GetClaimItemsQuery = { __typename?: 'QueryType' } & {
 
 export type GetClaimValuationQueryVariables = {
   claimId: Scalars['ID']
-  typeOfContract?: Maybe<TypeOfContract>
+  typeOfContract?: Maybe<Scalars['String']>
 }
 
 export type GetClaimValuationQuery = { __typename?: 'QueryType' } & {
@@ -4235,6 +4250,67 @@ export type DeleteClaimItemMutationOptions = ApolloReactCommon.BaseMutationOptio
   DeleteClaimItemMutation,
   DeleteClaimItemMutationVariables
 >
+export const DescribeClaimItemValuationDocument = gql`
+  query DescribeClaimItemValuation(
+    $claimItemId: ID!
+    $typeOfContract: String!
+  ) {
+    describeClaimItemValuation(
+      claimItemId: $claimItemId
+      typeOfContract: $typeOfContract
+    )
+  }
+`
+
+/**
+ * __useDescribeClaimItemValuationQuery__
+ *
+ * To run a query within a React component, call `useDescribeClaimItemValuationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDescribeClaimItemValuationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDescribeClaimItemValuationQuery({
+ *   variables: {
+ *      claimItemId: // value for 'claimItemId'
+ *      typeOfContract: // value for 'typeOfContract'
+ *   },
+ * });
+ */
+export function useDescribeClaimItemValuationQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    DescribeClaimItemValuationQuery,
+    DescribeClaimItemValuationQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useQuery<
+    DescribeClaimItemValuationQuery,
+    DescribeClaimItemValuationQueryVariables
+  >(DescribeClaimItemValuationDocument, baseOptions)
+}
+export function useDescribeClaimItemValuationLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    DescribeClaimItemValuationQuery,
+    DescribeClaimItemValuationQueryVariables
+  >,
+) {
+  return ApolloReactHooks.useLazyQuery<
+    DescribeClaimItemValuationQuery,
+    DescribeClaimItemValuationQueryVariables
+  >(DescribeClaimItemValuationDocument, baseOptions)
+}
+export type DescribeClaimItemValuationQueryHookResult = ReturnType<
+  typeof useDescribeClaimItemValuationQuery
+>
+export type DescribeClaimItemValuationLazyQueryHookResult = ReturnType<
+  typeof useDescribeClaimItemValuationLazyQuery
+>
+export type DescribeClaimItemValuationQueryResult = ApolloReactCommon.QueryResult<
+  DescribeClaimItemValuationQuery,
+  DescribeClaimItemValuationQueryVariables
+>
 export const EditMemberInfoDocument = gql`
   mutation EditMemberInfo($request: EditMemberInfoInput!) {
     editMemberInfo(request: $request)
@@ -4544,7 +4620,7 @@ export type GetClaimItemsQueryResult = ApolloReactCommon.QueryResult<
   GetClaimItemsQueryVariables
 >
 export const GetClaimValuationDocument = gql`
-  query GetClaimValuation($claimId: ID!, $typeOfContract: TypeOfContract) {
+  query GetClaimValuation($claimId: ID!, $typeOfContract: String) {
     getClaimValuation(claimId: $claimId, typeOfContract: $typeOfContract) {
       totalValuation {
         amount

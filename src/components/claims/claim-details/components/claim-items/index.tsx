@@ -82,13 +82,15 @@ export const ClaimItems: React.FC<{
       <div>
         <h3>Inventory</h3>
       </div>
-      <ItemList claimItems={claimItems} />
+      <ItemList claimItems={claimItems} typeOfContract={typeOfContract} />
       <Spacing top={'small'} />
       <ItemForm
         resetSwitch={resetSwitch}
         onReset={() => setResetSwitch(false)}
         preferredCurrency={preferredCurrency}
-        onChange={(formData) => setUpsertRequest(formData)}
+        onChange={(formData) =>
+          setUpsertRequest({ ...upsertRequest, ...formData })
+        }
       />
       <BottomWrapper>
         <ChipsWrapper>
@@ -99,7 +101,10 @@ export const ClaimItems: React.FC<{
               setFormData={setUpsertRequest}
             />
           ) : (
-            <TotalValuationChip totalValuation={totalValuation} />
+            <TotalValuationChip
+              totalValuation={totalValuation}
+              deductible={deductible}
+            />
           )}
         </ChipsWrapper>
         <Button

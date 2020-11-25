@@ -50,7 +50,6 @@ export const AccountTab: React.FC<{
     )
   }
 
-  console.log(contractMarketInfo)
   return (
     <FadeIn>
       <MainHeadline>

@@ -1,4 +1,4 @@
-query GetClaimValuation($claimId: ID!, $typeOfContract: TypeOfContract) {
+query GetClaimValuation($claimId: ID!, $typeOfContract: String) {
   getClaimValuation(claimId: $claimId, typeOfContract: $typeOfContract) {
     totalValuation {
       amount

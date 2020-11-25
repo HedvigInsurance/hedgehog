@@ -17,8 +17,8 @@ interface ItemFormData {
   dateOfPurchase: string
   note: string
   purchasePriceCurrency: string
-  automaticValuationAmount: string
-  customValuationAmount: string
+  automaticValuationAmount?: string
+  customValuationAmount?: string
 }
 
 const initialFormData = {
@@ -26,8 +26,6 @@ const initialFormData = {
   dateOfPurchase: '',
   note: '',
   purchasePriceCurrency: '',
-  automaticValuationAmount: '',
-  customValuationAmount: '',
 }
 
 export const ItemForm: React.FC<{

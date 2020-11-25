@@ -16,17 +16,26 @@ const Chip = styled(BaseChip)`
 
 export const TotalValuationChip: React.FC<{
   totalValuation?: MonetaryAmountV2 | null
-}> = ({ totalValuation }) => {
-  if (!totalValuation) {
+  deductible?: MonetaryAmountV2 | null
+}> = ({ totalValuation, deductible }) => {
+  if (!totalValuation || !deductible) {
     return <></>
   }
 
   return (
-    <Chip
-      label={`Total valuation: ${formatMoney(totalValuation, {
-        useGrouping: true,
-        maximumFractionDigits: 0,
-      })}`}
-    />
+    <>
+      <Chip
+        label={`Total valuation: ${formatMoney(totalValuation, {
+          useGrouping: true,
+          maximumFractionDigits: 0,
+        })}`}
+      />
+      <Chip
+        label={`Deduction: ${formatMoney(deductible, {
+          useGrouping: true,
+          maximumFractionDigits: 0,
+        })}`}
+      />
+    </>
   )
 }

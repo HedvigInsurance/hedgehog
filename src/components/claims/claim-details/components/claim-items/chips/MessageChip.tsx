@@ -1,4 +1,4 @@
-import { ClaimItemValuation, TypeOfContract } from 'api/generated/graphql'
+import { ClaimItemValuation } from 'api/generated/graphql'
 import { useGetClaimItemValuation } from 'graphql/use-get-claim-item-valuation'
 import { UpsertClaimItemVariables } from 'graphql/use-upsert-claim-item'
 import React from 'react'
@@ -8,7 +8,7 @@ import { ValuationChip } from './components/ValuationChip'
 
 export const MessageChip: React.FC<{
   onValuation: (valuation: ClaimItemValuation) => void
-  typeOfContract: TypeOfContract
+  typeOfContract: string
   formData: UpsertClaimItemVariables
 }> = ({ onValuation, typeOfContract, formData }) => {
   const {
@@ -49,6 +49,7 @@ export const MessageChip: React.FC<{
   if (valuationType === 'MARKET_PRICE') {
     return <MarketValuationChip />
   }
+
   if (depreciatedValue) {
     return (
       <ValuationChip

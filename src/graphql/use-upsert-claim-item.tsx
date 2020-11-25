@@ -73,7 +73,7 @@ export const useUpsertClaimItem = (
       variables: {
         request,
       },
-      refetchQueries: ['GetClaimItems'],
+      refetchQueries: ['GetClaimItems', 'GetClaimValuation'],
     })
   }
 
