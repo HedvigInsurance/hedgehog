@@ -28,7 +28,7 @@ const initialFormData: AssignVoucherPercentageDiscount = {
   validUntil: null,
 }
 
-const formLooksGood = (formData: AssignVoucherPercentageDiscount) => {
+const formIsValid = (formData: AssignVoucherPercentageDiscount) => {
   return formData.partnerId !== '' && formData.code !== ''
 }
 
@@ -127,7 +127,7 @@ const MonthlyPercentage: React.FC<{} & WithShowNotification> = ({
         <Button
           variation="primary"
           loading={loading}
-          disabled={loading || !formLooksGood(formData)}
+          disabled={loading || !formIsValid(formData)}
           onClick={() => {
             if (
               !window.confirm(`Create new campaign code "${formData.code}"?`)

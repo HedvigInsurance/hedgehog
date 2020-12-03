@@ -8,9 +8,10 @@ export const CustomValuationChip: React.FC<{
   onChange: (amount: string) => void
   onReset: () => void
 }> = ({ formData, onChange, onReset }) => {
-  const { customValuationAmount: amount, purchasePriceCurrency: currency } = {
-    ...formData,
-  }
+  const {
+    customValuationAmount: amount,
+    purchasePriceCurrency: currency,
+  } = formData
 
   if (!currency) {
     return <></>

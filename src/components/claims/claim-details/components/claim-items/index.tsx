@@ -1,12 +1,5 @@
 import { Button } from '@material-ui/core'
 import { Contract } from 'api/generated/graphql'
-import { Chips } from 'components/claims/claim-details/components/claim-items/chips/Chips'
-import { TotalValuationChip } from 'components/claims/claim-details/components/claim-items/chips/components/TotalValuationChip'
-import {
-  isEmpty,
-  isValidDate,
-  isValidNumber,
-} from 'components/claims/claim-details/components/claim-items/utils'
 import { Paper } from 'components/shared/Paper'
 import { useGetClaimItems } from 'graphql/use-get-claim-items'
 import { useGetClaimValuation } from 'graphql/use-get-claim-valuation'
@@ -18,8 +11,11 @@ import {
 import { Spacing } from 'hedvig-ui/spacing'
 import React from 'react'
 import styled from 'react-emotion'
+import { Chips } from './chips/Chips'
+import { TotalValuationChip } from './chips/components/TotalValuationChip'
 import { ItemForm } from './item-form/ItemForm'
 import { ItemList } from './item-list/ItemList'
+import { isEmpty, isValidDate, isValidNumber } from './utils'
 
 const BottomWrapper = styled.div`
   display: flex;
@@ -28,7 +24,7 @@ const BottomWrapper = styled.div`
 
 const ChipsWrapper = styled.div``
 
-const formLooksGood = (request: UpsertClaimItemVariables) => {
+const formIsValid = (request: UpsertClaimItemVariables) => {
   if (!request) {
     return false
   }
@@ -108,7 +104,7 @@ export const ClaimItems: React.FC<{
           )}
         </ChipsWrapper>
         <Button
-          disabled={loading || !upsertRequest || !formLooksGood}
+          disabled={loading || !upsertRequest || !formIsValid}
           variant="contained"
           color="primary"
           onClick={() => {

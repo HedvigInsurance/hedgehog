@@ -24,7 +24,7 @@ const initialFormData: AssignVoucherFreeMonths = {
   validUntil: null,
 }
 
-const formLooksGood = (formData: AssignVoucherFreeMonths) => {
+const formIsValid = (formData: AssignVoucherFreeMonths) => {
   return formData.partnerId !== '' && formData.code !== ''
 }
 
@@ -105,7 +105,7 @@ const FreeMonths: React.FC<{} & WithShowNotification> = ({
         <Button
           variation="primary"
           loading={loading}
-          disabled={loading || !formLooksGood(formData)}
+          disabled={loading || !formIsValid(formData)}
           onClick={() => {
             if (
               !window.confirm(`Create new campaign code "${formData.code}"?`)

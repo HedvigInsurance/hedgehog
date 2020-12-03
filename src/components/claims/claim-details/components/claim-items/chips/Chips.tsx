@@ -1,16 +1,16 @@
-import { NoValuationChip } from 'components/claims/claim-details/components/claim-items/chips/components/NoValuationChip'
-import { MessageChip } from 'components/claims/claim-details/components/claim-items/chips/MessageChip'
 import { useCanValuateClaimItem } from 'graphql/use-can-valuate-claim-item'
 import { UpsertClaimItemVariables } from 'graphql/use-upsert-claim-item'
 import React from 'react'
+import { NoValuationChip } from './components/NoValuationChip'
 import { CustomValuationChip } from './CustomValuationChip'
+import { MessageChip } from './MessageChip'
 
 export const Chips: React.FC<{
   typeOfContract: string
   formData: UpsertClaimItemVariables
   setFormData: (formData: UpsertClaimItemVariables) => void
 }> = ({ typeOfContract, formData, setFormData }) => {
-  const { itemFamilyId, itemTypeId } = { ...formData }
+  const { itemFamilyId, itemTypeId } = formData
 
   const [canValuate, { loading }] = useCanValuateClaimItem(
     itemFamilyId,

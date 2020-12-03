@@ -143,7 +143,7 @@ export const ItemForm: React.FC<{
             }}
           />
         </Grid>
-        <Grid item xs={true}>
+        <Grid item>
           <TextField
             value={itemFormData.note}
             onChange={({ target: { value } }) =>

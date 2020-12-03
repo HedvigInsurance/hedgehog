@@ -114,11 +114,13 @@ const ClaimPage: React.FC<Props> = ({ ...props }) => (
                       )}
                     </Grid>
                     <Grid item xs={12}>
-                      <ClaimItems
-                        claimId={props.match.params.claimId}
-                        memberId={props.match.params.memberId}
-                        contract={contract ?? null}
-                      />
+                      {member?.memberId && (
+                        <ClaimItems
+                          claimId={props.match.params.claimId}
+                          memberId={member.memberId}
+                          contract={contract ?? null}
+                        />
+                      )}
                     </Grid>
                     <Grid item xs={12}>
                       {transcriptions && transcriptions.length > 0 && (
