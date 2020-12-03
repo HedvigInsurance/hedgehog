@@ -43,7 +43,8 @@ export const Chips: React.FC<{
         <NoValuationChip />
       )}
       <CustomValuationChip
-        formData={formData}
+        amount={formData?.customValuationAmount}
+        currency={formData?.purchasePriceCurrency}
         onChange={(amount) =>
           setFormData({ ...formData, customValuationAmount: amount })
         }
