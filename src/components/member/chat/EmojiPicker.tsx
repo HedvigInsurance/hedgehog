@@ -1,5 +1,5 @@
 import { ActionMap, Container } from 'constate'
-import * as React from 'react'
+import React, { lazy, Suspense } from 'react'
 import styled from 'react-emotion'
 import { Icon } from 'semantic-ui-react'
 import { emojiMartStyles } from './_emojimartstyles'
@@ -29,10 +29,10 @@ const actions: ActionMap<State, Actions> = {
   setIsOpen: (open: boolean) => () => ({ open }),
 }
 
-const LazyEmojiPicker = React.lazy(
+const LazyEmojiPicker = lazy(
   () =>
     import(
-      /* webpackChunkName: 'emoji-mart' */ 'emoji-mart'
+      /* webpackChunkName: 'emoji-mart' */ 'emoji-mart/dist-es'
     ).then(({ Picker }) => ({ default: Picker })) as any,
 )
 
@@ -50,7 +50,7 @@ export const EmojiPicker: React.SFC<EmojiPickerProps> = ({ selectEmoji }) => {
           />
           {open && (
             <Wrapper>
-              <React.Suspense fallback="...">
+              <Suspense fallback="...">
                 <LazyEmojiPicker
                   onSelect={(emoji) => {
                     if (!(emoji as any).native) {
@@ -59,7 +59,7 @@ export const EmojiPicker: React.SFC<EmojiPickerProps> = ({ selectEmoji }) => {
                     selectEmoji((emoji as any).native)
                   }}
                 />
-              </React.Suspense>
+              </Suspense>
             </Wrapper>
           )}
         </>

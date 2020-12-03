@@ -2,6 +2,13 @@ import gql from 'graphql-tag'
 import * as ApolloReactCommon from '@apollo/react-common'
 import * as ApolloReactHooks from '@apollo/react-hooks'
 export type Maybe<T> = T | null
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K]
+}
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> }
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -9,23 +16,14 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
-  /** A String-representation of `java.time.LocalDate`, ex:  `"2018-09-26"` */
   LocalDate: any
-  /** A String-representation of `java.time.Instant`, ex: `"2018-06-11T20:08:30.123456"` */
   Instant: any
-  /** A String-representation of `java.time.YearMonth`, ex: `"2018-06"` */
   YearMonth: any
-  /** An object-representation of `javax.money.MonetaryAmount`, ex: `{"amount": 100  "currency": "SEK"}` */
   MonetaryAmount: any
-  /** A String-representation of `java.net.URL`, ex: "https://www.google.com/" */
   URL: any
-  /** A String-representation of `java.time.LocalDateTIme`, ex: `"2018-06-11T20:08:30.123456"` */
   LocalDateTime: any
-  /** A Json Object represtation of `JsonNode` */
   JSON: any
-  /** A String-representation of `java.time.LocalTime` */
   LocalTime: any
-  /** A String-representation of `java.time.ZonedDateTime`, ex: `"2018-09-21T14:17:46.536405+02:00[Europe/Stockholm]"` */
   ZonedDateTime: any
 }
 
@@ -1784,10 +1782,10 @@ export type Whitelisted = {
   whitelistedBy?: Maybe<Scalars['String']>
 }
 
-export type AddAccountEntryToMemberMutationVariables = {
+export type AddAccountEntryToMemberMutationVariables = Exact<{
   memberId: Scalars['ID']
   accountEntry: AccountEntryInput
-}
+}>
 
 export type AddAccountEntryToMemberMutation = {
   __typename?: 'MutationType'
@@ -1795,27 +1793,27 @@ export type AddAccountEntryToMemberMutation = {
   addAccountEntryToMember: { __typename?: 'Member' } & Pick<Member, 'memberId'>
 }
 
-export type BackfillSubscriptionsMutationVariables = {
+export type BackfillSubscriptionsMutationVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type BackfillSubscriptionsMutation = { __typename?: 'MutationType' } & {
   backfillSubscriptions: { __typename?: 'Member' } & Pick<Member, 'memberId'>
 }
 
-export type MemberNameAndContractMarketInfoQueryVariables = {
+export type MemberNameAndContractMarketInfoQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type MemberNameAndContractMarketInfoQuery = {
   __typename?: 'QueryType'
 } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<
       Member,
       'memberId' | 'firstName' | 'lastName'
     > & {
-        contractMarketInfo: Maybe<
+        contractMarketInfo?: Maybe<
           { __typename?: 'ContractMarketInfo' } & Pick<
             ContractMarketInfo,
             'market'
@@ -1825,48 +1823,48 @@ export type MemberNameAndContractMarketInfoQuery = {
   >
 }
 
-export type InsertItemCategoriesMutationVariables = {
+export type InsertItemCategoriesMutationVariables = Exact<{
   request?: Maybe<InsertItemCategoriesInput>
-}
+}>
 
 export type InsertItemCategoriesMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'insertItemCategories'>
 
-export type InsertValuationRulesMutationVariables = {
+export type InsertValuationRulesMutationVariables = Exact<{
   request?: Maybe<InsertValuationRulesInput>
-}
+}>
 
 export type InsertValuationRulesMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'insertValuationRules'>
 
-export type AddNorwegainPostalCodesMutationVariables = {
+export type AddNorwegainPostalCodesMutationVariables = Exact<{
   postalCodesString?: Maybe<Scalars['String']>
-}
+}>
 
 export type AddNorwegainPostalCodesMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'addNorwegianPostalCodes'>
 
-export type CreateNorwegianGripenPriceEngineMutationVariables = {
+export type CreateNorwegianGripenPriceEngineMutationVariables = Exact<{
   request?: Maybe<CreateNorwegianGripenInput>
-}
+}>
 
 export type CreateNorwegianGripenPriceEngineMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'createNorwegianGripenPriceEngine'>
 
-export type UnsignMemberMutationVariables = {
+export type UnsignMemberMutationVariables = Exact<{
   ssn: Scalars['String']
-}
+}>
 
 export type UnsignMemberMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'unsignMember'
 >
 
-export type GetSwitcherEmailsQueryVariables = {}
+export type GetSwitcherEmailsQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetSwitcherEmailsQuery = { __typename?: 'QueryType' } & {
   switchableSwitcherEmails: Array<
@@ -1882,18 +1880,18 @@ export type GetSwitcherEmailsQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type MarkSwitcherEmailAsRemindedMutationVariables = {
+export type MarkSwitcherEmailAsRemindedMutationVariables = Exact<{
   id: Scalars['ID']
-}
+}>
 
 export type MarkSwitcherEmailAsRemindedMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'markSwitchableSwitcherEmailAsReminded'>
 
-export type ActivatePendingAgreementMutationVariables = {
+export type ActivatePendingAgreementMutationVariables = Exact<{
   contractId: Scalars['ID']
   request?: Maybe<ActivatePendingAgreementInput>
-}
+}>
 
 export type ActivatePendingAgreementMutation = {
   __typename?: 'MutationType'
@@ -1904,69 +1902,69 @@ export type ActivatePendingAgreementMutation = {
   >
 }
 
-export type AddAgreementFromQuoteMutationVariables = {
+export type AddAgreementFromQuoteMutationVariables = Exact<{
   id: Scalars['ID']
   contractId: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
   previousAgreementActiveTo?: Maybe<Scalars['LocalDate']>
-}
+}>
 
 export type AddAgreementFromQuoteMutation = { __typename?: 'MutationType' } & {
   addAgreementFromQuote: { __typename?: 'Quote' } & Pick<Quote, 'id'>
 }
 
-export type AddMonthlyEntryMutationVariables = {
+export type AddMonthlyEntryMutationVariables = Exact<{
   memberId: Scalars['ID']
   input: MonthlyEntryInput
-}
+}>
 
 export type AddMonthlyEntryMutation = { __typename?: 'MutationType' } & {
   addMonthlyEntryToMember: { __typename?: 'Member' } & Pick<Member, 'memberId'>
 }
 
-export type AssignCampaignToPartnerFreeMonthsMutationVariables = {
+export type AssignCampaignToPartnerFreeMonthsMutationVariables = Exact<{
   request?: Maybe<AssignVoucherFreeMonths>
-}
+}>
 
 export type AssignCampaignToPartnerFreeMonthsMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'assignCampaignToPartnerFreeMonths'>
 
-export type AssignCampaignToPartnerPercentageDiscountMutationVariables = {
+export type AssignCampaignToPartnerPercentageDiscountMutationVariables = Exact<{
   request?: Maybe<AssignVoucherPercentageDiscount>
-}
+}>
 
 export type AssignCampaignToPartnerPercentageDiscountMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'assignCampaignToPartnerPercentageDiscount'>
 
-export type AssignCampaignToPartnerVisibleNoDiscountMutationVariables = {
+export type AssignCampaignToPartnerVisibleNoDiscountMutationVariables = Exact<{
   request?: Maybe<AssignVoucherVisibleNoDiscount>
-}
+}>
 
 export type AssignCampaignToPartnerVisibleNoDiscountMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'assignCampaignToPartnerVisibleNoDiscount'>
 
-export type AnswerQuestionMutationVariables = {
+export type AnswerQuestionMutationVariables = Exact<{
   memberId: Scalars['ID']
   answer: Scalars['String']
-}
+}>
 
 export type AnswerQuestionMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'answerQuestion'
 >
 
-export type CanValuateClaimItemQueryVariables = {
+export type CanValuateClaimItemQueryVariables = Exact<{
   typeOfContract: Scalars['String']
   itemFamilyId: Scalars['String']
   itemTypeId?: Maybe<Scalars['ID']>
-}
+}>
 
 export type CanValuateClaimItemQuery = { __typename?: 'QueryType' } & {
-  canValuateClaimItem: Maybe<
+  canValuateClaimItem?: Maybe<
     { __typename?: 'CanValuateClaimItem' } & Pick<
       CanValuateClaimItem,
       'canValuate' | 'typeOfContract' | 'itemFamily' | 'itemTypeId'
@@ -1974,20 +1972,20 @@ export type CanValuateClaimItemQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type ChangeFromDateMutationVariables = {
+export type ChangeFromDateMutationVariables = Exact<{
   agreementId: Scalars['ID']
   request?: Maybe<ChangeFromDateInput>
-}
+}>
 
 export type ChangeFromDateMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'changeFromDate'
 >
 
-export type ChangeTerminationDateMutationVariables = {
+export type ChangeTerminationDateMutationVariables = Exact<{
   contractId: Scalars['ID']
   request?: Maybe<ChangeTerminationDateInput>
-}
+}>
 
 export type ChangeTerminationDateMutation = { __typename?: 'MutationType' } & {
   changeTerminationDate: { __typename?: 'Contract' } & Pick<
@@ -1996,19 +1994,19 @@ export type ChangeTerminationDateMutation = { __typename?: 'MutationType' } & {
   >
 }
 
-export type ChangeToDateMutationVariables = {
+export type ChangeToDateMutationVariables = Exact<{
   agreementId: Scalars['ID']
   request?: Maybe<ChangeToDateInput>
-}
+}>
 
 export type ChangeToDateMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'changeToDate'
 >
 
-export type CreatePaymentCompletionLinkMutationVariables = {
+export type CreatePaymentCompletionLinkMutationVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type CreatePaymentCompletionLinkMutation = {
   __typename?: 'MutationType'
@@ -2018,11 +2016,11 @@ export type CreatePaymentCompletionLinkMutation = {
   } & Pick<PaymentCompletionResponse, 'url'>
 }
 
-export type CreateQuoteForMemberBySchemaMutationVariables = {
+export type CreateQuoteForMemberBySchemaMutationVariables = Exact<{
   memberId: Scalars['ID']
   schemaData: Scalars['JSON']
   bypassUnderwritingGuidelines: Scalars['Boolean']
-}
+}>
 
 export type CreateQuoteForMemberBySchemaMutation = {
   __typename?: 'MutationType'
@@ -2030,18 +2028,18 @@ export type CreateQuoteForMemberBySchemaMutation = {
   createQuoteForMemberBySchema: { __typename?: 'Quote' } & Pick<Quote, 'id'>
 }
 
-export type CreateQuoteFromAgreementMutationVariables = {
+export type CreateQuoteFromAgreementMutationVariables = Exact<{
   agreementId: Scalars['ID']
   memberId: Scalars['ID']
-}
+}>
 
 export type CreateQuoteFromAgreementMutation = {
   __typename?: 'MutationType'
 } & { createQuoteFromAgreement: { __typename?: 'Quote' } & Pick<Quote, 'id'> }
 
-export type DeleteClaimItemMutationVariables = {
+export type DeleteClaimItemMutationVariables = Exact<{
   claimItemId: Scalars['ID']
-}
+}>
 
 export type DeleteClaimItemMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
@@ -2057,23 +2055,23 @@ export type DescribeClaimItemValuationQuery = {
   __typename?: 'QueryType'
 } & Pick<QueryType, 'describeClaimItemValuation'>
 
-export type EditMemberInfoMutationVariables = {
+export type EditMemberInfoMutationVariables = Exact<{
   request: EditMemberInfoInput
-}
+}>
 
 export type EditMemberInfoMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'editMemberInfo'
 >
 
-export type GetAccountQueryVariables = {
+export type GetAccountQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetAccountQuery = { __typename?: 'QueryType' } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<Member, 'memberId'> & {
-        account: Maybe<
+        account?: Maybe<
           { __typename?: 'Account' } & Pick<Account, 'id'> & {
               currentBalance: { __typename?: 'MonetaryAmountV2' } & Pick<
                 MonetaryAmountV2,
@@ -2142,19 +2140,19 @@ export type GetAccountQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetClaimItemValuationQueryVariables = {
+export type GetClaimItemValuationQueryVariables = Exact<{
   request?: Maybe<GetClaimItemValuationInput>
-}
+}>
 
 export type GetClaimItemValuationQuery = { __typename?: 'QueryType' } & {
   getClaimItemValuation: { __typename?: 'ClaimItemValuation' } & {
-    depreciatedValue: Maybe<
+    depreciatedValue?: Maybe<
       { __typename?: 'MonetaryAmountV2' } & Pick<
         MonetaryAmountV2,
         'amount' | 'currency'
       >
     >
-    valuationRule: Maybe<
+    valuationRule?: Maybe<
       { __typename?: 'ValuationRule' } & Pick<
         ValuationRule,
         | 'valuationName'
@@ -2169,9 +2167,9 @@ export type GetClaimItemValuationQuery = { __typename?: 'QueryType' } & {
   }
 }
 
-export type GetClaimItemsQueryVariables = {
+export type GetClaimItemsQueryVariables = Exact<{
   claimId: Scalars['ID']
-}
+}>
 
 export type GetClaimItemsQuery = { __typename?: 'QueryType' } & {
   claimItems: Array<
@@ -2187,19 +2185,19 @@ export type GetClaimItemsQuery = { __typename?: 'QueryType' } & {
           ItemType,
           'id' | 'displayName'
         >
-        itemBrand: Maybe<
+        itemBrand?: Maybe<
           { __typename?: 'ItemBrand' } & Pick<ItemBrand, 'id' | 'displayName'>
         >
-        itemModel: Maybe<
+        itemModel?: Maybe<
           { __typename?: 'ItemModel' } & Pick<ItemModel, 'id' | 'displayName'>
         >
-        purchasePrice: Maybe<
+        purchasePrice?: Maybe<
           { __typename?: 'MonetaryAmountV2' } & Pick<
             MonetaryAmountV2,
             'amount' | 'currency'
           >
         >
-        valuation: Maybe<
+        valuation?: Maybe<
           { __typename?: 'MonetaryAmountV2' } & Pick<
             MonetaryAmountV2,
             'amount' | 'currency'
@@ -2231,14 +2229,14 @@ export type GetClaimValuationQuery = { __typename?: 'QueryType' } & {
   }
 }
 
-export type GetContractMarketInfoQueryVariables = {
+export type GetContractMarketInfoQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetContractMarketInfoQuery = { __typename?: 'QueryType' } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<Member, 'memberId'> & {
-        contractMarketInfo: Maybe<
+        contractMarketInfo?: Maybe<
           { __typename?: 'ContractMarketInfo' } & Pick<
             ContractMarketInfo,
             'market' | 'preferredCurrency'
@@ -2248,12 +2246,12 @@ export type GetContractMarketInfoQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetContractsQueryVariables = {
+export type GetContractsQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetContractsQuery = { __typename?: 'QueryType' } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<Member, 'memberId'> & {
         contracts: Array<
           { __typename?: 'Contract' } & Pick<
@@ -2297,13 +2295,13 @@ export type GetContractsQuery = { __typename?: 'QueryType' } & {
                       MonetaryAmountV2,
                       'amount' | 'currency'
                     >
-                    address: Maybe<
+                    address?: Maybe<
                       { __typename?: 'Address' } & Pick<
                         Address,
                         'street' | 'city' | 'postalCode'
                       >
                     >
-                    extraBuildings: Maybe<
+                    extraBuildings?: Maybe<
                       Array<
                         { __typename?: 'ExtraBuilding' } & Pick<
                           ExtraBuilding,
@@ -2317,7 +2315,7 @@ export type GetContractsQuery = { __typename?: 'QueryType' } & {
                     >
                   }
               >
-              renewal: Maybe<
+              renewal?: Maybe<
                 { __typename?: 'Renewal' } & Pick<
                   Renewal,
                   'renewalDate' | 'draftCertificateUrl' | 'draftOfAgreementId'
@@ -2329,10 +2327,10 @@ export type GetContractsQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetDashboardNumbersQueryVariables = {}
+export type GetDashboardNumbersQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetDashboardNumbersQuery = { __typename?: 'QueryType' } & {
-  dashboardNumbers: Maybe<
+  dashboardNumbers?: Maybe<
     { __typename?: 'DashboardNumbers' } & Pick<
       DashboardNumbers,
       'numberOfClaims' | 'numberOfQuestions'
@@ -2340,10 +2338,10 @@ export type GetDashboardNumbersQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetItemCategoriesQueryVariables = {
+export type GetItemCategoriesQueryVariables = Exact<{
   kind: ItemCategoryKind
   parentId?: Maybe<Scalars['ID']>
-}
+}>
 
 export type GetItemCategoriesQuery = { __typename?: 'QueryType' } & {
   itemCategories: Array<
@@ -2370,12 +2368,12 @@ export type GetItemCategoriesQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetMemberInfoQueryVariables = {
+export type GetMemberInfoQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetMemberInfoQuery = { __typename?: 'QueryType' } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<
       Member,
       | 'memberId'
@@ -2394,12 +2392,12 @@ export type GetMemberInfoQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetMemberNameQueryVariables = {
+export type GetMemberNameQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetMemberNameQuery = { __typename?: 'QueryType' } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<
       Member,
       'memberId' | 'firstName' | 'lastName'
@@ -2407,9 +2405,9 @@ export type GetMemberNameQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetMessageHistoryQueryVariables = {
+export type GetMessageHistoryQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetMessageHistoryQuery = { __typename?: 'QueryType' } & {
   messageHistory: Array<
@@ -2420,7 +2418,9 @@ export type GetMessageHistoryQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetPartnerCampaignOwnersQueryVariables = {}
+export type GetPartnerCampaignOwnersQueryVariables = Exact<{
+  [key: string]: never
+}>
 
 export type GetPartnerCampaignOwnersQuery = { __typename?: 'QueryType' } & {
   getPartnerCampaignOwners: Array<
@@ -2431,9 +2431,9 @@ export type GetPartnerCampaignOwnersQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type FindPartnerCampaignsQueryVariables = {
+export type FindPartnerCampaignsQueryVariables = Exact<{
   input: CampaignFilter
-}
+}>
 
 export type FindPartnerCampaignsQuery = { __typename?: 'QueryType' } & {
   findPartnerCampaigns: Array<
@@ -2446,7 +2446,7 @@ export type FindPartnerCampaignsQuery = { __typename?: 'QueryType' } & {
       | 'validFrom'
       | 'validTo'
     > & {
-        incentive: Maybe<
+        incentive?: Maybe<
           | ({ __typename?: 'MonthlyPercentageDiscountFixedPeriod' } & Pick<
               MonthlyPercentageDiscountFixedPeriod,
               'numberOfMonths' | 'percentage'
@@ -2465,22 +2465,22 @@ export type FindPartnerCampaignsQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetPersonQueryVariables = {
+export type GetPersonQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetPersonQuery = { __typename?: 'QueryType' } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<Member, 'memberId'> & {
-        person: Maybe<
+        person?: Maybe<
           { __typename?: 'Person' } & Pick<Person, 'debtFlag'> & {
-              status: Maybe<
+              status?: Maybe<
                 { __typename?: 'PersonStatus' } & Pick<
                   PersonStatus,
                   'flag' | 'whitelisted'
                 >
               >
-              debt: Maybe<
+              debt?: Maybe<
                 { __typename?: 'Debt' } & Pick<
                   Debt,
                   | 'numberPublicDebts'
@@ -2490,7 +2490,7 @@ export type GetPersonQuery = { __typename?: 'QueryType' } & {
                   | 'totalAmountDebt'
                   | 'fromDateTime'
                 > & {
-                    paymentDefaults: Maybe<
+                    paymentDefaults?: Maybe<
                       Array<
                         Maybe<
                           { __typename?: 'PaymentDefault' } & Pick<
@@ -2508,7 +2508,7 @@ export type GetPersonQuery = { __typename?: 'QueryType' } & {
                     >
                   }
               >
-              whitelisted: Maybe<
+              whitelisted?: Maybe<
                 { __typename?: 'Whitelisted' } & Pick<
                   Whitelisted,
                   'whitelistedAt' | 'whitelistedBy'
@@ -2520,7 +2520,7 @@ export type GetPersonQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetQuestionsGroupsQueryVariables = {}
+export type GetQuestionsGroupsQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetQuestionsGroupsQuery = { __typename?: 'QueryType' } & {
   questionGroups: Array<
@@ -2534,12 +2534,12 @@ export type GetQuestionsGroupsQuery = { __typename?: 'QueryType' } & {
             'id' | 'messageJsonString' | 'timestamp'
           >
         >
-        member: Maybe<
+        member?: Maybe<
           { __typename?: 'Member' } & Pick<
             Member,
             'memberId' | 'firstName' | 'lastName'
           > & {
-              contractMarketInfo: Maybe<
+              contractMarketInfo?: Maybe<
                 { __typename?: 'ContractMarketInfo' } & Pick<
                   ContractMarketInfo,
                   'market'
@@ -2554,12 +2554,12 @@ export type GetQuestionsGroupsQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetQuotesQueryVariables = {
+export type GetQuotesQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetQuotesQuery = { __typename?: 'QueryType' } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<Member, 'memberId'> & {
         quotes: Array<
           { __typename?: 'Quote' } & Pick<
@@ -2586,14 +2586,14 @@ export type GetQuotesQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetReferralInformationQueryVariables = {
+export type GetReferralInformationQueryVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type GetReferralInformationQuery = { __typename?: 'QueryType' } & {
-  member: Maybe<
+  member?: Maybe<
     { __typename?: 'Member' } & Pick<Member, 'memberId'> & {
-        referralInformation: Maybe<
+        referralInformation?: Maybe<
           { __typename?: 'ReferralInformation' } & Pick<
             ReferralInformation,
             'eligible'
@@ -2621,7 +2621,7 @@ export type GetReferralInformationQuery = { __typename?: 'QueryType' } & {
                 ReferralCampaign,
                 'code'
               > & {
-                  incentive: Maybe<
+                  incentive?: Maybe<
                     | ({
                         __typename: 'MonthlyPercentageDiscountFixedPeriod'
                       } & Pick<
@@ -2645,7 +2645,7 @@ export type GetReferralInformationQuery = { __typename?: 'QueryType' } & {
                     | { __typename: 'UnknownIncentive' }
                   >
                 }
-              referredBy: Maybe<
+              referredBy?: Maybe<
                 { __typename?: 'MemberReferral' } & Pick<
                   MemberReferral,
                   'memberId' | 'name' | 'status'
@@ -2663,54 +2663,54 @@ export type GetReferralInformationQuery = { __typename?: 'QueryType' } & {
   >
 }
 
-export type GetSchemaForContractTypeQueryVariables = {
+export type GetSchemaForContractTypeQueryVariables = Exact<{
   contractType: Scalars['String']
-}
+}>
 
 export type GetSchemaForContractTypeQuery = { __typename?: 'QueryType' } & Pick<
   QueryType,
   'quoteSchemaForContractType'
 >
 
-export type ManualRedeemCampaignMutationVariables = {
+export type ManualRedeemCampaignMutationVariables = Exact<{
   memberId: Scalars['ID']
   request: ManualRedeemCampaignInput
-}
+}>
 
 export type ManualRedeemCampaignMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'manualRedeemCampaign'>
 
-export type ManualRedeemEnableReferralsCampaignMutationVariables = {
+export type ManualRedeemEnableReferralsCampaignMutationVariables = Exact<{
   memberId: Scalars['ID']
   market: Market
-}
+}>
 
 export type ManualRedeemEnableReferralsCampaignMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'manualRedeemEnableReferralsCampaign'>
 
-export type ManualUnRedeemCampaignMutationVariables = {
+export type ManualUnRedeemCampaignMutationVariables = Exact<{
   memberId: Scalars['ID']
   request: ManualUnRedeemCampaignInput
-}
+}>
 
 export type ManualUnRedeemCampaignMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'manualUnRedeemCampaign'>
 
-export type MarkQuestionAsResolvedMutationVariables = {
+export type MarkQuestionAsResolvedMutationVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type MarkQuestionAsResolvedMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'markQuestionAsResolved'>
 
-export type MemberSearchQueryVariables = {
+export type MemberSearchQueryVariables = Exact<{
   query: Scalars['String']
   options: MemberSearchOptions
-}
+}>
 
 export type MemberSearchQuery = { __typename?: 'QueryType' } & {
   memberSearch: { __typename?: 'MemberSearchResult' } & Pick<
@@ -2727,7 +2727,7 @@ export type MemberSearchQuery = { __typename?: 'QueryType' } & {
           | 'signedOn'
           | 'birthDate'
         > & {
-            contractMarketInfo: Maybe<
+            contractMarketInfo?: Maybe<
               { __typename?: 'ContractMarketInfo' } & Pick<
                 ContractMarketInfo,
                 'market'
@@ -2744,26 +2744,26 @@ export type MemberSearchQuery = { __typename?: 'QueryType' } & {
     }
 }
 
-export type RegenerateCertificateMutationVariables = {
+export type RegenerateCertificateMutationVariables = Exact<{
   agreementId: Scalars['ID']
-}
+}>
 
 export type RegenerateCertificateMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'regenerateCertificate'>
 
-export type RemoveMonthlyEntryMutationVariables = {
+export type RemoveMonthlyEntryMutationVariables = Exact<{
   id: Scalars['ID']
-}
+}>
 
 export type RemoveMonthlyEntryMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'removeMonthlyEntry'
 >
 
-export type RevertTerminationMutationVariables = {
+export type RevertTerminationMutationVariables = Exact<{
   contractId: Scalars['ID']
-}
+}>
 
 export type RevertTerminationMutation = { __typename?: 'MutationType' } & {
   revertTermination: { __typename?: 'Contract' } & Pick<
@@ -2772,9 +2772,9 @@ export type RevertTerminationMutation = { __typename?: 'MutationType' } & {
   >
 }
 
-export type SendMessageMutationVariables = {
+export type SendMessageMutationVariables = Exact<{
   input: SendMessageInput
-}
+}>
 
 export type SendMessageMutation = { __typename?: 'MutationType' } & {
   sendMessage:
@@ -2788,23 +2788,23 @@ export type SendMessageMutation = { __typename?: 'MutationType' } & {
       >)
 }
 
-export type SetContractForClaimMutationVariables = {
+export type SetContractForClaimMutationVariables = Exact<{
   request: SetContractForClaim
-}
+}>
 
 export type SetContractForClaimMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'setContractForClaim'>
 
-export type SetCoveringEmployeeMutationVariables = {
+export type SetCoveringEmployeeMutationVariables = Exact<{
   id: Scalars['ID']
   coveringEmployee: Scalars['Boolean']
-}
+}>
 
 export type SetCoveringEmployeeMutation = { __typename?: 'MutationType' } & {
-  setCoveringEmployee: Maybe<
+  setCoveringEmployee?: Maybe<
     { __typename?: 'Claim' } & Pick<Claim, 'coveringEmployee'> & {
-        events: Maybe<
+        events?: Maybe<
           Array<
             Maybe<
               { __typename?: 'ClaimEvent' } & Pick<ClaimEvent, 'text' | 'date'>
@@ -2815,28 +2815,28 @@ export type SetCoveringEmployeeMutation = { __typename?: 'MutationType' } & {
   >
 }
 
-export type SetFraudulentStatusMutationVariables = {
+export type SetFraudulentStatusMutationVariables = Exact<{
   memberId: Scalars['ID']
   request: MemberFraudulentStatusInput
-}
+}>
 
 export type SetFraudulentStatusMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'setFraudulentStatus'>
 
-export type SignQuoteForNewContractMutationVariables = {
+export type SignQuoteForNewContractMutationVariables = Exact<{
   quoteId: Scalars['ID']
   activationDate?: Maybe<Scalars['LocalDate']>
-}
+}>
 
 export type SignQuoteForNewContractMutation = {
   __typename?: 'MutationType'
 } & { signQuoteForNewContract: { __typename?: 'Quote' } & Pick<Quote, 'id'> }
 
-export type TerminateContractMutationVariables = {
+export type TerminateContractMutationVariables = Exact<{
   contractId: Scalars['ID']
   request?: Maybe<TerminateContractInput>
-}
+}>
 
 export type TerminateContractMutation = { __typename?: 'MutationType' } & {
   terminateContract: { __typename?: 'Contract' } & Pick<
@@ -2845,15 +2845,15 @@ export type TerminateContractMutation = { __typename?: 'MutationType' } & {
   >
 }
 
-export type UpdateClaimStateMutationVariables = {
+export type UpdateClaimStateMutationVariables = Exact<{
   id: Scalars['ID']
   state: ClaimState
-}
+}>
 
 export type UpdateClaimStateMutation = { __typename?: 'MutationType' } & {
-  updateClaimState: Maybe<
+  updateClaimState?: Maybe<
     { __typename?: 'Claim' } & Pick<Claim, 'state'> & {
-        events: Maybe<
+        events?: Maybe<
           Array<
             Maybe<
               { __typename?: 'ClaimEvent' } & Pick<ClaimEvent, 'text' | 'date'>
@@ -2864,64 +2864,64 @@ export type UpdateClaimStateMutation = { __typename?: 'MutationType' } & {
   >
 }
 
-export type UpdateQuoteBySchemaMutationVariables = {
+export type UpdateQuoteBySchemaMutationVariables = Exact<{
   quoteId: Scalars['ID']
   schemaData: Scalars['JSON']
   bypassUnderwritingGuidelines: Scalars['Boolean']
-}
+}>
 
 export type UpdateQuoteBySchemaMutation = { __typename?: 'MutationType' } & {
   updateQuoteBySchema: { __typename?: 'Quote' } & Pick<Quote, 'id'>
 }
 
-export type UpsertClaimItemMutationVariables = {
+export type UpsertClaimItemMutationVariables = Exact<{
   request?: Maybe<UpsertClaimItemInput>
-}
+}>
 
 export type UpsertClaimItemMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'upsertClaimItem'
 >
 
-export type UpsertItemTypeMutationVariables = {
+export type UpsertItemTypeMutationVariables = Exact<{
   request?: Maybe<UpsertItemTypeInput>
-}
+}>
 
 export type UpsertItemTypeMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'upsertItemType'
 >
 
-export type UpsertItemBrandMutationVariables = {
+export type UpsertItemBrandMutationVariables = Exact<{
   request?: Maybe<UpsertItemBrandInput>
-}
+}>
 
 export type UpsertItemBrandMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'upsertItemBrand'
 >
 
-export type UpsertItemModelMutationVariables = {
+export type UpsertItemModelMutationVariables = Exact<{
   request?: Maybe<UpsertItemModelInput>
-}
+}>
 
 export type UpsertItemModelMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'upsertItemModel'
 >
 
-export type UpsertItemCompanyMutationVariables = {
+export type UpsertItemCompanyMutationVariables = Exact<{
   request?: Maybe<UpsertItemCompanyInput>
-}
+}>
 
 export type UpsertItemCompanyMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
   'upsertItemCompany'
 >
 
-export type WhitelistMemberMutationVariables = {
+export type WhitelistMemberMutationVariables = Exact<{
   memberId: Scalars['ID']
-}
+}>
 
 export type WhitelistMemberMutation = { __typename?: 'MutationType' } & Pick<
   MutationType,
@@ -3062,7 +3062,7 @@ export const MemberNameAndContractMarketInfoDocument = gql`
  * });
  */
 export function useMemberNameAndContractMarketInfoQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     MemberNameAndContractMarketInfoQuery,
     MemberNameAndContractMarketInfoQueryVariables
   >,
@@ -3857,7 +3857,7 @@ export const CanValuateClaimItemDocument = gql`
  * });
  */
 export function useCanValuateClaimItemQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     CanValuateClaimItemQuery,
     CanValuateClaimItemQueryVariables
   >,
@@ -4439,7 +4439,7 @@ export const GetAccountDocument = gql`
  * });
  */
 export function useGetAccountQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetAccountQuery,
     GetAccountQueryVariables
   >,
@@ -4588,7 +4588,7 @@ export const GetClaimItemsDocument = gql`
  * });
  */
 export function useGetClaimItemsQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetClaimItemsQuery,
     GetClaimItemsQueryVariables
   >,
@@ -4712,7 +4712,7 @@ export const GetContractMarketInfoDocument = gql`
  * });
  */
 export function useGetContractMarketInfoQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetContractMarketInfoQuery,
     GetContractMarketInfoQueryVariables
   >,
@@ -4823,7 +4823,7 @@ export const GetContractsDocument = gql`
  * });
  */
 export function useGetContractsQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetContractsQuery,
     GetContractsQueryVariables
   >,
@@ -4965,7 +4965,7 @@ export const GetItemCategoriesDocument = gql`
  * });
  */
 export function useGetItemCategoriesQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetItemCategoriesQuery,
     GetItemCategoriesQueryVariables
   >,
@@ -5032,7 +5032,7 @@ export const GetMemberInfoDocument = gql`
  * });
  */
 export function useGetMemberInfoQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetMemberInfoQuery,
     GetMemberInfoQueryVariables
   >,
@@ -5090,7 +5090,7 @@ export const GetMemberNameDocument = gql`
  * });
  */
 export function useGetMemberNameQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetMemberNameQuery,
     GetMemberNameQueryVariables
   >,
@@ -5150,7 +5150,7 @@ export const GetMessageHistoryDocument = gql`
  * });
  */
 export function useGetMessageHistoryQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetMessageHistoryQuery,
     GetMessageHistoryQueryVariables
   >,
@@ -5284,7 +5284,7 @@ export const FindPartnerCampaignsDocument = gql`
  * });
  */
 export function useFindPartnerCampaignsQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     FindPartnerCampaignsQuery,
     FindPartnerCampaignsQueryVariables
   >,
@@ -5368,7 +5368,7 @@ export const GetPersonDocument = gql`
  * });
  */
 export function useGetPersonQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetPersonQuery,
     GetPersonQueryVariables
   >,
@@ -5513,7 +5513,7 @@ export const GetQuotesDocument = gql`
  * });
  */
 export function useGetQuotesQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetQuotesQuery,
     GetQuotesQueryVariables
   >,
@@ -5615,7 +5615,7 @@ export const GetReferralInformationDocument = gql`
  * });
  */
 export function useGetReferralInformationQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetReferralInformationQuery,
     GetReferralInformationQueryVariables
   >,
@@ -5669,7 +5669,7 @@ export const GetSchemaForContractTypeDocument = gql`
  * });
  */
 export function useGetSchemaForContractTypeQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     GetSchemaForContractTypeQuery,
     GetSchemaForContractTypeQueryVariables
   >,
@@ -5947,7 +5947,7 @@ export const MemberSearchDocument = gql`
  * });
  */
 export function useMemberSearchQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     MemberSearchQuery,
     MemberSearchQueryVariables
   >,
@@ -6850,174 +6850,61 @@ export type WhitelistMemberMutationOptions = ApolloReactCommon.BaseMutationOptio
   WhitelistMemberMutationVariables
 >
 
-export interface IntrospectionResultData {
-  __schema: {
-    types: {
-      kind: string
-      name: string
-      possibleTypes: {
-        name: string
-      }[]
-    }[]
+export interface PossibleTypesResultData {
+  possibleTypes: {
+    [key: string]: string[]
   }
 }
-const result: IntrospectionResultData = {
-  __schema: {
-    types: [
-      {
-        kind: 'UNION',
-        name: 'ClaimType',
-        possibleTypes: [
-          {
-            name: 'TheftClaim',
-          },
-          {
-            name: 'AccidentalDamageClaim',
-          },
-          {
-            name: 'AssaultClaim',
-          },
-          {
-            name: 'WaterDamageClaim',
-          },
-          {
-            name: 'TravelAccidentClaim',
-          },
-          {
-            name: 'LuggageDelayClaim',
-          },
-          {
-            name: 'NotCoveredClaim',
-          },
-          {
-            name: 'FireDamageClaim',
-          },
-          {
-            name: 'ConfirmedFraudClaim',
-          },
-          {
-            name: 'LiabilityClaim',
-          },
-          {
-            name: 'ApplianceClaim',
-          },
-          {
-            name: 'LegalProtectionClaim',
-          },
-          {
-            name: 'WaterDamageBathroomClaim',
-          },
-          {
-            name: 'WaterDamageKitchenClaim',
-          },
-          {
-            name: 'BurglaryClaim',
-          },
-          {
-            name: 'FloodingClaim',
-          },
-          {
-            name: 'EarthquakeClaim',
-          },
-          {
-            name: 'InstallationsClaim',
-          },
-          {
-            name: 'SnowPressureClaim',
-          },
-          {
-            name: 'StormDamageClaim',
-          },
-          {
-            name: 'VerminAndPestsClaim',
-          },
-          {
-            name: 'TestClaim',
-          },
-        ],
-      },
-      {
-        kind: 'UNION',
-        name: 'Incentive',
-        possibleTypes: [
-          {
-            name: 'MonthlyPercentageDiscountFixedPeriod',
-          },
-          {
-            name: 'FreeMonths',
-          },
-          {
-            name: 'CostDeduction',
-          },
-          {
-            name: 'NoDiscount',
-          },
-          {
-            name: 'IndefinitePercentageDiscount',
-          },
-          {
-            name: 'VisibleNoDiscount',
-          },
-          {
-            name: 'UnknownIncentive',
-          },
-        ],
-      },
-      {
-        kind: 'UNION',
-        name: 'ItemCategory',
-        possibleTypes: [
-          {
-            name: 'ItemFamily',
-          },
-          {
-            name: 'ItemType',
-          },
-          {
-            name: 'ItemBrand',
-          },
-          {
-            name: 'ItemModel',
-          },
-          {
-            name: 'ItemCompany',
-          },
-        ],
-      },
-      {
-        kind: 'INTERFACE',
-        name: 'ItemCategoryCore',
-        possibleTypes: [
-          {
-            name: 'ItemFamily',
-          },
-          {
-            name: 'ItemType',
-          },
-          {
-            name: 'ItemBrand',
-          },
-          {
-            name: 'ItemModel',
-          },
-          {
-            name: 'ItemCompany',
-          },
-        ],
-      },
-      {
-        kind: 'UNION',
-        name: 'SendMessageResponse',
-        possibleTypes: [
-          {
-            name: 'SendMessageSuccessful',
-          },
-          {
-            name: 'SendMessageFailed',
-          },
-        ],
-      },
+const result: PossibleTypesResultData = {
+  possibleTypes: {
+    ClaimType: [
+      'TheftClaim',
+      'AccidentalDamageClaim',
+      'AssaultClaim',
+      'WaterDamageClaim',
+      'TravelAccidentClaim',
+      'LuggageDelayClaim',
+      'NotCoveredClaim',
+      'FireDamageClaim',
+      'ConfirmedFraudClaim',
+      'LiabilityClaim',
+      'ApplianceClaim',
+      'LegalProtectionClaim',
+      'WaterDamageBathroomClaim',
+      'WaterDamageKitchenClaim',
+      'BurglaryClaim',
+      'FloodingClaim',
+      'EarthquakeClaim',
+      'InstallationsClaim',
+      'SnowPressureClaim',
+      'StormDamageClaim',
+      'VerminAndPestsClaim',
+      'TestClaim',
     ],
+    Incentive: [
+      'MonthlyPercentageDiscountFixedPeriod',
+      'FreeMonths',
+      'CostDeduction',
+      'NoDiscount',
+      'IndefinitePercentageDiscount',
+      'VisibleNoDiscount',
+      'UnknownIncentive',
+    ],
+    ItemCategory: [
+      'ItemFamily',
+      'ItemType',
+      'ItemBrand',
+      'ItemModel',
+      'ItemCompany',
+    ],
+    ItemCategoryCore: [
+      'ItemFamily',
+      'ItemType',
+      'ItemBrand',
+      'ItemModel',
+      'ItemCompany',
+    ],
+    SendMessageResponse: ['SendMessageSuccessful', 'SendMessageFailed'],
   },
 }
 export default result

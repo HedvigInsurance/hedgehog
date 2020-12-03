@@ -40,7 +40,6 @@ export const emojiMartStyles = () => injectGlobal`
   flex-direction: row;
   justify-content: space-between;
   padding: 0 6px;
-  color: #858585;
   line-height: 0;
 }
 
@@ -48,6 +47,7 @@ export const emojiMartStyles = () => injectGlobal`
   position: relative;
   display: block;
   flex: 1 1 auto;
+  color: #858585;
   text-align: center;
   padding: 12px 4px;
   overflow: hidden;
@@ -57,7 +57,9 @@ export const emojiMartStyles = () => injectGlobal`
   background: none;
   border: none;
 }
+.emoji-mart-anchor:focus { outline: 0 }
 .emoji-mart-anchor:hover,
+.emoji-mart-anchor:focus,
 .emoji-mart-anchor-selected {
   color: #464646;
 }
@@ -81,13 +83,14 @@ export const emojiMartStyles = () => injectGlobal`
 
 .emoji-mart-anchors svg,
 .emoji-mart-anchors img {
-  fill: #858585;
+  fill: currentColor;
   height: 18px;
   width: 18px;
 }
 
 .emoji-mart-scroll {
   overflow-y: scroll;
+  overflow-x: hidden;
   height: 270px;
   padding: 0 6px 6px 6px;
   will-change: transform; /* avoids "repaints on scroll" in mobile Chrome */
@@ -187,7 +190,7 @@ export const emojiMartStyles = () => injectGlobal`
 }
 
 .emoji-mart-emoji-native {
-  font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "EmojiOne Color", "Android Emoji";
+  font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji";
 }
 
 .emoji-mart-no-results {
@@ -414,5 +417,49 @@ export const emojiMartStyles = () => injectGlobal`
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+/*
+ * Dark mode styles
+ */
+
+.emoji-mart-dark {
+  color: #fff;
+  border-color: #555453;
+  background-color: #222;
+}
+
+.emoji-mart-dark .emoji-mart-bar {
+  border-color: #555453;
+}
+
+.emoji-mart-dark .emoji-mart-search input {
+  color: #fff;
+  border-color: #555453;
+  background-color: #2f2f2f;
+}
+
+.emoji-mart-dark .emoji-mart-search-icon svg {
+  fill: #fff;
+}
+
+.emoji-mart-dark .emoji-mart-category .emoji-mart-emoji:hover:before {
+  background-color: #444;
+}
+
+.emoji-mart-dark .emoji-mart-category-label span {
+  background-color: #222;
+  color: #fff;
+}
+
+.emoji-mart-dark .emoji-mart-skin-swatches {
+  border-color: #555453;
+  background-color: #222;
+}
+
+.emoji-mart-dark .emoji-mart-anchor:hover,
+.emoji-mart-dark .emoji-mart-anchor:focus,
+.emoji-mart-dark .emoji-mart-anchor-selected {
+  color: #bfbfbf;
 }
 `

@@ -76,7 +76,7 @@ const staticDir = path.resolve(__dirname, '../../static')
 const scriptLocation =
   process.env.NODE_ENV === 'production'
     ? '/static/' +
-      JSON.parse(readFileSync(path.resolve(buildDir, 'stats.json'), 'UTF8'))
+      JSON.parse(readFileSync(path.resolve(buildDir, 'stats.json'), 'utf-8'))
         .assetsByChunkName.app[0]
     : '/static/app.js'
 app.use(mount('/static', serve(buildDir, { maxage: 86400 * 1000 * 365 })))

@@ -1,4 +1,4 @@
-import { GenericAgreement, Contract } from 'api/generated/graphql'
+import { Contract, GenericAgreement } from 'api/generated/graphql'
 import {
   regenerateCertificateOptions,
   useRegenerateCertificate,
@@ -19,11 +19,11 @@ export const InsuranceCertificate: React.FunctionComponent<{
     contract,
   )
 
-  const onUpload = (files, memberId) => {
+  const onUpload = (files, agreementId) => {
     const certificateForm = new FormData()
     certificateForm.set('file', files[0])
 
-    fetch(`/api/member/insurance/${memberId}/certificate`, {
+    fetch(`/_/agreements/${agreementId}/certificates`, {
       method: 'POST',
       body: certificateForm,
     })
@@ -91,7 +91,7 @@ export const InsuranceCertificate: React.FunctionComponent<{
         >
           Regenerate
         </Button>
-        <Dropzone onDrop={(files) => onUpload(files, contract.holderMemberId)}>
+        <Dropzone onDrop={(files) => onUpload(files, agreement.id)}>
           {({ getRootProps, getInputProps }) => (
             <Button
               fullWidth={!!agreement.certificateUrl}

@@ -2,7 +2,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import { Button, ButtonProps } from 'hedvig-ui/button'
 import React from 'react'
 import styled from 'react-emotion'
-import { Controller, useFormContext, ValidationRules } from 'react-hook-form'
+import { Controller, RegisterOptions, useFormContext } from 'react-hook-form'
 import { FieldValues } from 'react-hook-form/dist/types/fields'
 import {
   Dropdown,
@@ -59,7 +59,7 @@ interface FormFieldProps {
   label: React.ReactNode
   name: string
   defaultValue: unknown
-  rules?: ValidationRules
+  rules?: RegisterOptions
 }
 
 const FormField: React.FC<FormFieldProps> = ({

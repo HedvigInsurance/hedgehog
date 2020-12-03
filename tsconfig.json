@@ -17,6 +17,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "skipLibCheck": true,
+    "sourceMap": true,
     "paths": {
       "*": ["*", "node_modules/*", "src/*", "shared/*"]
     }
