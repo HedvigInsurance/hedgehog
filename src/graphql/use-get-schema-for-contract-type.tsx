@@ -3,7 +3,7 @@ import {
   useGetSchemaForContractTypeQuery,
 } from 'api/generated/graphql'
 import { JSONSchema7 } from 'json-schema'
-import { ContractType } from 'utils/contract'
+import { ContractType } from 'types/enums'
 
 type GetSchemaForContractTypeReturnTuple = [
   JSONSchema7,

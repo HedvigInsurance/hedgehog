@@ -19,8 +19,6 @@ export const ListItem: React.FC<{
   member: Member
   active?: boolean
 }> = ({ index, member, active }) => {
-  const market = member?.contractMarketInfo?.market
-
   const contracts = member.contracts
 
   return (
@@ -34,7 +32,7 @@ export const ListItem: React.FC<{
       </Table.Cell>
       <Table.Cell>
         {member.firstName ?? '-'} {member.lastName ?? '-'}{' '}
-        {market && getMemberFlag(market)}
+        {getMemberFlag(member?.contractMarketInfo)}
         <MemberAgeWrapper>
           <MemberAge birthDateString={member.birthDate} />
         </MemberAgeWrapper>

@@ -1,23 +1,24 @@
 import { MonetaryAmountV2 } from 'api/generated/graphql'
-import { parseAmount } from 'components/member/tabs/account-tab/AddEntryForm'
 import React from 'react'
 import { formatMoney } from 'utils/money'
 
 export const AddEntryInformation: React.FC<{
   amount: MonetaryAmountV2
-  memberId: string
-}> = ({ amount, memberId }) => {
-  const parsedAmount = parseAmount(amount.amount)
-  const validAmount = !isNaN(parsedAmount) && parsedAmount !== 0
+}> = ({ amount }) => {
+  if (!amount.amount || +amount.amount === 0) {
+    return null
+  }
 
-  if (!validAmount) {
-    return <></>
+  const absoluteAmount = {
+    amount: Math.abs(+amount.amount),
+    currency: amount.currency,
   }
 
   return (
     <div>
-      {memberId} will owe us {formatMoney(amount)}{' '}
-      <strong>{parsedAmount < 0 ? 'less' : 'more'}</strong>
+      If this entry is added, the member will be charged{' '}
+      {formatMoney(absoluteAmount)}{' '}
+      <strong>{+amount.amount < 0 ? 'less' : 'more'}</strong>
     </div>
   )
 }

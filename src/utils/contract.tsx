@@ -2,16 +2,9 @@ import {
   Contract,
   ContractMarketInfo,
   GenericAgreement,
-  Market,
   SignSource,
 } from 'api/generated/graphql'
-
-export enum ContractType {
-  SwedishApartment = 'SWEDISH_APARTMENT',
-  SwedishHouse = 'SWEDISH_HOUSE',
-  NorwegianHomeContent = 'NORWEGIAN_HOME_CONTENT',
-  NorwegianTravel = 'NORWEGIAN_TRAVEL',
-}
+import { Market } from 'types/enums'
 
 export const getSignSource = (signSource: SignSource): string => {
   switch (signSource) {
@@ -44,6 +37,12 @@ export const isNorwegianMarket = (
   contractMarketInfo: ContractMarketInfo,
 ): boolean => {
   return contractMarketInfo.market === Market.Norway
+}
+
+export const isDanishMarket = (
+  contractMarketInfo: ContractMarketInfo,
+): boolean => {
+  return contractMarketInfo.market === Market.Denmark
 }
 
 export const currentAgreementForContract = (

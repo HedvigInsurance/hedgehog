@@ -1,5 +1,6 @@
-import { Market, QuestionGroup } from 'api/generated/graphql'
+import { QuestionGroup } from 'api/generated/graphql'
 import { FilterState } from 'components/questions/filter'
+import { Market } from 'types/enums'
 import { hasOpenClaim } from 'utils/claim'
 import { isMemberIdEven } from 'utils/member'
 
@@ -19,7 +20,9 @@ export const doMarketFilter = (selectedFilters: ReadonlyArray<FilterState>) => (
   (selectedFilters.includes(FilterState.Sweden) &&
     questionGroup?.member?.contractMarketInfo?.market === Market.Sweden) ||
   (selectedFilters.includes(FilterState.Norway) &&
-    questionGroup?.member?.contractMarketInfo?.market === Market.Norway)
+    questionGroup?.member?.contractMarketInfo?.market === Market.Norway) ||
+  (selectedFilters.includes(FilterState.Denmark) &&
+    questionGroup?.member?.contractMarketInfo?.market === Market.Denmark)
 
 export const doClaimFilter = (selectedFilters: ReadonlyArray<FilterState>) => (
   questionGroup: QuestionGroup,

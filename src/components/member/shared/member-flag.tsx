@@ -6,5 +6,5 @@ export const MemberFlag: React.FC<{
   memberId: string
 }> = ({ memberId }) => {
   const [contractMarket] = useContractMarketInfo(memberId)
-  return <>{contractMarket && getMemberFlag(contractMarket!.market)}</>
+  return <>{getMemberFlag(contractMarket)}</>
 }

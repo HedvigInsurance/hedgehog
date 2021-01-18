@@ -1,8 +1,4 @@
-import {
-  ContractMarketInfo,
-  Market,
-  PaymentDefault,
-} from 'api/generated/graphql'
+import { ContractMarketInfo, PaymentDefault } from 'api/generated/graphql'
 import { OverallDebtProfile } from 'components/member/tabs/debt-tab/OverallDebtProfile'
 import { PaymentDefaultsTable } from 'components/member/tabs/debt-tab/PaymentDefaultsTable'
 import { WhitelistMemberButton } from 'components/member/tabs/debt-tab/WhitelistMemberButton'
@@ -24,6 +20,7 @@ import { Spacing } from 'hedvig-ui/spacing'
 import { MainHeadline } from 'hedvig-ui/typography'
 import React from 'react'
 import { ArrowRepeat } from 'react-bootstrap-icons'
+import { Market } from 'types/enums'
 
 export const DebtTab: React.FC<{
   memberId: string
@@ -35,10 +32,10 @@ export const DebtTab: React.FC<{
     !person?.status?.whitelisted && person?.debt?.paymentDefaults?.length !== 0
 
   // FIXME: We should not make market specific features like this, should use "have debt" or "don't have debt" instead
-  if (contractMarketInfo?.market === Market.Norway) {
+  if (contractMarketInfo?.market !== Market.Sweden) {
     return (
       <StandaloneMessage paddingTop="10vh">
-        Not available for Norway
+        Only available in Sweden
       </StandaloneMessage>
     )
   }

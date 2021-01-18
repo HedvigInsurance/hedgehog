@@ -8,7 +8,6 @@ import { CheckCircle, XCircle } from 'react-bootstrap-icons'
 import styled from 'react-emotion'
 import { Spacing } from 'hedvig-ui/spacing'
 import { Button } from 'hedvig-ui/button'
-import { Market } from 'api/generated/graphql'
 import { formatMoney } from 'utils/money'
 import { GenerateSetupDirectDebitLink } from './generate-setup-direct-debit-link'
 import { FadeIn } from 'hedvig-ui/animations/fade-in'
@@ -16,6 +15,7 @@ import {
   LoadingMessage,
   StandaloneMessage,
 } from 'hedvig-ui/animations/standalone-message'
+import { Market } from 'types/enums'
 
 const IconWrapper = styled.span`
   display: inline-block;

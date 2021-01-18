@@ -7,7 +7,6 @@ import { Spacing } from 'hedvig-ui/spacing'
 import { ThirdLevelHeadline } from 'hedvig-ui/typography'
 import React, { useState } from 'react'
 import styled, { css } from 'react-emotion'
-import { WithShowNotification } from 'store/actions/notificationsActions'
 
 const ActualLink = styled.a`
   white-space: pre-wrap;
@@ -23,7 +22,7 @@ const ActualLink = styled.a`
 
 export const GenerateSetupDirectDebitLink: React.FC<{
   memberId: string
-} & WithShowNotification> = ({ memberId }) => {
+}> = ({ memberId }) => {
   const [
     createPaymentCompletionLink,
     { data, loading },

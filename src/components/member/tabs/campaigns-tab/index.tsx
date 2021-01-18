@@ -15,7 +15,7 @@ import { ArrowRepeat } from 'react-bootstrap-icons'
 export const CampaignsTab: React.FunctionComponent<{
   memberId: string
   contractMarketInfo: ContractMarketInfo
-}> = ({ memberId, contractMarketInfo }) => {
+}> = ({ memberId }) => {
   const [
     referralInformation,
     { loading, error, refetch },
@@ -47,11 +47,7 @@ export const CampaignsTab: React.FunctionComponent<{
       />
 
       <MainHeadline>Referrals</MainHeadline>
-      <ReferralsInfo
-        memberId={memberId}
-        referralInformation={referralInformation}
-        market={contractMarketInfo?.market}
-      />
+      <ReferralsInfo referralInformation={referralInformation} />
     </FadeIn>
   )
 }

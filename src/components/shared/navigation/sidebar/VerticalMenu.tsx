@@ -297,7 +297,7 @@ export const VerticalMenuComponent: React.FC<any & { history: History }> = ({
                   </MenuText>
                 </MenuItemExternalLink>
                 <MenuItemExternalLink
-                  href="https://www.gsr.infodata.se/incident/lookupPage"
+                  href="https://app.gsr.se/Account/SignIn"
                   target="_blank"
                 >
                   <PersonBoundingBox />

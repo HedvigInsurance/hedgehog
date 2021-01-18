@@ -58,7 +58,7 @@ const QuestionGroupInfo = ({ questionGroup }) => {
               </StyledPopover>
             )}
             {member?.firstName} {member?.lastName}{' '}
-            {getMemberFlag(member?.contractMarketInfo?.market)}{' '}
+            {getMemberFlag(member?.contractMarketInfo)}{' '}
           </>
         )}
         <Link to={`/members/${questionGroup.memberId}`}>

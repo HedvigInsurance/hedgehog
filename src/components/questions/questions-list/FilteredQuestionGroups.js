@@ -3,8 +3,8 @@ import React from 'react'
 import { Segment } from 'semantic-ui-react'
 import styled from 'react-emotion'
 import { QuestionGroup } from './QuestionGroup'
-import { FadeIn } from 'hedvig-ui/animations/fade-in'
 import { StandaloneMessage } from 'hedvig-ui/animations/standalone-message'
+import { withFadeIn } from 'hedvig-ui/animations/fade-in'
 
 const List = styled(Segment)`
   width: 100%;
@@ -15,18 +15,19 @@ const List = styled(Segment)`
   }
 `
 
+const FadeInQuestionGroup = withFadeIn(QuestionGroup)
+
 export const FilteredQuestionGroups = ({ filterQuestionGroups }) => {
   return (
     <List>
       {filterQuestionGroups.length ? (
         <>
           {filterQuestionGroups.map((questionGroup, index) => (
-            <FadeIn delay={`${index * 100}ms`}>
-              <QuestionGroup
-                key={questionGroup.id}
-                questionGroup={questionGroup}
-              />
-            </FadeIn>
+            <FadeInQuestionGroup
+              delay={`${index * 100}ms`}
+              key={questionGroup.id}
+              questionGroup={questionGroup}
+            />
           ))}
         </>
       ) : (

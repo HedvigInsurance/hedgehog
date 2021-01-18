@@ -1,15 +1,26 @@
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import React from 'react'
 import styled, { css } from 'react-emotion'
-import { Input as SemanticInput, InputProps } from 'semantic-ui-react'
+import {
+  Input as SemanticInput,
+  InputProps,
+  LabelProps,
+} from 'semantic-ui-react'
 
-interface CustomInputProps {
+export interface CustomInputProps extends InputProps {
   muted?: boolean
+  affix?: LabelProps
+  affixPosition?: 'left' | 'right'
 }
 
 const StyledSemanticInput = styled(SemanticInput)<CustomInputProps>`
   &&&& {
     width: 100%;
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
     input {
       font-family: ${fonts.FAVORIT};
 
@@ -25,8 +36,6 @@ const StyledSemanticInput = styled(SemanticInput)<CustomInputProps>`
   }
 `
 
-export const Input: React.FunctionComponent<InputProps & CustomInputProps> = (
-  props,
-) => {
+export const Input: React.FunctionComponent<CustomInputProps> = (props) => {
   return <StyledSemanticInput {...props} />
 }

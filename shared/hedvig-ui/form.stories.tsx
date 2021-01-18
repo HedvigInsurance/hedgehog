@@ -58,6 +58,12 @@ export const StandardForm: React.FC = () => {
           }}
         />
         <FormInput
+          label="Text input with icon"
+          icon="search"
+          name="searchInput"
+          defaultValue=""
+        />
+        <FormInput
           label="Number input"
           name="numberInput"
           defaultValue=""
@@ -77,6 +83,17 @@ export const StandardForm: React.FC = () => {
               message: 'Only 1337 is a valid number',
             },
           }}
+        />
+        <FormInput
+          label="Amount input with suffix"
+          affix={{
+            content: 'SEK',
+            basic: true,
+          }}
+          affixPosition="right"
+          name="amountInput"
+          defaultValue=""
+          type="number"
         />
         <FormDropdown
           options={formOptions}

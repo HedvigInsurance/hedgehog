@@ -11,9 +11,9 @@ import { connect } from 'react-redux'
 import { showNotification as createShowNotificationAction } from 'store/actions/notificationsActions'
 import { sleep } from 'utils/sleep'
 
-import { FieldSelect } from '../../../shared/inputs/FieldSelect'
-import { TextField } from '../../../shared/inputs/TextField'
-import { Paper } from '../../../shared/Paper'
+import { FieldSelect } from 'components/shared/inputs/FieldSelect'
+import { TextField } from 'components/shared/inputs/TextField'
+import { Paper } from 'components/shared/Paper'
 
 export const TYPE_FRAGMENT = `
         __typename

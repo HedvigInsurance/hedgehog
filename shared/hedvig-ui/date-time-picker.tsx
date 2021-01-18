@@ -45,6 +45,7 @@ export const DateTimePicker: React.FunctionComponent<DatePickerProps> = ({
 }) => {
   return (
     <DatePicker
+      autoComplete="off"
       locale={'enGB'}
       selected={date}
       disabled={disabled}

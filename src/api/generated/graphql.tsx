@@ -424,7 +424,7 @@ export type Contract = {
   hasQueuedRenewal: Scalars['Boolean']
   renewal?: Maybe<Renewal>
   preferredCurrency: Scalars['String']
-  market: Market
+  market: Scalars['String']
   signSource?: Maybe<SignSource>
   contractTypeName: Scalars['String']
   createdAt: Scalars['Instant']
@@ -432,7 +432,7 @@ export type Contract = {
 
 export type ContractMarketInfo = {
   __typename?: 'ContractMarketInfo'
-  market: Market
+  market: Scalars['String']
   preferredCurrency: Scalars['String']
 }
 
@@ -703,11 +703,6 @@ export type ManualUnRedeemCampaignInput = {
   campaignCode: Scalars['String']
 }
 
-export enum Market {
-  Sweden = 'SWEDEN',
-  Norway = 'NORWAY',
-}
-
 export type Member = {
   __typename?: 'Member'
   memberId: Scalars['ID']
@@ -736,7 +731,7 @@ export type Member = {
   contracts: Array<Contract>
   claims: Array<Claim>
   contractMarketInfo?: Maybe<ContractMarketInfo>
-  pickedLocale?: Maybe<PickedLocale>
+  pickedLocale: Scalars['String']
   referralInformation?: Maybe<ReferralInformation>
 }
 
@@ -881,7 +876,6 @@ export type MutationType = {
   setContractForClaim: Scalars['Boolean']
   manualRedeemCampaign: Scalars['Boolean']
   manualUnRedeemCampaign: Scalars['Boolean']
-  manualRedeemEnableReferralsCampaign: Scalars['Boolean']
   unsignMember: Scalars['Boolean']
   editMemberInfo: Scalars['Boolean']
   setFraudulentStatus: Scalars['Boolean']
@@ -1159,11 +1153,6 @@ export type MutationTypeManualUnRedeemCampaignArgs = {
   request: ManualUnRedeemCampaignInput
 }
 
-export type MutationTypeManualRedeemEnableReferralsCampaignArgs = {
-  memberId: Scalars['ID']
-  market: Market
-}
-
 export type MutationTypeUnsignMemberArgs = {
   ssn: Scalars['String']
 }
@@ -1248,13 +1237,6 @@ export type PersonStatus = {
   __typename?: 'PersonStatus'
   flag?: Maybe<Flag>
   whitelisted?: Maybe<Scalars['Boolean']>
-}
-
-export enum PickedLocale {
-  SvSe = 'sv_SE',
-  EnSe = 'en_SE',
-  NbNo = 'nb_NO',
-  EnNo = 'en_NO',
 }
 
 export type QueryType = {
@@ -1373,7 +1355,7 @@ export type Quote = {
   createdAt?: Maybe<Scalars['Instant']>
   price?: Maybe<Scalars['Float']>
   currency?: Maybe<Scalars['String']>
-  productType?: Maybe<QuoteProductType>
+  productType?: Maybe<Scalars['String']>
   state?: Maybe<QuoteState>
   initiatedFrom?: Maybe<Scalars['String']>
   attributedTo?: Maybe<Scalars['String']>
@@ -1388,14 +1370,6 @@ export type Quote = {
   signedProductId?: Maybe<Scalars['ID']>
   originatingProductId?: Maybe<Scalars['ID']>
   isReadyToSign?: Maybe<Scalars['Boolean']>
-}
-
-export enum QuoteProductType {
-  Apartment = 'APARTMENT',
-  House = 'HOUSE',
-  Object = 'OBJECT',
-  HomeContent = 'HOME_CONTENT',
-  Travel = 'TRAVEL',
 }
 
 export enum QuoteState {
@@ -2680,15 +2654,6 @@ export type ManualRedeemCampaignMutationVariables = Exact<{
 export type ManualRedeemCampaignMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'manualRedeemCampaign'>
-
-export type ManualRedeemEnableReferralsCampaignMutationVariables = Exact<{
-  memberId: Scalars['ID']
-  market: Market
-}>
-
-export type ManualRedeemEnableReferralsCampaignMutation = {
-  __typename?: 'MutationType'
-} & Pick<MutationType, 'manualRedeemEnableReferralsCampaign'>
 
 export type ManualUnRedeemCampaignMutationVariables = Exact<{
   memberId: Scalars['ID']
@@ -5751,58 +5716,6 @@ export type ManualRedeemCampaignMutationResult = ApolloReactCommon.MutationResul
 export type ManualRedeemCampaignMutationOptions = ApolloReactCommon.BaseMutationOptions<
   ManualRedeemCampaignMutation,
   ManualRedeemCampaignMutationVariables
->
-export const ManualRedeemEnableReferralsCampaignDocument = gql`
-  mutation ManualRedeemEnableReferralsCampaign(
-    $memberId: ID!
-    $market: Market!
-  ) {
-    manualRedeemEnableReferralsCampaign(memberId: $memberId, market: $market)
-  }
-`
-export type ManualRedeemEnableReferralsCampaignMutationFn = ApolloReactCommon.MutationFunction<
-  ManualRedeemEnableReferralsCampaignMutation,
-  ManualRedeemEnableReferralsCampaignMutationVariables
->
-
-/**
- * __useManualRedeemEnableReferralsCampaignMutation__
- *
- * To run a mutation, you first call `useManualRedeemEnableReferralsCampaignMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useManualRedeemEnableReferralsCampaignMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [manualRedeemEnableReferralsCampaignMutation, { data, loading, error }] = useManualRedeemEnableReferralsCampaignMutation({
- *   variables: {
- *      memberId: // value for 'memberId'
- *      market: // value for 'market'
- *   },
- * });
- */
-export function useManualRedeemEnableReferralsCampaignMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    ManualRedeemEnableReferralsCampaignMutation,
-    ManualRedeemEnableReferralsCampaignMutationVariables
-  >,
-) {
-  return ApolloReactHooks.useMutation<
-    ManualRedeemEnableReferralsCampaignMutation,
-    ManualRedeemEnableReferralsCampaignMutationVariables
-  >(ManualRedeemEnableReferralsCampaignDocument, baseOptions)
-}
-export type ManualRedeemEnableReferralsCampaignMutationHookResult = ReturnType<
-  typeof useManualRedeemEnableReferralsCampaignMutation
->
-export type ManualRedeemEnableReferralsCampaignMutationResult = ApolloReactCommon.MutationResult<
-  ManualRedeemEnableReferralsCampaignMutation
->
-export type ManualRedeemEnableReferralsCampaignMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  ManualRedeemEnableReferralsCampaignMutation,
-  ManualRedeemEnableReferralsCampaignMutationVariables
 >
 export const ManualUnRedeemCampaignDocument = gql`
   mutation ManualUnRedeemCampaign(

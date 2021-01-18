@@ -1,8 +1,4 @@
-import {
-  Market,
-  MemberReferral,
-  ReferralInformation,
-} from 'api/generated/graphql'
+import { MemberReferral, ReferralInformation } from 'api/generated/graphql'
 import {
   BadgeRow,
   SmallTopSpacing,
@@ -13,7 +9,6 @@ import { Card, CardsWrapper } from 'hedvig-ui/card'
 import { Capitalized, Placeholder } from 'hedvig-ui/typography'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { EnableReferralButton } from './EnableReferralButton'
 import { MembersReferredTable } from './MembersReferredTable'
 
 const MemberLink: React.FC<{ memberReferral: MemberReferral }> = ({
@@ -35,10 +30,8 @@ const NotAvailable: React.FC = () => (
 )
 
 export const ReferralsInfo: React.FunctionComponent<{
-  memberId: string
   referralInformation: ReferralInformation
-  market?: Market
-}> = ({ memberId, referralInformation, market }) => {
+}> = ({ referralInformation }) => {
   const eligible = referralInformation.eligible
 
   return (
@@ -73,9 +66,6 @@ export const ReferralsInfo: React.FunctionComponent<{
               <NotAvailable />
             )}
           </BadgeRow>
-          {!eligible && market && (
-            <EnableReferralButton market={market} memberId={memberId} />
-          )}
         </Card>
       </CardsWrapper>
 

@@ -9,8 +9,9 @@ import {
 import { getTextFromEnumValue } from 'hedvig-ui/dropdown'
 import * as React from 'react'
 import { Tab } from 'semantic-ui-react'
+import { ContractType, QuoteProductType } from 'types/enums'
 import {
-  ContractType,
+  isDanishMarket,
   isNorwegianMarket,
   isSwedishMarket,
 } from 'utils/contract'
@@ -33,7 +34,7 @@ export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
   if (!contractMarket) {
     return (
       <StandaloneMessage paddingTop="10vh">
-        Unable to get Market, contact Tech
+        Unable to get Market, the member most likely does not have a contract
       </StandaloneMessage>
     )
   }
@@ -47,6 +48,14 @@ export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
       return [ContractType.NorwegianHomeContent, ContractType.NorwegianTravel]
     }
 
+    if (isDanishMarket(contractMarket)) {
+      return [
+        ContractType.DanishHomeContent,
+        ContractType.DanishTravel,
+        ContractType.DanishAccident,
+      ]
+    }
+
     return []
   }
 
@@ -54,18 +63,28 @@ export const Quotes: React.FunctionComponent<{ memberId: string }> = ({
     quote: Quote,
     contractType,
   ): boolean => {
-    if (quote.productType === 'HOME_CONTENT') {
-      return contractType === ContractType.NorwegianHomeContent
-    }
-    if (quote.productType === 'TRAVEL') {
-      return contractType === ContractType.NorwegianTravel
-    }
-    if (quote.productType === 'APARTMENT') {
+    if (quote.productType === QuoteProductType.Apartment) {
       return contractType === ContractType.SwedishApartment
     }
-    if (quote.productType === 'HOUSE') {
+    if (quote.productType === QuoteProductType.House) {
       return contractType === ContractType.SwedishHouse
     }
+    if (quote.productType === QuoteProductType.HomeContent) {
+      return (
+        contractType === ContractType.NorwegianHomeContent ||
+        contractType === ContractType.DanishHomeContent
+      )
+    }
+    if (quote.productType === QuoteProductType.Travel) {
+      return (
+        contractType === ContractType.NorwegianTravel ||
+        contractType === ContractType.DanishTravel
+      )
+    }
+    if (quote.productType === QuoteProductType.Accident) {
+      return contractType === ContractType.DanishAccident
+    }
+
     return false
   }
 

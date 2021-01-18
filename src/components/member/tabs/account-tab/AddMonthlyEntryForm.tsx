@@ -3,6 +3,7 @@ import {
   getAddMonthlyEntryOptions,
   useAddMonthlyEntry,
 } from 'graphql/use-add-monthly-entry'
+import { StandaloneMessage } from 'hedvig-ui/animations/standalone-message'
 import { getTextFromEnumValue } from 'hedvig-ui/dropdown'
 import { Form, FormDropdown, FormInput, SubmitButton } from 'hedvig-ui/form'
 import React from 'react'
@@ -20,7 +21,11 @@ const AddMonthlyEntryFormComponent: React.FC<{
   showNotification,
 }) => {
   if (!preferredCurrency) {
-    return null
+    return (
+      <StandaloneMessage>
+        The member has no preferred currency
+      </StandaloneMessage>
+    )
   }
 
   const form = useForm()
@@ -67,6 +72,11 @@ const AddMonthlyEntryFormComponent: React.FC<{
         />
         <FormInput
           type="number"
+          affix={{
+            content: preferredCurrency,
+            basic: true,
+          }}
+          affixPosition="right"
           label="Amount"
           name="amount.amount"
           defaultValue=""
@@ -87,7 +97,7 @@ const AddMonthlyEntryFormComponent: React.FC<{
             {
               key: 1,
               value: 'object',
-              text: 'Object',
+              text: 'Object Insurance',
             },
           ]}
           label="Source"

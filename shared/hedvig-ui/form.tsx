@@ -1,5 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message'
 import { Button, ButtonProps } from 'hedvig-ui/button'
+import { CustomInputProps, Input } from 'hedvig-ui/input'
 import React from 'react'
 import styled from 'react-emotion'
 import { Controller, RegisterOptions, useFormContext } from 'react-hook-form'
@@ -9,6 +10,7 @@ import {
   DropdownItemProps,
   Form as SemanticForm,
   FormProps,
+  TextArea,
 } from 'semantic-ui-react'
 
 const StyledForm = styled(SemanticForm)`
@@ -56,7 +58,7 @@ const FormError: React.FC<{
 }
 
 interface FormFieldProps {
-  label: React.ReactNode
+  label?: React.ReactNode
   name: string
   defaultValue: unknown
   rules?: RegisterOptions
@@ -74,7 +76,7 @@ const FormField: React.FC<FormFieldProps> = ({
       required={Boolean(rules?.required)}
       error={errors && Boolean(errors[name.split('.')[0]])}
     >
-      <FormLabel name={name}>{label}</FormLabel>
+      {label && <FormLabel name={name}>{label}</FormLabel>}
       {children}
       <FormError name={name} />
     </SemanticForm.Field>
@@ -92,33 +94,61 @@ export const SubmitButton: React.FC<ButtonProps> = ({ children, ...props }) => {
   )
 }
 
-interface FormInputProps {
-  type?: 'number' | 'text'
-}
-
-const FormInputComponent: React.FC<FormInputProps & FormFieldProps> = ({
+const FormInputComponent: React.FC<CustomInputProps & FormFieldProps> = ({
   name,
-  type,
   rules,
   defaultValue,
+  affix,
+  affixPosition,
+  ...props
 }) => {
   return (
     <Controller
       name={name}
       rules={rules}
       defaultValue={defaultValue}
-      as={<input type={type} />}
+      as={
+        <Input
+          {...props}
+          label={affix}
+          labelPosition={affixPosition}
+          autoComplete="off"
+        />
+      }
     />
   )
 }
 
-export const FormInput: React.FC<FormInputProps & FormFieldProps> = ({
-  type = 'text',
+export const FormInput: React.FC<CustomInputProps & FormFieldProps> = ({
   ...props
 }) => {
   return (
     <FormField {...props}>
-      <FormInputComponent type={type} {...props} />
+      <FormInputComponent {...props} />
+    </FormField>
+  )
+}
+
+const FormTextAreaComponent: React.FC<FormFieldProps> = ({
+  name,
+  rules,
+  defaultValue,
+  ...props
+}) => {
+  return (
+    <Controller
+      name={name}
+      rules={rules}
+      defaultValue={defaultValue}
+      as={<TextArea {...props} autoHeight />}
+    />
+  )
+}
+
+export const FormTextArea: React.FC<FormFieldProps> = ({ ...props }) => {
+  return (
+    <FormField {...props}>
+      <FormTextAreaComponent {...props} />
     </FormField>
   )
 }
