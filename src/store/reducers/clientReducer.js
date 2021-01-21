@@ -5,7 +5,7 @@ export default function clientReducer(state = initialState.client, action) {
   switch (action.type) {
     case CLIENT_SET:
       return {
-        ...action.creditals,
+        ...action.credentials,
       }
 
     case CLIENT_UNSET:

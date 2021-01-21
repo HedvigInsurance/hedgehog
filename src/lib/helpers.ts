@@ -2,9 +2,6 @@
 import { parseISO } from 'date-fns'
 import formatDate from 'date-fns/format'
 
-export const filterList = (filter: string, list: any[], fieldName: string) =>
-  list.filter((item) => item[fieldName] === filter)
-
 export const sortByKey = (key: string) => (a, b) => a[key] - b[key]
 
 export const updateList = (list: any[], msg: any[]) => {
@@ -55,30 +52,6 @@ export const getFieldValue = (value) => {
 }
 
 /**
- * Sort members table (Members overview page)
- * @param {array} list members list
- * @param {string} fieldName clicked column name
- * @param {bool} isReverse
- */
-export const sortMembersList = (list, fieldName, isReverse) => {
-  let sortedList = null
-
-  switch (fieldName) {
-    case 'name':
-      sortedList = list.sort((a, b) =>
-        a.firstName + a.lastName > b.firstName + b.lastName ? 1 : -1,
-      )
-      break
-    case 'signedOn':
-    case 'createdOn':
-      return sortListByDate(list, fieldName, isReverse)
-    default:
-      sortedList = list
-  }
-  return isReverse ? (sortedList ?? []).reverse() : sortedList
-}
-
-/**
  * Sort claims table (ClaimsList page)
  * @param {array} list ClaimsList
  * @param {string} fieldName clicked column name
@@ -101,22 +74,10 @@ export const sortClaimsList = (list, fieldName, isReverse) => {
   return isReverse ? (sortedList ?? []).reverse() : sortedList
 }
 
-export const range = (
-  startInclusive: number,
-  endExclusive: number,
-): number[] => {
-  const len = endExclusive - startInclusive
-  if (len <= 0) {
-    return []
-  }
-
-  const res: number[] = new Array<number>(len)
-  for (let i = 0; i < len; i++) {
-    res[i] = i + startInclusive
-  }
-
-  return res
-}
+export const range = (start, end) =>
+  start >= 0 && end >= start
+    ? Array.from({ length: end - start }, (v, k) => k + start)
+    : []
 
 function sortListByText(list, fieldName, isReverse) {
   const withoutText: any[] = []

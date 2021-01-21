@@ -34,25 +34,7 @@ type QueryType {
     query: String!
     options: MemberSearchOptions!
   ): MemberSearchResult!
-}
-
-type MemberSearchResult {
-  members: [Member!]!
-  totalPages: Int!
-  page: Int!
-}
-
-input MemberSearchOptions {
-  includeAll: Boolean
-  page: Int
-  pageSize: Int
-  sortBy: String
-  sortDirection: String
-}
-
-type DashboardNumbers {
-  numberOfClaims: Int!
-  numberOfQuestions: Int!
+  listClaims(options: ListClaimsOptions!): ListClaimsResult!
 }
 
 type MutationType {
@@ -164,6 +146,39 @@ type MutationType {
     memberId: ID!
     request: MemberFraudulentStatusInput!
   ): Boolean!
+}
+
+type ListClaimsResult {
+  claims: [Claim!]!
+  totalPages: Int!
+  page: Int!
+}
+
+input ListClaimsOptions {
+  includeAll: Boolean
+  page: Int
+  pageSize: Int
+  sortBy: String
+  sortDirection: String
+}
+
+type MemberSearchResult {
+  members: [Member!]!
+  totalPages: Int!
+  page: Int!
+}
+
+input MemberSearchOptions {
+  includeAll: Boolean
+  page: Int
+  pageSize: Int
+  sortBy: String
+  sortDirection: String
+}
+
+type DashboardNumbers {
+  numberOfClaims: Int!
+  numberOfQuestions: Int!
 }
 
 input MemberFraudulentStatusInput {
@@ -679,6 +694,18 @@ type Member {
   contractMarketInfo: ContractMarketInfo
   pickedLocale: String!
   referralInformation: ReferralInformation
+  identity: Identity
+}
+
+type Identity {
+  nationalIdentification: NationalIdentification!
+  firstName: String
+  lastName: String
+}
+
+type NationalIdentification {
+  identification: String!
+  nationality: String!
 }
 
 type ReferralInformation {

@@ -4,7 +4,6 @@ import { Dropdown, DropdownItemProps } from 'semantic-ui-react'
 
 const StyledDropdown = styled(Dropdown)({
   width: '100%',
-  marginTop: '1rem',
 })
 
 export const EnumDropdown: React.FunctionComponent<{

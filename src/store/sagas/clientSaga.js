@@ -4,7 +4,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import { setClient, unsetClient } from '../actions/clientActions'
 import { CLIENT_CHECK_AUTH } from '../constants/login'
 
-function* reqestFlow() {
+function* requestFlow() {
   try {
     const { data } = yield call(api, config.login.login)
     yield put(setClient(data))
@@ -14,7 +14,7 @@ function* reqestFlow() {
 }
 
 function* clientWatcher() {
-  yield [takeLatest(CLIENT_CHECK_AUTH, reqestFlow)]
+  yield [takeLatest(CLIENT_CHECK_AUTH, requestFlow)]
 }
 
 export default clientWatcher

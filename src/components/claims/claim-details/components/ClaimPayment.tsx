@@ -51,6 +51,8 @@ interface Props {
   sanctionStatus: SanctionStatus
   claimId: string
   refetchPage: () => Promise<any>
+  identified: boolean
+  market: string | null
 }
 
 interface State {
@@ -133,6 +135,8 @@ export const ClaimPayment: React.SFC<Props> = ({
   sanctionStatus,
   claimId,
   refetchPage,
+  identified,
+  market,
 }) => {
   const isPotentiallySanctioned =
     sanctionStatus === 'Undetermined' || sanctionStatus === 'PartialHit'
@@ -251,6 +255,8 @@ export const ClaimPayment: React.SFC<Props> = ({
                       }}
                       payment={initiatedPayment}
                       claimId={claimId}
+                      identified={identified}
+                      market={market}
                     />
                   )}
 

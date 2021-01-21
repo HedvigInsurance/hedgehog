@@ -210,11 +210,9 @@ class PaymentsTab extends React.Component {
                   )}
                 </p>
 
-                {!data.member.directDebitStatus.activated && (
-                  <Spacing bottom>
-                    <GenerateSetupDirectDebitLink memberId={this.memberId} />
-                  </Spacing>
-                )}
+                <Spacing bottom>
+                  <GenerateSetupDirectDebitLink memberId={this.memberId} />
+                </Spacing>
 
                 {data.member.directDebitStatus.activated && (
                   <Mutation

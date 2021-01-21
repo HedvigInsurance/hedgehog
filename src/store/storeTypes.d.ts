@@ -1,5 +1,4 @@
 import { AuthState } from 'store/actions/auth'
-import { ClaimsStore } from './types/claimsTypes'
 
 export interface BackofficeStore {
   auth: {
@@ -10,12 +9,8 @@ export interface BackofficeStore {
   }
   login: any
   client: any
-  poll: any
-  claims: ClaimsStore
-  claimDetails: any
   payoutDetails: any
   notifications: any
-  memberInsurance: any
 }
 
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER'

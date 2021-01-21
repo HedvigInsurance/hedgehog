@@ -1,4 +1,4 @@
-import QuestionsPage from 'containers/questions-page/QuestionsPage'
+import QuestionsPage from 'containers/QuestionsPage'
 import * as React from 'react'
 
 const QuestionsPageRoute = () => <QuestionsPage />

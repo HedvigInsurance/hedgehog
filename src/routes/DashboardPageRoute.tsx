@@ -1,4 +1,4 @@
-import DashboardPage from 'containers/dashboard-page/DashboardPage'
+import DashboardPage from 'containers/DashboardPage'
 import * as React from 'react'
 
 const DashboardPageRoute = () => <DashboardPage />

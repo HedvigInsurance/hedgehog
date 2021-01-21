@@ -1,5 +1,5 @@
-import MemberPage from 'containers/member-page/MemberPage'
-import { MembersSearchPage } from 'containers/member-search-page'
+import MemberPage from 'containers/MemberPage'
+import { MembersSearchPage } from 'containers/MembersSearchPage'
 import * as PropTypes from 'prop-types'
 import * as React from 'react'
 import { Route, Switch } from 'react-router'

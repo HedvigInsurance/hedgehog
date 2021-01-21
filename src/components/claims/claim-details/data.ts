@@ -29,6 +29,17 @@ export const CLAIM_PAGE_QUERY = gql`
             currency
           }
         }
+        identity {
+          nationalIdentification {
+            identification
+            nationality
+          }
+          firstName
+          lastName
+        }
+        contractMarketInfo {
+          market
+        }
       }
       registrationDate
       recordingUrl

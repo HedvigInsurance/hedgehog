@@ -1,0 +1,18 @@
+query ListClaims($options: ListClaimsOptions!) {
+  listClaims(options: $options) {
+    claims {
+      id
+      member {
+        memberId
+      }
+      registrationDate
+      type {
+        __typename
+      }
+      state
+      reserves
+    }
+    page
+    totalPages
+  }
+}

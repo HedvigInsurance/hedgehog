@@ -6,6 +6,7 @@ import { FraudulentStatus } from 'lib/fraudulentStatus'
 import * as React from 'react'
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
+import { Market } from 'types/enums'
 import { currentAgreementForContract } from 'utils/contract'
 import { formatMoney } from 'utils/money'
 
@@ -59,6 +60,12 @@ const MemberInformation: React.FC<{
         <strong>Id:</strong>{' '}
         <Link to={`/members/${member.memberId}`}>{member.memberId}</Link>
       </p>
+      {member.contractMarketInfo?.market === Market.Norway && (
+        <p>
+          <strong>Identified:</strong>{' '}
+          {member.identity ? <Checkmark /> : <Cross />}
+        </p>
+      )}
       <p>
         <strong>Personal Number:</strong> {member.personalNumber}
       </p>

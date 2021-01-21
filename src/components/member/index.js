@@ -73,10 +73,6 @@ export const Member = (props) => {
   const getMemberPageTitle = (member) =>
     `${member.firstName || ''} ${member.lastName || ''}`
 
-  useEffect(() => {
-    props.claimsByMember(memberId)
-  }, [memberId])
-
   if (loading) {
     return null
   }
@@ -159,5 +155,4 @@ export const Member = (props) => {
 Member.propTypes = {
   match: PropTypes.object.isRequired,
   showNotification: PropTypes.func.isRequired,
-  claimsByMember: PropTypes.func.isRequired,
 }

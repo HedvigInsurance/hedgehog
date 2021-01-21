@@ -9,20 +9,6 @@ export const ListPage = styled.div`
   margin: 0;
 `
 
-export const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-
-export const ListContainer = styled.div<{ autoWidth?: string }>`
-  width: ${(props) => props.autoWidth || '500px'};
-  border: solid 1px #dfe0e0;
-  border-radius: 5px;
-  padding: 20px 10px;
-  margin-bottom: 50px;
-`
-
 export const ItemContent = styled.div`
   display: flex;
   justify-content: space-between;

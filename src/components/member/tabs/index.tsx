@@ -1,10 +1,10 @@
-import ClaimsTab from 'components/member/tabs/ClaimsTab'
 import { ContractTab } from 'components/member/tabs/contracts-tab'
 import { DetailsTab } from 'components/member/tabs/DetailsTab'
 import MemberFile from 'components/member/tabs/FileTab'
 import PaymentsTab from 'components/member/tabs/payments-tab'
 import { Quotes } from 'components/member/tabs/quote-tab'
 
+import { ClaimsTab } from 'components/member/tabs/ClaimsTab'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
 import React from 'react'
 import styled from 'react-emotion'

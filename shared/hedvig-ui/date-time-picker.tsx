@@ -8,7 +8,7 @@ import { Input } from 'semantic-ui-react'
 registerLocale('enGB', enGB)
 
 interface DatePickerProps {
-  date: Date
+  date: Date | null
   setDate: (date: Date) => void
   showTimePicker?: boolean
   maxDate?: Date

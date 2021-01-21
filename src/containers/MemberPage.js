@@ -6,8 +6,7 @@ import actions from 'store/actions'
 
 const MemberPage = (props) => <Member {...props} />
 
-const mapStateToProps = ({ claims, auth, payoutDetails }) => ({
-  memberClaims: claims.memberClaims,
+const mapStateToProps = ({ auth, payoutDetails }) => ({
   auth,
   payoutDetails,
 })
@@ -15,7 +14,6 @@ const mapStateToProps = ({ claims, auth, payoutDetails }) => ({
 export default connect(
   mapStateToProps,
   {
-    claimsByMember: actions.claimsActions.claimsByMember,
     ...actions.clientActions,
     ...actions.notificationsActions,
     ...actions.payoutDetailsActions,

@@ -7,6 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core'
+import { Market } from 'types/enums'
 import { PaymentFormData } from './ClaimPayment'
 
 import { Field, Form, Formik } from 'formik'
@@ -18,6 +19,8 @@ interface PaymentConfirmationDialogProps {
   onSubmit: (claimVariables: object) => void
   payment: PaymentFormData
   claimId: string
+  identified: boolean
+  market: string | null
 }
 
 const CustomTextField = ({ field, form, ...props }) => {
@@ -38,19 +41,26 @@ export const PaymentConfirmationDialog: React.SFC<PaymentConfirmationDialogProps
   onSubmit,
   payment,
   claimId,
+  identified,
+  market,
 }) => {
   return (
     <Dialog open={true} onClose={onClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">Payment Confirmation</DialogTitle>
 
       <DialogContent>
+        {!identified && market === Market.Norway && (
+          <DialogContentText>
+            ⚠️ Please note that this member is not identified
+          </DialogContentText>
+        )}
+        <br />
         <DialogContentText>
           Please enter "{payment.amount}" and submit to confirm payment.
           <br />
           Once confirmed, an amount of {payment.amount} will be paid out to
           support this claim.
         </DialogContentText>
-
         <Formik<ConfirmationData>
           initialValues={{ confirmation: '' }}
           onSubmit={(_, { resetForm }) => {
