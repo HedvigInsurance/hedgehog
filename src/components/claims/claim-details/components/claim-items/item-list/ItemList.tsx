@@ -34,7 +34,7 @@ const ItemRow: React.FC<{ item: ClaimItem; typeOfContract?: string }> = ({
   typeOfContract,
 }) => {
   const [deleteClaimItem] = useDeleteClaimItemMutation({
-    refetchQueries: ['GetClaimItems', 'GetClaimValuation'],
+    refetchQueries: ['ClaimPage'],
   })
 
   const [description] = useDescribeClaimItemValuation(

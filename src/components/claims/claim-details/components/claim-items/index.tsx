@@ -1,8 +1,6 @@
 import { Button } from '@material-ui/core'
-import { Contract } from 'api/generated/graphql'
+import { Claim, Contract } from 'api/generated/graphql'
 import { Paper } from 'components/shared/Paper'
-import { useGetClaimItems } from 'graphql/use-get-claim-items'
-import { useGetClaimValuation } from 'graphql/use-get-claim-valuation'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
 import {
   UpsertClaimItemVariables,
@@ -53,18 +51,17 @@ const formIsValid = (request: UpsertClaimItemVariables) => {
 }
 
 export const ClaimItems: React.FC<{
-  claimId: string
+  claim: Claim
   memberId: string
   contract: Contract | null
-}> = ({ claimId, memberId, contract }) => {
-  const [claimItems] = useGetClaimItems(claimId)
+}> = ({ claim, memberId, contract }) => {
+  const claimId = claim.id ?? ''
   const [contractMarketInfo] = useContractMarketInfo(memberId)
   const { typeOfContract } = { ...contract }
-  const [claimValuation] = useGetClaimValuation(claimId, typeOfContract)
   const [upsertClaimItem, { loading }] = useUpsertClaimItem(claimId)
 
   const { preferredCurrency = '' } = { ...contractMarketInfo }
-  const { totalValuation, deductible } = { ...claimValuation }
+  const { totalValuation, deductible, claimItems = [] } = { ...claim.valuation }
 
   const [
     upsertRequest,

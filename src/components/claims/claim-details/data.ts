@@ -4,6 +4,7 @@ import { TYPE_FRAGMENT } from './components/ClaimType'
 export const CLAIM_PAGE_QUERY = gql`
   query ClaimPage($id: ID!) {
     claim(id: $id) {
+      id
       member {
         memberId
         signedOn
@@ -93,6 +94,44 @@ export const CLAIM_PAGE_QUERY = gql`
         typeOfContract
       }
       coveringEmployee
+      valuation {
+        totalValuation {
+          amount
+          currency
+        }
+        deductible {
+          amount
+          currency
+        }
+        claimItems {
+          id
+          itemFamily {
+            displayName
+          }
+          itemType {
+            displayName
+          }
+          itemBrand {
+            displayName
+          }
+          itemCompany {
+            displayName
+          }
+          itemModel {
+            displayName
+          }
+          valuation {
+            amount
+            currency
+          }
+          dateOfPurchase
+          purchasePrice {
+            amount
+            currency
+          }
+          note
+        }
+      }
       __typename
     }
   }

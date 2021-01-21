@@ -7,9 +7,6 @@ type QueryType {
   member(id: ID!): Member
   claim(id: ID!): Claim
   paymentSchedule(status: ChargeStatus!): [SchedulerState]
-  ticket(id: ID!): Ticket
-  getFullTicketHistory(id: ID!): TicketHistory
-  tickets(resolved: Boolean): [Ticket!]!
   me: String
   switchableSwitcherEmails: [SwitchableSwitcherEmail!]!
   messageHistory(memberId: ID!): [ChatMessage!]!
@@ -19,10 +16,7 @@ type QueryType {
   findPartnerCampaigns(input: CampaignFilter!): [VoucherCampaign!]!
   getPartnerCampaignOwners: [CampaignOwnerPartner!]!
   dashboardNumbers: DashboardNumbers
-  getClaimItemValuation(
-    request: GetClaimItemValuationInput
-  ): ClaimItemValuation!
-  getClaimValuation(claimId: ID!, typeOfContract: String): ClaimValuation!
+  getClaimItemValuation(request: GetClaimItemValuationInput): ClaimItemValuation!
   describeClaimItemValuation(claimItemId: ID!, typeOfContract: String!): String!
   canValuateClaimItem(
     typeOfContract: String!
@@ -58,12 +52,6 @@ type MutationType {
   setClaimInformation(id: ID!, information: ClaimInformationInput!): Claim
   updateReserve(id: ID!, amount: MonetaryAmount!): Claim
   setCoveringEmployee(id: ID!, coveringEmployee: Boolean!): Claim
-  createTicket(ticket: TicketInput): ID
-  changeTicketDescription(ticketId: ID!, newDescription: String): ID
-  assignTicketToTeamMember(ticketId: ID!, teamMemberId: ID!): ID
-  changeTicketStatus(ticketId: ID!, newStatus: TicketStatus): ID
-  changeTicketReminder(ticketId: ID!, newReminder: RemindNotification): ID
-  changeTicketPriority(ticketId: ID!, newPriority: Float): ID
   whitelistMember(memberId: ID!): Boolean
   markClaimFileAsDeleted(claimId: ID!, claimFileId: ID!): Boolean
   backfillSubscriptions(memberId: ID!): Member!
@@ -195,8 +183,8 @@ type ClaimItem {
   itemCompany: ItemCompany
   dateOfPurchase: LocalDate
   itemAge: Float
-  purchasePrice: MonetaryAmountV2
   valuation: MonetaryAmountV2
+  purchasePrice: MonetaryAmountV2
   note: String
 }
 
@@ -233,6 +221,13 @@ type ClaimItemValuation {
 type ClaimValuation {
   totalValuation: MonetaryAmountV2
   deductible: MonetaryAmountV2
+  claimItems: [ClaimItem!]!
+}
+
+type TotalClaimItemValuation {
+  totalValuation: MonetaryAmountV2
+  deductible: MonetaryAmountV2
+  claimItems: [ClaimItem!]!
 }
 
 type ValuationRule {
@@ -538,7 +533,7 @@ type UnknownIncentive {
 }
 
 union Incentive =
-    MonthlyPercentageDiscountFixedPeriod
+  MonthlyPercentageDiscountFixedPeriod
   | FreeMonths
   | CostDeduction
   | NoDiscount
@@ -965,6 +960,7 @@ type Claim {
   coveringEmployee: Boolean!
   claimFiles: [ClaimFileUpload!]!
   contract: Contract
+  valuation: ClaimValuation!
 }
 
 type ClaimNote {
@@ -1003,7 +999,7 @@ enum ClaimTypes {
   TestClaim
 }
 union ClaimType =
-    TheftClaim
+  TheftClaim
   | AccidentalDamageClaim
   | AssaultClaim
   | WaterDamageClaim
@@ -1223,86 +1219,6 @@ type Question {
   id: ID!
   timestamp: Instant!
   messageJsonString: String!
-}
-
-input TicketInput {
-  assignedTo: String
-  priority: Float
-  type: TicketType
-  remindNotificationDate: LocalDate
-  remindNotificationTime: LocalTime
-  remindMessage: String
-  description: String
-  status: TicketStatus
-  referenceId: String
-  memberId: String
-}
-
-type Ticket {
-  id: ID
-  assignedTo: String
-  createdAt: Instant
-  createdBy: String
-  memberId: String
-  referenceId: String
-  priority: Float
-  type: TicketType
-  remindNotificationDate: LocalDate
-  remindNotificationTime: LocalTime
-  remindMessage: String
-  description: String
-  status: TicketStatus
-}
-
-type TicketHistory {
-  id: ID
-  createdAt: Instant
-  createdBy: String
-  type: TicketType
-  revisions: [TicketRevision]
-}
-
-type TicketRevision {
-  assignedTo: String
-  manualPriority: Float
-  remindDate: LocalDate
-  remindTime: LocalTime
-  remindMessage: String
-  status: TicketStatus
-  changedAt: Instant
-  changeType: TicketChangeType
-  changedBy: String
-  description: String
-}
-
-input RemindNotification {
-  date: LocalDate
-  time: LocalTime
-  message: String
-}
-
-enum TicketChangeType {
-  TICKET_CREATED
-  CHANGED_REMINDER
-  CHANGED_ASSIGNED_TO
-  CHANGED_DESCRIPTION
-  CHANGED_STATUS
-  CHANGED_PRIORITY
-}
-
-enum TicketStatus {
-  WAITING
-  WORKING_ON
-  ON_HOLD
-  RESOLVED
-}
-
-enum TicketType {
-  REMIND
-  MESSAGE
-  CLAIM
-  CALL_ME
-  OTHER
 }
 
 input CreateNorwegianGripenInput {
