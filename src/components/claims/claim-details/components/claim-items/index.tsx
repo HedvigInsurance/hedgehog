@@ -63,7 +63,7 @@ export const ClaimItems: React.FC<{
   const [claimValuation] = useGetClaimValuation(claimId, typeOfContract)
   const [upsertClaimItem, { loading }] = useUpsertClaimItem(claimId)
 
-  const { preferredCurrency = 'SEK' } = { ...contractMarketInfo }
+  const { preferredCurrency = '' } = { ...contractMarketInfo }
   const { totalValuation, deductible } = { ...claimValuation }
 
   const [

@@ -23,7 +23,7 @@ export const Chips: React.FC<{
   }, [itemFamilyId, itemTypeId])
 
   if (loading || !itemFamilyId || !typeOfContract) {
-    return <></>
+    return null
   }
 
   return (
