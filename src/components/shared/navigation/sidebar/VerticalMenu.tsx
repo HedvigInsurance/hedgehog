@@ -274,7 +274,7 @@ export const VerticalMenuComponent: React.FC<any & { history: History }> = ({
                   <Inbox />
                   <MenuText>Questions</MenuText>
                 </MenuItem>
-                <MenuItem to="/claims">
+                <MenuItem to="/claims/list/1">
                   <ShieldShaded />
                   <MenuText>Claims</MenuText>
                 </MenuItem>

@@ -19,18 +19,17 @@ interface DatePickerProps {
   name?: string
 }
 
-const StyledInput = styled(Input)<{ fullWidth?: boolean }>(
-  ({ fullWidth = false }) => {
-    return {
-      '&&': {
-        width: fullWidth ? '100%' : '150px',
-      },
-      '&& input:hover': {
-        cursor: 'pointer !important',
-      },
-    }
-  },
-)
+const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
+  && {
+    width: ${({ fullWidth }) => (fullWidth ? '100%' : '150px')};
+  }
+  && input:hover {
+    cursor: pointer !important;
+  }
+  && input {
+    caret-color: transparent;
+  }
+`
 
 export const DateTimePicker: React.FunctionComponent<DatePickerProps> = ({
   date,
@@ -66,7 +65,8 @@ export const DateTimePicker: React.FunctionComponent<DatePickerProps> = ({
           maxLength={10}
         />
       }
-      dateFormat={'yyyy-MM-dd'}
+      dateFormat={showTimePicker ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'}
+      timeIntervals={1}
     />
   )
 }

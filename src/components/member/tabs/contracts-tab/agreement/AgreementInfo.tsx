@@ -81,7 +81,10 @@ export const AgreementInfo: React.FC<{ agreement: GenericAgreement }> = ({
         <InfoText>{convertEnumToTitle(agreement.lineOfBusinessName)}</InfoText>
       </InfoRow>
       <InfoRow>
-        Premium <InfoText>{formatMoney(agreement.premium)}</InfoText>
+        Premium{' '}
+        <InfoText>
+          {formatMoney(agreement.premium, { minimumFractionDigits: 0 })}
+        </InfoText>
       </InfoRow>
       <InfoRow>
         Status <InfoText>{convertEnumToTitle(agreement.status)}</InfoText>

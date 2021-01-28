@@ -9,7 +9,8 @@
 ## Optional screenshots
 
 ## Optional checklist
-- [ ] Boyscouted
+- [ ] Updated `src/changelog.ts`
+- [ ] Codescouted
 - [ ] Unit tests written
-- [ ] Tested locally
+- [ ] Tested locally
 

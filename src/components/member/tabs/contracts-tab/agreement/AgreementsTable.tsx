@@ -76,7 +76,7 @@ export const AgreementsTable: React.FC<{
                 selected={isSelected}
                 status={agreement.status}
               >
-                {formatMoney(agreement.premium)}
+                {formatMoney(agreement.premium, { minimumFractionDigits: 0 })}
               </SelectableTableCell>
               <SelectableTableCell
                 selected={isSelected}

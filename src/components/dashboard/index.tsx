@@ -69,7 +69,7 @@ export const Dashboard: React.FC<{ auth: any }> = ({ auth }) => {
       {dashboardNumbers && (
         <FadeIn>
           <MetricsWrapper>
-            <Metric to="/claims">
+            <Metric to="/claims/list/1">
               <MetricNumber>
                 {dashboardNumbers?.numberOfClaims || 0}
               </MetricNumber>

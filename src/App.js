@@ -13,7 +13,7 @@ import { Provider } from 'react-redux'
 import { Redirect, Route, Router, Switch } from 'react-router'
 import Routes from 'routes'
 import Store, { history } from 'store'
-import { DarkmodeContext, getDefaultIsDarkmode } from './utils/darkmode-context'
+import { DarkmodeContext, getDefaultIsDarkmode } from 'utils/darkmode-context'
 import {
   darkTheme,
   darkUiTheme,
@@ -21,7 +21,7 @@ import {
   lightUiTheme,
   SemanticOverrides,
 } from 'hedvig-ui/themes'
-import { MemberHistoryProvider } from './utils/member-history'
+import { MemberHistoryProvider } from 'utils/member-history'
 
 const store = Store.configureStore()
 

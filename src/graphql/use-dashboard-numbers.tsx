@@ -11,7 +11,7 @@ type DashboardNumbersReturnTuple = [
 
 export const useDashboardNumbers = (): DashboardNumbersReturnTuple => {
   const queryResult = useGetDashboardNumbersQuery({
-    pollInterval: 1000 * 60,
+    pollInterval: 1000 * 5,
   })
   const dashboardNumbers = queryResult.data?.dashboardNumbers as
     | DashboardNumbers

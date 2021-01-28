@@ -26,7 +26,7 @@ export const ClaimEvents: React.SFC<Props> = ({ events }) => (
     <MuiList>
       {events.filter(Boolean).map((event) => (
         <ListItem key={event!.date}>
-          {format(parseISO(event!.date), 'yyyy-MM-dd hh:mm:ss')}: {event!.text}
+          {format(parseISO(event!.date), 'yyyy-MM-dd HH:mm:ss')}: {event!.text}
         </ListItem>
       ))}
     </MuiList>

@@ -64,7 +64,13 @@ export const ClaimListItem: React.FC<{
           <Capitalized>{item.state}</Capitalized>
         </Badge>
       </Table.Cell>
-      <Table.Cell>{item.reserves && formatMoney(item.reserves)}</Table.Cell>
+      <Table.Cell>
+        {item.reserves &&
+          formatMoney(item.reserves, {
+            useGrouping: true,
+            maximumFractionDigits: 0,
+          })}
+      </Table.Cell>
     </FadeInLinkRow>
   )
 }

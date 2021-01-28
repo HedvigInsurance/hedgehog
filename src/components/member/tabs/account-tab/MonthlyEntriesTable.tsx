@@ -74,7 +74,7 @@ export const MonthlyEntriesTableComponent: React.FC<{
                           <br />
                           {format(
                             parseISO(monthlyEntry.addedAt),
-                            'yyyy-MM-dd hh:mm:ss',
+                            'yyyy-MM-dd HH:mm:ss',
                           )}
                         </Grid.Column>
                       </Grid.Row>

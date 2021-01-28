@@ -43,20 +43,11 @@ const ClaimsTabComponent: React.FC<{
 
   const [showForm, setShowForm] = React.useState(false)
   const [claimSource, setClaimSource] = React.useState<ClaimSource | null>(null)
-  const [claimDate, setClaimDate] = React.useState<Date | null>(null)
+  const [claimDate, setClaimDate] = React.useState<Date>(new Date())
 
   if (loading || !claims) {
     return <LoadingMessage paddingTop="25vh" />
   }
-
-  if (claims.length === 0) {
-    return (
-      <StandaloneMessage paddingTop="10vh">
-        Claims list is empty
-      </StandaloneMessage>
-    )
-  }
-
   return (
     <FadeIn>
       <HeaderWrapper>
@@ -83,6 +74,7 @@ const ClaimsTabComponent: React.FC<{
                   setDate={(date) => setClaimDate(date)}
                   placeholder="Notification date"
                   maxDate={new Date()}
+                  showTimePicker
                 />
               </Spacing>
               <Spacing left={'small'}>
@@ -92,7 +84,7 @@ const ClaimsTabComponent: React.FC<{
                   color="danger"
                   onClick={() => {
                     setShowForm(false)
-                    setClaimDate(null)
+                    setClaimDate(new Date())
                     setClaimSource(null)
                   }}
                 >
@@ -122,7 +114,7 @@ const ClaimsTabComponent: React.FC<{
                     })
                       .then(() => {
                         setShowForm(false)
-                        setClaimDate(null)
+                        setClaimDate(new Date())
                         setClaimSource(null)
                         refetch().then(() => {
                           showNotification({
@@ -142,7 +134,7 @@ const ClaimsTabComponent: React.FC<{
                       })
                   }}
                 >
-                  Save
+                  Add
                 </Button>
               </Spacing>
             </>
@@ -157,15 +149,20 @@ const ClaimsTabComponent: React.FC<{
           )}
         </FormWrapper>
       </HeaderWrapper>
-      <Table celled selectable>
-        <ClaimListHeader />
-
-        <Table.Body>
-          {claims.map((item, index) => (
-            <ClaimListItem key={item.id} item={item} index={index} />
-          ))}
-        </Table.Body>
-      </Table>
+      {claims.length === 0 ? (
+        <StandaloneMessage paddingTop="10vh">
+          No claims for member
+        </StandaloneMessage>
+      ) : (
+        <Table celled selectable>
+          <ClaimListHeader />
+          <Table.Body>
+            {claims.map((item, index) => (
+              <ClaimListItem key={item.id} item={item} index={index} />
+            ))}
+          </Table.Body>
+        </Table>
+      )}
     </FadeIn>
   )
 }

@@ -9,9 +9,13 @@ const ClaimsPageRoute = ({ store }) => (
   <Switch>
     <Route
       exact
-      path="/claims"
+      path="/claims/list/:page"
       render={() => (
-        <PrivateRoute component={ClaimsPage} path="/claims" store={store} />
+        <PrivateRoute
+          component={ClaimsPage}
+          path="/claims/list/:page"
+          store={store}
+        />
       )}
     />
     <Route

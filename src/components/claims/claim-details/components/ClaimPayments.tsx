@@ -107,7 +107,7 @@ const ClaimPayments: React.SFC<Props> = ({
               </PaymentTableCell>
               <PaymentTableCell>{payment!.note}</PaymentTableCell>
               <PaymentTableCell>
-                {format(parseISO(payment!.timestamp), 'yyyy-MM-dd hh:mm:ss')}
+                {format(parseISO(payment!.timestamp), 'yyyy-MM-dd HH:mm:ss')}
               </PaymentTableCell>
               <PaymentTableCell>
                 {payment!.exGratia ? <Checkmark /> : <Cross />}

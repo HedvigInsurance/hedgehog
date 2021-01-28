@@ -58,8 +58,6 @@ const getUrlWithoutParameters = (recordingUrl): string => {
   return regex[0]
 }
 
-const AudioWrapper = styled('div')({})
-
 const Audio = styled('audio')({
   width: '100%',
 })
@@ -87,41 +85,42 @@ const ClaimInformation: React.FC<Props> = ({
   const [setContractForClaim] = useSetContractForClaim()
   const [setCoveringEmployee] = useSetCoveringEmployee()
   const [updateClaimState] = useUpdateClaimState()
-
   return (
     <Paper>
       <h3>Claim Information</h3>
-      {recordingUrl && (
-        <AudioWrapper>
-          <p>
-            Registered at:{' '}
-            {format(parseISO(registrationDate), 'yyyy-MM-dd hh:mm:ss')}
-          </p>
-          <Audio controls>
-            <source src={recordingUrl} type="audio/aac" />
-          </Audio>
-          <Audio controls>
-            <source
-              src={getUrlWithoutParameters(recordingUrl)}
-              type="audio/aac"
-            />
-          </Audio>
-          <DownloadClaimFile
-            href={recordingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Download claim file
-          </DownloadClaimFile>
-          <DownloadClaimFile
-            href={getUrlWithoutParameters(recordingUrl)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Download claim file
-          </DownloadClaimFile>
-        </AudioWrapper>
-      )}
+      <div>
+        <p>
+          Registered at:{' '}
+          {format(parseISO(registrationDate), 'yyyy-MM-dd HH:mm:ss')}
+        </p>
+        {recordingUrl && (
+          <>
+            <Audio controls>
+              <source src={recordingUrl} type="audio/aac" />
+            </Audio>
+            <Audio controls>
+              <source
+                src={getUrlWithoutParameters(recordingUrl)}
+                type="audio/aac"
+              />
+            </Audio>
+            <DownloadClaimFile
+              href={recordingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download claim file
+            </DownloadClaimFile>
+            <DownloadClaimFile
+              href={getUrlWithoutParameters(recordingUrl)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download claim file
+            </DownloadClaimFile>
+          </>
+        )}
+      </div>
       <SelectWrapper>
         <MuiInputLabel shrink>Status</MuiInputLabel>
         <MuiSelect

@@ -98,7 +98,7 @@ const ClaimNotes: React.FC<Props> = ({ notes, claimId, refetchPage }) => (
             <ListItem key={note.date}>
               <ClaimNote component="p">{note.text}</ClaimNote>
               <ClaimNoteDate component="span">
-                {format(parseISO(note.date), 'yyyy-MM-dd hh:mm:ss')}
+                {format(parseISO(note.date), 'yyyy-MM-dd HH:mm:ss')}
               </ClaimNoteDate>
             </ListItem>
           ))}

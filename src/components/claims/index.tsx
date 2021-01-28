@@ -4,16 +4,25 @@ import { useListClaims } from 'graphql/use-list-claims'
 import { FadeIn } from 'hedvig-ui/animations/fade-in'
 import { LoadingMessage } from 'hedvig-ui/animations/standalone-message'
 import { Spacing } from 'hedvig-ui/spacing'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Header } from 'semantic-ui-react'
 import { history } from 'store'
 import { useVerticalKeyboardNavigation } from 'utils/keyboard-actions'
 import { ClaimListHeader } from './claims-list/components/ClaimListHeader'
 import { ClaimListItem } from './claims-list/components/ClaimListItem'
 
-export const Claims: React.FC = () => {
+interface ClaimsListProps {
+  match: {
+    params: {
+      page?: number
+    }
+  }
+}
+
+export const ClaimsList: React.FC<ClaimsListProps> = ({ ...props }) => {
+  const selectedPage = props.match.params.page ?? 1
   const [
-    { claims, page, totalPages },
+    { claims, page: currentPage, totalPages },
     listClaims,
     { loading },
   ] = useListClaims()
@@ -32,62 +41,51 @@ export const Claims: React.FC = () => {
     },
   })
 
-  React.useEffect(() => {
-    listClaims()
-  }, [])
-
-  if (loading && !claims) {
-    return (
-      <>
-        <FadeIn>
-          <Header size="huge">Claims List</Header>
-        </FadeIn>
-        <LoadingMessage paddingTop={'25vh'} />
-      </>
-    )
-  }
+  useEffect(() => {
+    listClaims({ page: selectedPage - 1 ?? 0 })
+  }, [selectedPage])
 
   return (
     <>
       <FadeIn>
         <Header size="huge">Claims List</Header>
       </FadeIn>
-      <Spacing top={'small'}>
-        <FadeIn delay={'200ms'}>
-          <Paginator<Claim>
-            currentPage={page}
-            totalPages={totalPages}
-            onChangePage={(nextPage) =>
-              listClaims({
-                includeAll: true,
-                page: nextPage,
-                pageSize: 20,
-              })
-            }
-            pagedItems={claims}
-            itemContent={(claim, index) => (
-              <ClaimListItem
-                index={index}
-                item={claim}
-                active={currentKeyboardNavigationStep === index}
-              />
-            )}
-            tableHeader={
-              <ClaimListHeader
-                onSort={(column, direction) => {
-                  listClaims({
-                    includeAll: true,
-                    page,
-                    pageSize: 20,
-                    sortBy: column,
-                    sortDirection: direction,
-                  })
-                }}
-              />
-            }
-          />
-        </FadeIn>
-      </Spacing>
+      {loading && !claims ? (
+        <LoadingMessage paddingTop={'25vh'} />
+      ) : (
+        <Spacing top={'small'}>
+          <FadeIn delay={'200ms'}>
+            <Paginator<Claim>
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onChangePage={(nextPage) =>
+                history.push(`/claims/list/${nextPage + 1}`)
+              }
+              pagedItems={claims}
+              itemContent={(claim, index) => (
+                <ClaimListItem
+                  index={index}
+                  item={claim}
+                  active={currentKeyboardNavigationStep === index}
+                />
+              )}
+              tableHeader={
+                <ClaimListHeader
+                  onSort={(column, direction) => {
+                    listClaims({
+                      includeAll: true,
+                      page: currentPage,
+                      pageSize: 20,
+                      sortBy: column,
+                      sortDirection: direction,
+                    })
+                  }}
+                />
+              }
+            />
+          </FadeIn>
+        </Spacing>
+      )}
     </>
   )
 }

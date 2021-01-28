@@ -49,9 +49,9 @@ export const ClaimListHeader: React.FC<{
 
   return (
     <Table.Header>
-      <Table.HeaderCell>Member ID</Table.HeaderCell>
+      <Table.HeaderCell width={1}>Member ID</Table.HeaderCell>
       <Table.HeaderCell
-        width={6}
+        width={3}
         sorted={column === ClaimSortColumn.Date ? sortDirection : undefined}
         onClick={() => sortTable(ClaimSortColumn.Date)}
       >
@@ -65,14 +65,14 @@ export const ClaimListHeader: React.FC<{
         Type
       </Table.HeaderCell>
       <Table.HeaderCell
-        width={6}
+        width={1}
         sorted={column === ClaimSortColumn.State ? sortDirection : undefined}
         onClick={() => sortTable(ClaimSortColumn.State)}
       >
         State
       </Table.HeaderCell>
       <Table.HeaderCell
-        width={6}
+        width={2}
         sorted={column === ClaimSortColumn.Reserve ? sortDirection : undefined}
         onClick={() => sortTable(ClaimSortColumn.Reserve)}
       >
