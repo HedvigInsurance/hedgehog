@@ -94,7 +94,7 @@ export const CLAIM_PAGE_QUERY = gql`
         typeOfContract
       }
       coveringEmployee
-      valuation {
+      inventory {
         totalValuation {
           amount
           currency
@@ -103,7 +103,7 @@ export const CLAIM_PAGE_QUERY = gql`
           amount
           currency
         }
-        claimItems {
+        items {
           id
           itemFamily {
             displayName
@@ -120,14 +120,16 @@ export const CLAIM_PAGE_QUERY = gql`
           itemModel {
             displayName
           }
-          valuation {
-            amount
-            currency
-          }
           dateOfPurchase
           purchasePrice {
             amount
             currency
+          }
+          valuation {
+            depreciatedValue {
+              amount
+              currency
+            }
           }
           note
         }

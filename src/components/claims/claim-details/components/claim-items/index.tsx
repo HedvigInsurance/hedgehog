@@ -61,7 +61,7 @@ export const ClaimItems: React.FC<{
   const [upsertClaimItem, { loading }] = useUpsertClaimItem(claimId)
 
   const { preferredCurrency = '' } = { ...contractMarketInfo }
-  const { totalValuation, deductible, claimItems = [] } = { ...claim.valuation }
+  const { totalValuation, deductible, items = [] } = { ...claim.inventory }
 
   const [
     upsertRequest,
@@ -75,7 +75,7 @@ export const ClaimItems: React.FC<{
       <div>
         <h3>Inventory</h3>
       </div>
-      <ItemList claimItems={claimItems} typeOfContract={typeOfContract} />
+      <ItemList claimItems={items} typeOfContract={typeOfContract} />
       <Spacing top={'small'} />
       <ItemForm
         resetSwitch={resetSwitch}

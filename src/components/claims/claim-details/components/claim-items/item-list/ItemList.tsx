@@ -55,11 +55,11 @@ const ItemRow: React.FC<{ item: ClaimItem; typeOfContract?: string }> = ({
       )
     : null
 
-  const valuationString = item.valuation?.amount
+  const valuationString = item.valuation?.depreciatedValue.amount
     ? formatMoney(
         {
-          amount: item.valuation.amount,
-          currency: item.valuation.currency,
+          amount: item.valuation.depreciatedValue.amount,
+          currency: item.valuation.depreciatedValue.currency,
         },
         {
           minimumFractionDigits: 0,

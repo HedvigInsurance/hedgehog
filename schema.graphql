@@ -671,7 +671,6 @@ type Member {
   status: String
   transactions: [Transaction]
   directDebitStatus: DirectDebitStatus
-  payoutMethodStatus: PayoutMethodStatus
   monthlySubscription(month: YearMonth!): MonthlySubscription
   sanctionStatus: SanctionStatus
   account: Account
@@ -831,10 +830,6 @@ type DirectDebitStatus {
   activated: Boolean
 }
 
-type PayoutMethodStatus {
-  activated: Boolean
-}
-
 enum SanctionStatus {
   Undetermined
   NoHit
@@ -960,7 +955,7 @@ type Claim {
   coveringEmployee: Boolean!
   claimFiles: [ClaimFileUpload!]!
   contract: Contract
-  inventory: ClaimInventory
+  inventory: ClaimInventory!
 }
 
 type ClaimNote {
