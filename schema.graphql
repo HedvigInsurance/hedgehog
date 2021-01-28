@@ -183,8 +183,8 @@ type ClaimItem {
   itemCompany: ItemCompany
   dateOfPurchase: LocalDate
   itemAge: Float
-  valuation: MonetaryAmountV2
   purchasePrice: MonetaryAmountV2
+  valuation: ClaimItemValuation
   note: String
 }
 
@@ -214,20 +214,15 @@ input GetClaimItemValuationInput {
 }
 
 type ClaimItemValuation {
-  depreciatedValue: MonetaryAmountV2
+  depreciatedValue: MonetaryAmountV2!
   valuationRule: ValuationRule
+  explanation: String
 }
 
-type ClaimValuation {
+type ClaimInventory {
   totalValuation: MonetaryAmountV2
   deductible: MonetaryAmountV2
-  claimItems: [ClaimItem!]!
-}
-
-type TotalClaimItemValuation {
-  totalValuation: MonetaryAmountV2
-  deductible: MonetaryAmountV2
-  claimItems: [ClaimItem!]!
+  items: [ClaimItem!]!
 }
 
 type ValuationRule {
@@ -960,7 +955,7 @@ type Claim {
   coveringEmployee: Boolean!
   claimFiles: [ClaimFileUpload!]!
   contract: Contract
-  valuation: ClaimValuation!
+  inventory: ClaimInventory
 }
 
 type ClaimNote {
