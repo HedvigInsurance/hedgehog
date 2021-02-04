@@ -17,6 +17,7 @@ import { Checkmark, Cross } from '../../../icons'
 import { Paper } from '../../../shared/Paper'
 import { ClaimPayment } from './ClaimPayment'
 import { ClaimReserves } from './ClaimReserves'
+import styled from 'react-emotion'
 
 interface Props {
   payments: NonNullable<Claim['payments']>
@@ -40,6 +41,11 @@ const PaymentTableCell = withStyles({
   },
 })(MuiTableCell)
 
+const TotalCell = styled(MuiTableCell)(({ theme }) => ({
+  backgroundColor: theme.accentThird,
+  fontSize: '1rem',
+}))
+
 const ClaimPayments: React.SFC<Props> = ({
   payments,
   claimId,
@@ -49,6 +55,13 @@ const ClaimPayments: React.SFC<Props> = ({
   identity,
   market,
 }) => {
+  let totalAmount = payments
+    .map((payment) => +payment?.amount?.amount)
+    .reduce((acc, amount) => acc + amount, 0)
+  let totalDeductible = payments
+    .map((payment) => +payment?.deductible?.amount)
+    .reduce((acc, amount) => acc + amount, 0)
+
   return (
     <Paper>
       <h3>Payments</h3>
@@ -100,10 +113,10 @@ const ClaimPayments: React.SFC<Props> = ({
             >
               <PaymentTableCell>{payment!.id}</PaymentTableCell>
               <PaymentTableCell>
-                {payment!.amount.amount} {payment!.amount.currency}
+                {payment!.amount.amount}&nbsp;{payment!.amount.currency}
               </PaymentTableCell>
               <PaymentTableCell>
-                {payment!.deductible.amount} {payment!.deductible.currency}
+                {payment!.deductible.amount}&nbsp;{payment!.deductible.currency}
               </PaymentTableCell>
               <PaymentTableCell>{payment!.note}</PaymentTableCell>
               <PaymentTableCell>
@@ -116,6 +129,27 @@ const ClaimPayments: React.SFC<Props> = ({
               <PaymentTableCell>{payment!.status}</PaymentTableCell>
             </MuiTableRow>
           ))}
+          {totalAmount > 0 && (
+            <>
+              <MuiTableRow>
+                <TotalCell>
+                  <b>Amount Total: </b>
+                </TotalCell>
+                <TotalCell align="right">
+                  {totalAmount.toFixed(2)}&nbsp;{payments[0]!.amount.currency}
+                </TotalCell>
+              </MuiTableRow>
+              <MuiTableRow>
+                <TotalCell>
+                  <b>Deductible Total: </b>
+                </TotalCell>
+                <TotalCell align="right">
+                  {totalDeductible.toFixed(2)}&nbsp;
+                  {payments[0]!.deductible.currency}
+                </TotalCell>
+              </MuiTableRow>
+            </>
+          )}
         </MuiTableBody>
       </PaymentTable>
 
