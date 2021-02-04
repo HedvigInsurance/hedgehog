@@ -4,7 +4,6 @@ import React from 'react'
 import { Mutation, Query } from 'react-apollo'
 import { Form, Input, Table } from 'semantic-ui-react'
 import PayoutDetails from 'components/payouts/payout-details'
-import { CheckCircle, XCircle } from 'react-bootstrap-icons'
 import styled from 'react-emotion'
 import { Spacing } from 'hedvig-ui/spacing'
 import { Button } from 'hedvig-ui/button'
@@ -264,40 +263,9 @@ class PaymentsTab extends React.Component {
                   </Mutation>
                 )}
                 <br />
-                {data.member.payoutMethodStatus.activated && (
+                {data.member.payoutMethodStatus.activated && this.props.contractMarketInfo?.market === Market.Sweden && (
                   <>
                     <h3>Payout:</h3>
-                    {this.props.contractMarketInfo?.market ===
-                      Market.Norway && (
-                      <p>
-                        <strong>
-                          Identified:{' '}
-                          {data.member.identity ? <Checkmark /> : <Cross />}
-                        </strong>
-                        <br />
-                        {data.member.identity ? (
-                          <p>
-                            <strong>Personal Number: </strong>
-                            {
-                              data.member.identity.nationalIdentification
-                                .identification
-                            }
-                            {data.member.identity.firstName &&
-                              data.member.identity.lastName && (
-                                <p>
-                                  <strong>Name:</strong>{' '}
-                                  {data.member.identity.firstName}{' '}
-                                  {data.member.identity.lastName}
-                                </p>
-                              )}
-                          </p>
-                        ) : (
-                          <p>
-                            ⚠️ Please note that this member is not identified
-                          </p>
-                        )}
-                      </p>
-                    )}
                     <PayoutDetails {...this.props} />
                   </>
                 )}

@@ -36,13 +36,13 @@ const ChatHeaderStyle = styled.div`
 `
 
 export const ChatPane = ({ memberId }) => {
-  const [visible, setVisible] = useState(window.innerWidth > 1500)
+  const [visible, setVisible] = useState(window.innerWidth > 1000)
   const [manualChange, setManualChange] = useState(false)
 
   useEffect(() => {
     const resizeControlChat = (e) => {
       if (!manualChange) {
-        setVisible(window.innerWidth > 1500)
+        setVisible(window.innerWidth > 1000)
       }
     }
     window.addEventListener('resize', resizeControlChat)
