@@ -583,7 +583,7 @@ export type GetClaimItemValuationInput = {
   itemFamilyId: Scalars['String']
   itemTypeId?: Maybe<Scalars['ID']>
   typeOfContract: Scalars['String']
-  purchaseDate: Scalars['LocalDate']
+  purchaseDate?: Maybe<Scalars['LocalDate']>
   baseDate?: Maybe<Scalars['LocalDate']>
 }
 
@@ -745,6 +745,7 @@ export type Member = {
   status?: Maybe<Scalars['String']>
   transactions?: Maybe<Array<Maybe<Transaction>>>
   directDebitStatus?: Maybe<DirectDebitStatus>
+  payoutMethodStatus?: Maybe<PayoutMethodStatus>
   monthlySubscription?: Maybe<MonthlySubscription>
   sanctionStatus?: Maybe<SanctionStatus>
   account?: Maybe<Account>
@@ -1220,6 +1221,11 @@ export type PaymentDefault = {
   amount?: Maybe<Scalars['MonetaryAmount']>
   caseId?: Maybe<Scalars['String']>
   claimant?: Maybe<Scalars['String']>
+}
+
+export type PayoutMethodStatus = {
+  __typename?: 'PayoutMethodStatus'
+  activated?: Maybe<Scalars['Boolean']>
 }
 
 export type Person = {

@@ -16,7 +16,7 @@ type QueryType {
   findPartnerCampaigns(input: CampaignFilter!): [VoucherCampaign!]!
   getPartnerCampaignOwners: [CampaignOwnerPartner!]!
   dashboardNumbers: DashboardNumbers
-  getClaimItemValuation(request: GetClaimItemValuationInput): ClaimItemValuation!
+  getClaimItemValuation(request: GetClaimItemValuationInput): ClaimItemValuation
   describeClaimItemValuation(claimItemId: ID!, typeOfContract: String!): String!
   canValuateClaimItem(
     typeOfContract: String!
@@ -209,7 +209,7 @@ input GetClaimItemValuationInput {
   itemFamilyId: String!
   itemTypeId: ID
   typeOfContract: String!
-  purchaseDate: LocalDate!
+  purchaseDate: LocalDate
   baseDate: LocalDate
 }
 
@@ -528,7 +528,7 @@ type UnknownIncentive {
 }
 
 union Incentive =
-  MonthlyPercentageDiscountFixedPeriod
+    MonthlyPercentageDiscountFixedPeriod
   | FreeMonths
   | CostDeduction
   | NoDiscount
@@ -671,6 +671,7 @@ type Member {
   status: String
   transactions: [Transaction]
   directDebitStatus: DirectDebitStatus
+  payoutMethodStatus: PayoutMethodStatus
   monthlySubscription(month: YearMonth!): MonthlySubscription
   sanctionStatus: SanctionStatus
   account: Account
@@ -827,6 +828,10 @@ type Transaction {
 }
 
 type DirectDebitStatus {
+  activated: Boolean
+}
+
+type PayoutMethodStatus {
   activated: Boolean
 }
 
@@ -994,7 +999,7 @@ enum ClaimTypes {
   TestClaim
 }
 union ClaimType =
-  TheftClaim
+    TheftClaim
   | AccidentalDamageClaim
   | AssaultClaim
   | WaterDamageClaim
