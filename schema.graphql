@@ -184,7 +184,7 @@ type ClaimItem {
   dateOfPurchase: LocalDate
   itemAge: Float
   purchasePrice: MonetaryAmountV2
-  valuation: ClaimItemValuation
+  valuation(typeOfContract: String): ClaimItemValuation
   note: String
 }
 
@@ -528,7 +528,7 @@ type UnknownIncentive {
 }
 
 union Incentive =
-    MonthlyPercentageDiscountFixedPeriod
+  MonthlyPercentageDiscountFixedPeriod
   | FreeMonths
   | CostDeduction
   | NoDiscount
@@ -999,7 +999,7 @@ enum ClaimTypes {
   TestClaim
 }
 union ClaimType =
-    TheftClaim
+  TheftClaim
   | AccidentalDamageClaim
   | AssaultClaim
   | WaterDamageClaim

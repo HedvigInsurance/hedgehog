@@ -376,13 +376,9 @@
               }
             ],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "ClaimItemValuation",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "ClaimItemValuation",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5533,7 +5529,18 @@
           {
             "name": "valuation",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "typeOfContract",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
             "type": {
               "kind": "OBJECT",
               "name": "ClaimItemValuation",

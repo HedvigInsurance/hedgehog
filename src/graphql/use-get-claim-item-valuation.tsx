@@ -13,7 +13,6 @@ type GetClaimItemValuationReturnTuple = [
 export const useGetClaimItemValuation = (
   request: GetClaimItemValuationInput,
 ): GetClaimItemValuationReturnTuple => {
-  console.log(request)
   const queryResult = useGetClaimItemValuationQuery({
     variables: {
       request,

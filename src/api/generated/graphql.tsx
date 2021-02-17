@@ -282,6 +282,10 @@ export type ClaimItem = {
   note?: Maybe<Scalars['String']>
 }
 
+export type ClaimItemValuationArgs = {
+  typeOfContract?: Maybe<Scalars['String']>
+}
+
 export type ClaimItemValuation = {
   __typename?: 'ClaimItemValuation'
   depreciatedValue: MonetaryAmountV2
@@ -1256,7 +1260,7 @@ export type QueryType = {
   findPartnerCampaigns: Array<VoucherCampaign>
   getPartnerCampaignOwners: Array<CampaignOwnerPartner>
   dashboardNumbers?: Maybe<DashboardNumbers>
-  getClaimItemValuation: ClaimItemValuation
+  getClaimItemValuation?: Maybe<ClaimItemValuation>
   describeClaimItemValuation: Scalars['String']
   canValuateClaimItem?: Maybe<CanValuateClaimItem>
   quoteSchemaForContractType?: Maybe<Scalars['JSON']>
@@ -2034,24 +2038,26 @@ export type GetClaimItemValuationQueryVariables = Exact<{
 }>
 
 export type GetClaimItemValuationQuery = { __typename?: 'QueryType' } & {
-  getClaimItemValuation: { __typename?: 'ClaimItemValuation' } & {
-    depreciatedValue: { __typename?: 'MonetaryAmountV2' } & Pick<
-      MonetaryAmountV2,
-      'amount' | 'currency'
-    >
-    valuationRule?: Maybe<
-      { __typename?: 'ValuationRule' } & Pick<
-        ValuationRule,
-        | 'valuationName'
-        | 'itemFamily'
-        | 'itemTypeId'
-        | 'ageLimit'
-        | 'valuationTable'
-        | 'valuationType'
-        | 'depreciation'
+  getClaimItemValuation?: Maybe<
+    { __typename?: 'ClaimItemValuation' } & {
+      depreciatedValue: { __typename?: 'MonetaryAmountV2' } & Pick<
+        MonetaryAmountV2,
+        'amount' | 'currency'
       >
-    >
-  }
+      valuationRule?: Maybe<
+        { __typename?: 'ValuationRule' } & Pick<
+          ValuationRule,
+          | 'valuationName'
+          | 'itemFamily'
+          | 'itemTypeId'
+          | 'ageLimit'
+          | 'valuationTable'
+          | 'valuationType'
+          | 'depreciation'
+        >
+      >
+    }
+  >
 }
 
 export type GetContractMarketInfoQueryVariables = Exact<{

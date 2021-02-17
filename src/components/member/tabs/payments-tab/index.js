@@ -194,11 +194,19 @@ class PaymentsTab extends React.Component {
               <div>
                 <p>
                   Direct Debit activated:{' '}
-                  {data.member.directDebitStatus.activated ? <Checkmark /> : <Cross />}
+                  {data.member.directDebitStatus.activated ? (
+                    <Checkmark />
+                  ) : (
+                    <Cross />
+                  )}
                 </p>
                 <p>
                   Payout Method activated:{' '}
-                  {data.member.payoutMethodStatus.activated ? <Checkmark /> : <Cross />}
+                  {data.member.payoutMethodStatus.activated ? (
+                    <Checkmark />
+                  ) : (
+                    <Cross />
+                  )}
                 </p>
 
                 <Spacing bottom>

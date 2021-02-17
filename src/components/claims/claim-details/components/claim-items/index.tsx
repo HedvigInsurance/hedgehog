@@ -1,119 +1,84 @@
-import { Button } from '@material-ui/core'
 import { Claim, Contract } from 'api/generated/graphql'
+import { InventoryProvider } from 'components/claims/claim-details/components/claim-items/context'
+import { ItemForm } from 'components/claims/claim-details/components/claim-items/item-form/ItemForm'
 import { Paper } from 'components/shared/Paper'
 import { useContractMarketInfo } from 'graphql/use-get-member-contract-market-info'
-import {
-  UpsertClaimItemVariables,
-  useUpsertClaimItem,
-} from 'graphql/use-upsert-claim-item'
-import { Spacing } from 'hedvig-ui/spacing'
+import { StandaloneMessage } from 'hedvig-ui/animations/standalone-message'
+import { Button } from 'hedvig-ui/button'
 import React from 'react'
 import styled from 'react-emotion'
-import { Chips } from './chips/Chips'
-import { TotalValuationChip } from './chips/components/TotalValuationChip'
-import { ItemForm } from './item-form/ItemForm'
-import { ItemList } from './item-list/ItemList'
-import { isEmpty, isValidDate, isValidNumber } from './utils'
 
-const BottomWrapper = styled.div`
+const Container = styled.div`
   display: flex;
+  flex: 1;
+  flex-direction: column;
   justify-content: space-between;
 `
 
-const ChipsWrapper = styled.div``
+const Header = styled.div`
+  display: flex;
+  flex: 1;
+`
 
-const formIsValid = (request: UpsertClaimItemVariables) => {
-  if (!request) {
-    return false
-  }
+const Content = styled.div`
+  display: flex;
+  flex: 4;
+  justify-content: center;
+  align-items: center;
+`
 
-  const {
-    itemFamilyId,
-    itemTypeId,
-    purchasePriceAmount = '',
-    dateOfPurchase = '',
-    customValuationAmount = '',
-  } = request
-
-  if (!itemFamilyId || !itemTypeId) {
-    return false
-  }
-
-  if (!isEmpty(purchasePriceAmount) && !isValidNumber(purchasePriceAmount)) {
-    return false
-  }
-
-  if (!isEmpty(dateOfPurchase) && !isValidDate(dateOfPurchase)) {
-    return false
-  }
-
-  return isEmpty(customValuationAmount) || isValidNumber(customValuationAmount)
-}
+const Footer = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: flex-end;
+`
 
 export const ClaimItems: React.FC<{
   claim: Claim
   memberId: string
   contract: Contract | null
 }> = ({ claim, memberId, contract }) => {
-  const claimId = claim.id ?? ''
   const [contractMarketInfo] = useContractMarketInfo(memberId)
-  const { typeOfContract } = { ...contract }
-  const [upsertClaimItem, { loading }] = useUpsertClaimItem(claimId)
+  const [showForm, setShowForm] = React.useState(false)
 
-  const { preferredCurrency = '' } = { ...contractMarketInfo }
-  const { totalValuation, deductible, items = [] } = { ...claim.inventory }
+  const claimId = claim?.id
+  const typeOfContract = contract?.typeOfContract
+  const preferredCurrency = contractMarketInfo?.preferredCurrency
 
-  const [
-    upsertRequest,
-    setUpsertRequest,
-  ] = React.useState<UpsertClaimItemVariables | null>(null)
-
-  const [resetSwitch, setResetSwitch] = React.useState(false)
+  if (!claimId || !typeOfContract) {
+    return null
+  }
 
   return (
     <Paper>
-      <div>
-        <h3>Inventory</h3>
-      </div>
-      <ItemList claimItems={items} typeOfContract={typeOfContract} />
-      <Spacing top={'small'} />
-      <ItemForm
-        resetSwitch={resetSwitch}
-        onReset={() => setResetSwitch(false)}
-        preferredCurrency={preferredCurrency}
-        onChange={(formData) =>
-          setUpsertRequest({ ...upsertRequest, ...formData })
-        }
-      />
-      <BottomWrapper>
-        <ChipsWrapper>
-          {typeOfContract && upsertRequest && upsertRequest.itemFamilyId ? (
-            <Chips
-              typeOfContract={typeOfContract}
-              formData={upsertRequest}
-              setFormData={setUpsertRequest}
-            />
-          ) : (
-            <TotalValuationChip
-              totalValuation={totalValuation}
-              deductible={deductible}
-            />
-          )}
-        </ChipsWrapper>
-        <Button
-          disabled={loading || !upsertRequest || !formIsValid}
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            if (upsertRequest) {
-              upsertClaimItem(upsertRequest)
-              setResetSwitch(true)
-            }
-          }}
-        >
-          Add item
-        </Button>
-      </BottomWrapper>
+      <Container>
+        <Header>
+          <h3>Inventory</h3>
+        </Header>
+        <Content>
+          <InventoryProvider
+            state={{ claimId, typeOfContract, preferredCurrency }}
+          >
+            {showForm ? (
+              <ItemForm />
+            ) : (
+              <StandaloneMessage style={{ fontSize: '1.25rem' }}>
+                No items added
+              </StandaloneMessage>
+            )}
+          </InventoryProvider>
+        </Content>
+        <Footer>
+          <Button
+            style={{ width: '20%' }}
+            variation={'primary'}
+            onClick={() => setShowForm(true)}
+          >
+            ADD ITEM
+          </Button>
+        </Footer>
+      </Container>
     </Paper>
   )
 }

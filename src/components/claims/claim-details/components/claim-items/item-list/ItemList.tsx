@@ -9,11 +9,10 @@ import {
   withStyles,
 } from '@material-ui/core'
 import { ClaimItem, useDeleteClaimItemMutation } from 'api/generated/graphql'
-import { useDescribeClaimItemValuation } from 'graphql/use-describe-claim-item-valuation'
 import { Placeholder } from 'hedvig-ui/typography'
 import React from 'react'
 import { ChevronRight, InfoCircleFill, Trash } from 'react-bootstrap-icons'
-import { formatMoney } from 'utils/money'
+import { formatMoneyMaybe } from 'utils/money'
 import {
   ChevronRightWrapper,
   InfoWrapper,
@@ -31,42 +30,20 @@ const NotSpecified: React.FC = () => <Placeholder>Not specified</Placeholder>
 
 const ItemRow: React.FC<{ item: ClaimItem; typeOfContract?: string }> = ({
   item,
-  typeOfContract,
 }) => {
   const [deleteClaimItem] = useDeleteClaimItemMutation({
     refetchQueries: ['ClaimPage'],
   })
 
-  const [description] = useDescribeClaimItemValuation(
-    item.id,
-    typeOfContract ?? 'SE_APARTMENT_RENT',
-  )
+  const purchasePriceString = formatMoneyMaybe(item.purchasePrice, {
+    minimumFractionDigits: 0,
+    useGrouping: true,
+  })
 
-  const purchasePriceString = item.purchasePrice?.amount
-    ? formatMoney(
-        {
-          amount: item.purchasePrice.amount,
-          currency: item.purchasePrice.currency,
-        },
-        {
-          minimumFractionDigits: 0,
-          useGrouping: true,
-        },
-      )
-    : null
-
-  const valuationString = item.valuation?.depreciatedValue.amount
-    ? formatMoney(
-        {
-          amount: item.valuation.depreciatedValue.amount,
-          currency: item.valuation.depreciatedValue.currency,
-        },
-        {
-          minimumFractionDigits: 0,
-          useGrouping: true,
-        },
-      )
-    : null
+  const valuationString = formatMoneyMaybe(item.valuation?.depreciatedValue, {
+    minimumFractionDigits: 0,
+    useGrouping: true,
+  })
 
   return (
     <>
@@ -98,7 +75,7 @@ const ItemRow: React.FC<{ item: ClaimItem; typeOfContract?: string }> = ({
         <TableCell>
           {valuationString ?? <NotSpecified />}{' '}
           <Placeholder>
-            {valuationString && typeOfContract ? ` (${description})` : ''}
+            {valuationString && ` (${item.valuation?.explanation ?? ''})`}
           </Placeholder>
         </TableCell>
         <TableCell>{purchasePriceString ?? <NotSpecified />}</TableCell>
@@ -136,8 +113,7 @@ const ItemRow: React.FC<{ item: ClaimItem; typeOfContract?: string }> = ({
 
 export const ItemList: React.FC<{
   claimItems: ClaimItem[]
-  typeOfContract?: string
-}> = ({ claimItems, typeOfContract }) => {
+}> = ({ claimItems }) => {
   return (
     <Table>
       <TableHead>
@@ -151,7 +127,7 @@ export const ItemList: React.FC<{
       </TableHead>
       <TableBody>
         {claimItems.map((item) => (
-          <ItemRow key={item.id} item={item} typeOfContract={typeOfContract} />
+          <ItemRow key={item.id} item={item} />
         ))}
       </TableBody>
     </Table>
