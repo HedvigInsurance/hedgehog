@@ -23,6 +23,7 @@ export type Scalars = {
   URL: any
   LocalDateTime: any
   JSON: any
+  Upload: any
   ZonedDateTime: any
   LocalTime: any
 }
@@ -96,6 +97,11 @@ export enum AccountEntryType {
 export type ActivatePendingAgreementInput = {
   pendingAgreementId: Scalars['ID']
   fromDate: Scalars['LocalDate']
+}
+
+export type AddedTermsAndConditions = {
+  __typename?: 'AddedTermsAndConditions'
+  fileUrl: Scalars['String']
 }
 
 export type Address = {
@@ -892,6 +898,7 @@ export type MutationType = {
   unsignMember: Scalars['Boolean']
   editMemberInfo: Scalars['Boolean']
   setFraudulentStatus: Scalars['Boolean']
+  addTermsAndConditions: AddedTermsAndConditions
 }
 
 export type MutationTypeChargeMemberArgs = {
@@ -1148,6 +1155,10 @@ export type MutationTypeEditMemberInfoArgs = {
 export type MutationTypeSetFraudulentStatusArgs = {
   memberId: Scalars['ID']
   request: MemberFraudulentStatusInput
+}
+
+export type MutationTypeAddTermsAndConditionsArgs = {
+  input: TermsAndConditionsInput
 }
 
 export type NationalIdentification = {
@@ -1508,6 +1519,10 @@ export enum TerminationReason {
   Unknown = 'UNKNOWN',
 }
 
+export type TermsAndConditionsInput = {
+  file: Scalars['Upload']
+}
+
 export type TestClaim = {
   __typename?: 'TestClaim'
   date?: Maybe<Scalars['LocalDate']>
@@ -1751,6 +1766,17 @@ export type MarkSwitcherEmailAsRemindedMutationVariables = Exact<{
 export type MarkSwitcherEmailAsRemindedMutation = {
   __typename?: 'MutationType'
 } & Pick<MutationType, 'markSwitchableSwitcherEmailAsReminded'>
+
+export type AddTermsAndConditionsMutationVariables = Exact<{
+  input: TermsAndConditionsInput
+}>
+
+export type AddTermsAndConditionsMutation = { __typename?: 'MutationType' } & {
+  addTermsAndConditions: { __typename?: 'AddedTermsAndConditions' } & Pick<
+    AddedTermsAndConditions,
+    'fileUrl'
+  >
+}
 
 export type ActivatePendingAgreementMutationVariables = Exact<{
   contractId: Scalars['ID']
@@ -3371,6 +3397,56 @@ export type MarkSwitcherEmailAsRemindedMutationResult = ApolloReactCommon.Mutati
 export type MarkSwitcherEmailAsRemindedMutationOptions = ApolloReactCommon.BaseMutationOptions<
   MarkSwitcherEmailAsRemindedMutation,
   MarkSwitcherEmailAsRemindedMutationVariables
+>
+export const AddTermsAndConditionsDocument = gql`
+  mutation AddTermsAndConditions($input: TermsAndConditionsInput!) {
+    addTermsAndConditions(input: $input) {
+      fileUrl
+    }
+  }
+`
+export type AddTermsAndConditionsMutationFn = ApolloReactCommon.MutationFunction<
+  AddTermsAndConditionsMutation,
+  AddTermsAndConditionsMutationVariables
+>
+
+/**
+ * __useAddTermsAndConditionsMutation__
+ *
+ * To run a mutation, you first call `useAddTermsAndConditionsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTermsAndConditionsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTermsAndConditionsMutation, { data, loading, error }] = useAddTermsAndConditionsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddTermsAndConditionsMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    AddTermsAndConditionsMutation,
+    AddTermsAndConditionsMutationVariables
+  >,
+) {
+  return ApolloReactHooks.useMutation<
+    AddTermsAndConditionsMutation,
+    AddTermsAndConditionsMutationVariables
+  >(AddTermsAndConditionsDocument, baseOptions)
+}
+export type AddTermsAndConditionsMutationHookResult = ReturnType<
+  typeof useAddTermsAndConditionsMutation
+>
+export type AddTermsAndConditionsMutationResult = ApolloReactCommon.MutationResult<
+  AddTermsAndConditionsMutation
+>
+export type AddTermsAndConditionsMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddTermsAndConditionsMutation,
+  AddTermsAndConditionsMutationVariables
 >
 export const ActivatePendingAgreementDocument = gql`
   mutation ActivatePendingAgreement(

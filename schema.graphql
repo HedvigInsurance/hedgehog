@@ -133,6 +133,7 @@ type MutationType {
     memberId: ID!
     request: MemberFraudulentStatusInput!
   ): Boolean!
+  addTermsAndConditions(input: TermsAndConditionsInput!): AddedTermsAndConditions!
 }
 
 type ListClaimsResult {
@@ -1264,6 +1265,24 @@ type MonetaryAmountV2 {
   currency: String!
 }
 
+input TermsAndConditionsInput {
+  #    commencementDate: LocalDate!
+  #    carrier: Carrier!
+  #    contractType: TypeOfContract,
+  #    locale: Locale,
+  #    displayName: String,
+  file: Upload!
+}
+
+type AddedTermsAndConditions {
+  #    commencementDate: LocalDate!
+  #    carrier: Carrier!
+  #    contractType: TypeOfContract!,
+  #    locale: Locale!,
+  #    displayName: String!,
+  fileUrl: String!
+}
+
 # A String-representation of `java.time.YearMonth`, ex: `"2018-06"`
 scalar YearMonth
 # An object-representation of `javax.money.MonetaryAmount`, ex: `{"amount": 100  "currency": "SEK"}`
@@ -1282,3 +1301,4 @@ scalar Instant
 scalar URL
 # A Json Object represtation of `JsonNode`
 scalar JSON
+scalar Upload

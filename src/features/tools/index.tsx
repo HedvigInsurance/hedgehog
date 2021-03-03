@@ -47,6 +47,11 @@ export const Tools: React.FC = () => (
         <Icon>📱</Icon>
         Itemizer
       </CardLink>
+
+      <CardLink to="/tools/add-terms" span={4}>
+        <Icon>📄</Icon>
+        Add terms and conditions
+      </CardLink>
     </CardsWrapper>
 
     {stagingToolsAvailable() && <StagingTools />}

@@ -1,0 +1,5 @@
+mutation AddTermsAndConditions($input: TermsAndConditionsInput!) {
+  addTermsAndConditions(input: $input) {
+    fileUrl
+  }
+}

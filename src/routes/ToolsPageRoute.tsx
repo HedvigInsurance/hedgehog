@@ -1,4 +1,5 @@
 import { Tools } from 'features/tools'
+import { AddTermsAndConditionsTool } from 'features/tools/add-terms-and-conditions'
 import { CampaignCodeInfo } from 'features/tools/campaign-codes'
 import { ChargePage } from 'features/tools/charges'
 import { ItemizerComponent } from 'features/tools/itemizer'
@@ -22,5 +23,6 @@ export const ToolsPageRoute: React.FunctionComponent = () => (
     <Route component={ItemizerComponent} path="/tools/itemizer" />
     <Route component={CampaignCodeInfo} path="/tools/campaign-codes" />
     <Route component={UnsignMemberTool} path="/tools/unsign-member" />
+    <Route component={AddTermsAndConditionsTool} path="/tools/add-terms" />
   </Switch>
 )
